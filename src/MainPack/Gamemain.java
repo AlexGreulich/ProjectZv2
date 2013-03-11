@@ -82,12 +82,12 @@ public class Gamemain {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		 
 		GL11.glViewport(0, 0, World.WIDTH, World.HEIGHT);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
+//		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, World.WIDTH, World.HEIGHT, 0, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+//		GL11.glOrtho(0, World.WIDTH, World.HEIGHT, 0, 1, -1);
+//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 	
 	
