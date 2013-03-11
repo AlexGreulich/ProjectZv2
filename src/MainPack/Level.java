@@ -33,9 +33,10 @@ public class Level {
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
 	private Map<Integer,TextureEntry> textureEntryMap = null;
-	private short[][][] wholeMapArray = new short[4000][4000][4];
-	private int playerdeltax, playerdeltay;
+	private short[][][] wholeMapArray = new short[400][400][4]; // ACHTUNG zu testzwecken verkleinert
+	private int playerdeltax = 0, playerdeltay = 0;
 	float percentage = 32f/1024f;
+	int uebergangx = 32, uebergangy = 32;
 	
 	
 	public Level(int x, int y){
@@ -45,7 +46,6 @@ public class Level {
 		
 			texW = tilesetTexture.getTextureWidth()/32f;
 			texH = tilesetTexture.getTextureHeight()/32f;
-			System.out.println("getTextureWidth/32: "+ texW +" "+texH);
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
@@ -57,9 +57,6 @@ public class Level {
 	
 	
 	public void draw(Player player){
-		playerdeltax = player.getX()%32;
-		playerdeltay = player.getY()%32;
-
 		int cornerx = 0;
 		if (player.screenx == (World.TILES_ON_SCREEN_WIDTH*32 / 2)){
 			cornerx = player.getX()/32 - World.TILES_ON_SCREEN_WIDTH/2;
@@ -71,17 +68,24 @@ public class Level {
 		} 	
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
-		if ((cornerx == 0) && (cornery > 0)){
-			glTranslatef(0f, (float)-playerdeltay, 0f);
-		}
-		if ((cornery == 0) && (cornerx > 0)){
-			glTranslatef((float)-playerdeltax, 0f, 0f);
-		}
-		if ((cornerx != 0) && (cornery != 0)){
-			glTranslatef((float)-playerdeltax, (float)-playerdeltay, 0f);
-		}
 		
-		System.out.println("player: "+player.getX()+"|"+player.getY()+" ; screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"; playerdeltax/y: "+playerdeltax+"|"+playerdeltay );
+		playerdeltax = player.getX()%32;
+		playerdeltay = player.getY()%32;
+		if (cornerx == 0){
+			if (player.screenx > (320-32)){
+				playerdeltax = (int) ((int) 32-(World.TILE_MIDDLE_X*32 - player.screenx));
+			} else {
+				playerdeltax = 0;
+			}
+			
+		}
+		if (cornery == 0){
+			playerdeltay = 0;
+		}
+		glTranslatef((float)-playerdeltax, (float)-playerdeltay, 0f);
+		
+		
+		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay+" ;  cornerx/y: "+cornerx+"|"+cornery );
 		
 		glBegin(GL_QUADS);
 		
@@ -112,8 +116,10 @@ public class Level {
 			BufferedImage bi = ImageIO.read(getClass().getResource("/karten/grossekarte.gif"));
 			Color c = Color.BLACK;
 			
-			for(int x = 0; x < bi.getWidth(); x++){
-				for(int y = 0; y< bi.getHeight();y++){
+//			for(int x = 0; x < bi.getWidth(); x++){
+//				for(int y = 0; y< bi.getHeight();y++){ // ACHTUNG zu testzwecken verkleinert
+			for(int x = 0; x < 400; x++){
+				for(int y = 0; y < 400;y++){
 				
 					c = new Color(bi.getRGB(x,y));
 					

@@ -23,8 +23,8 @@ public class Player extends AbstractMovableEntity {
         this.texposx = 0;
         this.texposy = 0.125f+ 0.125f;
         this.changeState = 0;
-        this.screenx = World.TILE_MIDDLE_X;
-        this.screeny = World.TILE_MIDDLE_Y;
+        this.screenx = World.TILE_MIDDLE_X*32;
+        this.screeny = World.TILE_MIDDLE_Y*32;
         isMoving = false;
 	}
 
@@ -55,7 +55,7 @@ public class Player extends AbstractMovableEntity {
 	@Override
 	public void setX(int x) {
 		if (x < (World.TILES_ON_SCREEN_WIDTH/2*32)){
-			screenx = (World.TILES_ON_SCREEN_WIDTH*32 / 2) + x-World.TILES_ON_SCREEN_WIDTH*32/2;
+			screenx = x;
 		} else {
 			screenx = World.TILES_ON_SCREEN_WIDTH*32 / 2;
 		}
@@ -72,7 +72,7 @@ public class Player extends AbstractMovableEntity {
 	@Override
 	public void setY(int y) {
 		if (y < (World.TILES_ON_SCREEN_HEIGHT/2*32)){
-			screeny = (World.TILES_ON_SCREEN_HEIGHT*32 / 2) + y-World.TILES_ON_SCREEN_HEIGHT*32/2;
+			screeny = y;
 		} else {
 			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;
 		}

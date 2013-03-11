@@ -8,8 +8,9 @@ public class World {
 	public final static int TILE_SIZE = 32;
 	final static int WIDTH = 640;
 	final static int HEIGHT = 640;
-	public final static int PLAYERSTARTPOSITIONX = 613;
-	public final static int PLAYERSTARTPOSITIONY = 442;
+	// ACHTUNG: nicht innerhalb der Randzone starten
+	public final static int PLAYERSTARTPOSITIONX = 442;
+	public final static int PLAYERSTARTPOSITIONY = 613;
 	
 	//Berechnete Werte
 	public final static int TILE_MIDDLE_X = TILES_ON_SCREEN_WIDTH / 2; 
