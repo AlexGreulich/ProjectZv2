@@ -14,6 +14,7 @@ public class Gamemain {
 	Level level;
 	Player player;
 	private static long lastFrame;
+	float velocityX =0.0f, velocityY =0.0f;
 	
 	
 	public void start(){
@@ -27,22 +28,61 @@ public class Gamemain {
 			
 			switch(state){
 				case INGAME:
-				
+					
 					if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-						player.setX(player.getX()-1);
+						velocityX -= 0.01f;
+						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+							velocityY -= 0.01f;
+						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+							velocityY += 0.01f;
+						}
 						player.isMoving = true;
-					}else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-						player.setX(player.getX()+1);
+					} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+						velocityX += 0.01f;
+						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+							velocityY -= 0.01f;
+						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+							velocityY += 0.01f;
+						}
 						player.isMoving = true;
-					}else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-						player.setY(player.getY()-1);
+					} else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+						velocityY -= 0.01f;
+						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
+							velocityX -= 0.01f;
+						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+							velocityX += 0.01f;
+						}
 						player.isMoving = true;
-					}else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-						player.setY(player.getY()+1);
+					} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+						velocityY += 0.01f;
+						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
+							velocityX -= 0.01f;
+						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+							velocityX += 0.01f;
+						}
 						player.isMoving = true;
 					} else {
 						player.isMoving = false;
+						velocityX = 0;
+						velocityY = 0;
 					}
+					
+					if(velocityX >= 0.3f){
+						velocityX =0.3f;
+					}
+					else if(velocityX < -0.3f){
+						velocityX=-0.3f;
+					}
+					if(velocityY >= 0.3f){
+						velocityY =0.3f;
+					}
+					else if(velocityY < -0.3f){
+						velocityY =-0.3f;
+					}
+					int delta = getDelta();
+					
+					player.setX(player.getX()+velocityX*delta);
+					player.setY(player.getY()+velocityY*delta);
 					
 					level.draw(player);
 					player.draw();
@@ -92,7 +132,7 @@ public class Gamemain {
 	
 	
 	public void initGame(){
-		level = new Level(World.PLAYERSTARTPOSITIONX, World.PLAYERSTARTPOSITIONY);
+		level = new Level();
 		player = new Player();
 	}
 	

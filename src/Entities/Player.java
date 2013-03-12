@@ -53,24 +53,24 @@ public class Player extends AbstractMovableEntity {
 	}
 
 	@Override
-	public void setX(int x) {
-		if (x < (World.TILES_ON_SCREEN_WIDTH/2*32)){
-			screenx = x;
+	public void setX(float f) {
+		if (f < (World.TILES_ON_SCREEN_WIDTH/2*32)){
+			screenx = f;
 		} else {
 			screenx = World.TILES_ON_SCREEN_WIDTH*32 / 2;
 		}
 		//nicht über den rand laufen
-		if (x <= 0){
+		if (f <= 0){
 			this.x = 0;
-		} else if (x >= World.WORLDSIZE*32 ){
+		} else if (f >= World.WORLDSIZE*32 ){
 			this.x = (int) (World.WORLDSIZE*32 - width);
 		} else {
-			this.x = x;
+			this.x = f;
 		}
 	}
 
 	@Override
-	public void setY(int y) {
+	public void setY(float y) {
 		if (y < (World.TILES_ON_SCREEN_HEIGHT/2*32)){
 			screeny = y;
 		} else {

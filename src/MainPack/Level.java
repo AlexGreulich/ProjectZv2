@@ -39,7 +39,7 @@ public class Level {
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
 	
 	
-	public Level(int x, int y){
+	public Level(){
 		//	Lade das tileset als eine große Textur
 		try {
 			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_neu_32-1024.png"));
@@ -60,18 +60,18 @@ public class Level {
 	public void draw(Player player){
 		int cornerx = 0;
 		if (player.screenx == (World.TILES_ON_SCREEN_WIDTH*32 / 2)){
-			cornerx = player.getX()/32 - World.TILES_ON_SCREEN_WIDTH/2;
+			cornerx = (int) (player.getX()/32 - World.TILES_ON_SCREEN_WIDTH/2);
 		}
 		
 		int cornery = 0;
 		if (player.screeny == (World.TILES_ON_SCREEN_HEIGHT*32 / 2)){
-			cornery = player.getY()/32 - World.TILES_ON_SCREEN_HEIGHT/2;
+			cornery = (int) (player.getY()/32 - World.TILES_ON_SCREEN_HEIGHT/2);
 		} 	
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
 		
-		playerdeltax = player.getX()%32;
-		playerdeltay = player.getY()%32;
+		playerdeltax = (int) (player.getX()%32);
+		playerdeltay = (int) (player.getY()%32);
 		if (cornerx == 0){
 			if (player.screenx > (320-32)){
 				playerdeltax = (int) ((int) 32-(World.TILE_MIDDLE_X*32 - player.screenx));

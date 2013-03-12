@@ -9,13 +9,13 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 public abstract class AbstractEntity implements Entity {
 
-	protected int x;
-	protected int y;
+	protected float x;
+	protected float y;
     protected double width, height;
     protected Rectangle hitbox = new Rectangle();
     protected Texture texture;
 
-    public AbstractEntity(int x, int y, double width, double height, String textureName) {
+    public AbstractEntity(float x, float y, double width, double height, String textureName) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -30,7 +30,7 @@ public abstract class AbstractEntity implements Entity {
     }
     
     @Override
-    public void setLocation(int x, int y) {
+    public void setLocation(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -46,12 +46,12 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public int getX() {
+    public float getX() {
         return x;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return y;
     }
 

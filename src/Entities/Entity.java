@@ -6,19 +6,19 @@ public interface Entity {
 
     public void update(int delta);
 
-    public void setLocation(int x, int y);
+    public void setLocation(float x, float y);
 
     public void setWidth(double width);
 
     public void setHeight(double height);
 
-    public int getX();
+    public float getX();
 
-    public int getY();
+    public float getY();
     
-    public void setX(int x);
+    public void setX(float x);
 
-    public void setY(int y);
+    public void setY(float y);
 
     public double getHeight();
 

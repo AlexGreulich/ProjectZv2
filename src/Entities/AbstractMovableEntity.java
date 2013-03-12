@@ -4,7 +4,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
 
     protected double dx, dy;
 
-    public AbstractMovableEntity(int x, int y, double width, double height, String textureName) {
+    public AbstractMovableEntity(float x, float y, double width, double height, String textureName) {
         super(x, y, width, height, textureName);
         this.dx = 0;
         this.dy = 0;
