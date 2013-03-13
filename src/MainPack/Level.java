@@ -33,13 +33,18 @@ public class Level {
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
 	private Map<Integer,TextureEntry> textureEntryMap = null;
+	
 	private int playerdeltax = 0, playerdeltay = 0;
 	float percentage = 32f/1024f;
-	int uebergangx = 32, uebergangy = 32;
+	float u, v, u2, v2;
+	int chunkLeftCornerX;
+	int chunkLeftCornerY;
+	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
+	Tile[][] currentTileGrid = new Tile[World.WORLDSIZE/50][World.WORLDSIZE/50];	//80x80 Tiles
 	
 	
-	public Level(){
+	public Level(int x, int y){
 		//	Lade das tileset als eine groﬂe Textur
 		try {
 			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_neu_32-1024.png"));
@@ -54,50 +59,41 @@ public class Level {
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
 		createFinalMap();
 		calculateTileBorders();
+		createCurrentTileGrid(x, y);
+	}
+	
+	public void createCurrentTileGrid(int x, int y){
+		chunkLeftCornerX = ((x/32)/80)*80;
+		chunkLeftCornerY = ((y/32)/80)*80;
+		
+		for(int a = 0; a < World.TILE_CHUNK_WIDTH; a++){
+			for(int b = 0; b< World.TILE_CHUNK_HEIGHT; b++){
+				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX+a][chunkLeftCornerY+b];
+			}
+		}
 	}
 	
 	
 	public void draw(Player player){
-		int cornerx = 0;
-		if (player.screenx == (World.TILES_ON_SCREEN_WIDTH*32 / 2)){
-			cornerx = (int) (player.getX()/32 - World.TILES_ON_SCREEN_WIDTH/2);
-		}
-		
-		int cornery = 0;
-		if (player.screeny == (World.TILES_ON_SCREEN_HEIGHT*32 / 2)){
-			cornery = (int) (player.getY()/32 - World.TILES_ON_SCREEN_HEIGHT/2);
-		} 	
+		playerdeltax = (int) (player.getX()-chunkLeftCornerX);
+		playerdeltay = (int) (player.getY()-chunkLeftCornerY);
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
 		
-		playerdeltax = (int) (player.getX()%32);
-		playerdeltay = (int) (player.getY()%32);
-		if (cornerx == 0){
-			if (player.screenx > (320-32)){
-				playerdeltax = (int) ((int) 32-(World.TILE_MIDDLE_X*32 - player.screenx));
-			} else {
-				playerdeltax = 0;
-			}
-			
-		}
-		if (cornery == 0){
-			playerdeltay = 0;
-		}
 		glTranslatef((float)-playerdeltax, (float)-playerdeltay, 0f);
 		
-		
-		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay+" ;  cornerx/y: "+cornerx+"|"+cornery );
+		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay);
 		
 		glBegin(GL_QUADS);
 		
-		for(int a = 0; a < World.TILES_ON_SCREEN_WIDTH+1; a++){
-			for(int b = 0; b < World.TILES_ON_SCREEN_HEIGHT+1; b++){
+		for(int a = 0; a < currentTileGrid.length; a++){
+			for(int b = 0; b < currentTileGrid.length; b++){
 								
-				TextureEntry te = textureEntryMap.get((int)tilegrid[cornerx+a][cornery+b].getType());
-				float u = te.getX()/texW * percentage;//
-				float v = te.getY()/texW * percentage;//
-				float u2 = (te.getX()+texW)/texW * percentage;//
-				float v2 = (te.getY()+texW)/texW * percentage;//
+				TextureEntry te = textureEntryMap.get((int)currentTileGrid[a][b].getType());
+				u = te.getX()/texW * percentage;//
+				v = te.getY()/texW * percentage;//
+				u2 = (te.getX()+texW)/texW * percentage;//
+				v2 = (te.getY()+texW)/texW * percentage;//
 				
 			//	Texturkoord.		..	an Bildschirmausschnitt
 				glTexCoord2f(u,v);		glVertex2f(a*texW,b*texW);		

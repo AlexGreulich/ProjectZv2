@@ -132,8 +132,8 @@ public class Gamemain {
 	
 	
 	public void initGame(){
-		level = new Level();
 		player = new Player();
+		level = new Level((int)player.getX(), (int)player.getY());
 	}
 	
 	
