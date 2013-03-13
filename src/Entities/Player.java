@@ -21,7 +21,7 @@ public class Player extends AbstractMovableEntity {
 		// x, y, width, height, file-name
         super(World.PLAYERSTARTPOSITIONX, World.PLAYERSTARTPOSITIONY, 32, 64, "newcharset2_32-2erPot.gif");
         this.texposx = 0;
-        this.texposy = 0.125f+ 0.125f;
+        this.texposy = 0;
         this.changeState = 0;
         this.screenx = World.TILE_MIDDLE_X*32;
         this.screeny = World.TILE_MIDDLE_Y*32;
@@ -84,6 +84,31 @@ public class Player extends AbstractMovableEntity {
 		} else {
 			this.y = y;
 		}
+	}
+	
+	public void movesRight(){
+		texposy = 2*0.125f;
+	}
+	public void movesLeft(){
+		texposy = 0.125f;
+	}
+	public void movesDown(){
+		texposy = 0;
+	}
+	public void movesUp() {
+		texposy = 3*0.125f;
+	}
+	public void movesLeftUp() {
+		texposy = 6*0.125f;
+	}
+	public void movesLeftDown() {
+		texposy = 4*0.125f;
+	}
+	public void movesRightUp() {
+		texposy = 7*0.125f;
+	}
+	public void movesRightDown() {
+		texposy = 5*0.125f;
 	}
 	
 }

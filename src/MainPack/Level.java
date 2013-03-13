@@ -41,7 +41,7 @@ public class Level {
 	int chunkLeftCornerY;
 	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
-	Tile[][] currentTileGrid = new Tile[World.WORLDSIZE/50][World.WORLDSIZE/50];	//80x80 Tiles
+	Tile[][] currentTileGrid = new Tile[(World.WORLDSIZE/50)+20][(World.WORLDSIZE/50)+20];	//bis zu 100x100 Tiles
 	
 	
 	public Level(int x, int y){
@@ -58,16 +58,20 @@ public class Level {
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
 		createFinalMap();
-		calculateTileBorders();
+		//calculateTileBorders();
 		createCurrentTileGrid(x, y);
 	}
 	
 	public void createCurrentTileGrid(int x, int y){
+		System.out.println("createCurrentTileGrid");
 		chunkLeftCornerX = ((x/32)/80)*80;
 		chunkLeftCornerY = ((y/32)/80)*80;
 		
-		for(int a = 0; a < World.TILE_CHUNK_WIDTH; a++){
-			for(int b = 0; b< World.TILE_CHUNK_HEIGHT; b++){
+		if (chunkLeftCornerX >=80){chunkLeftCornerX-=10;};
+		if (chunkLeftCornerY >=80){chunkLeftCornerY-=10;};
+		
+		for(int a = 0; a < World.TILE_CHUNK_WIDTH+World.TILES_ON_SCREEN_WIDTH; a++){
+			for(int b = 0; b< World.TILE_CHUNK_HEIGHT+World.TILES_ON_SCREEN_HEIGHT; b++){
 				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX+a][chunkLeftCornerY+b];
 			}
 		}
@@ -75,14 +79,21 @@ public class Level {
 	
 	
 	public void draw(Player player){
-		playerdeltax = (int) (player.getX()-chunkLeftCornerX);
-		playerdeltay = (int) (player.getY()-chunkLeftCornerY);
+		playerdeltax = (int) (player.getX()-chunkLeftCornerX*32);
+		playerdeltay = (int) (player.getY()-chunkLeftCornerY*32);
+		
+		if ((playerdeltax >= 100*32-10*23) ||(playerdeltax <= 10*32 ) || (playerdeltay >= 80*32)){
+			createCurrentTileGrid((int)player.getX(), (int)player.getY());
+			playerdeltax = (int) (player.getX()-chunkLeftCornerX*32);
+			playerdeltay = (int) (player.getY()-chunkLeftCornerY*32);
+		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
 		
 		glTranslatef((float)-playerdeltax, (float)-playerdeltay, 0f);
 		
 		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay);
+		System.out.println("chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY );
 		
 		glBegin(GL_QUADS);
 		
@@ -109,7 +120,7 @@ public class Level {
 	
 	private void createFinalMap(){
 		try {
-			BufferedImage map = ImageIO.read(getClass().getResource("/karten/grossekarte.gif"));
+			BufferedImage map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
 			Color c = null;
 			for(short x = 0; x < map.getWidth();x++){
 				for(short y = 0; y < map.getHeight();y++){

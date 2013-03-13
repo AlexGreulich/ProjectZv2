@@ -31,34 +31,46 @@ public class Gamemain {
 					
 					if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
 						velocityX -= 0.01f;
+						player.movesLeft();
 						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
 							velocityY -= 0.01f;
+							player.movesLeftUp();
 						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
 							velocityY += 0.01f;
+							player.movesLeftDown();
 						}
 						player.isMoving = true;
 					} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
 						velocityX += 0.01f;
+						player.movesRight();
 						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
 							velocityY -= 0.01f;
+							player.movesRightUp();
 						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
 							velocityY += 0.01f;
+							player.movesRightDown();
 						}
 						player.isMoving = true;
 					} else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
 						velocityY -= 0.01f;
+						player.movesUp();
 						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
 							velocityX -= 0.01f;
+							player.movesLeftUp();
 						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
 							velocityX += 0.01f;
+							player.movesRightUp();
 						}
 						player.isMoving = true;
 					} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
 						velocityY += 0.01f;
+						player.movesDown();
 						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
 							velocityX -= 0.01f;
+							player.movesLeftUp();
 						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
 							velocityX += 0.01f;
+							player.movesRightUp();
 						}
 						player.isMoving = true;
 					} else {
