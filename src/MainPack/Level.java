@@ -34,14 +34,14 @@ public class Level {
 	float texH = 0f, texW = 0f;
 	private Map<Integer,TextureEntry> textureEntryMap = null;
 	
-	private int playerdeltax = 0, playerdeltay = 0;
+	private int screenDeltaX = 0, screenDeltaY = 0;
 	float percentage = 32f/1024f;
 	float u, v, u2, v2;
 	int chunkLeftCornerX;
 	int chunkLeftCornerY;
 	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
-	Tile[][] currentTileGrid = new Tile[(World.WORLDSIZE/50)+20][(World.WORLDSIZE/50)+20];	//bis zu 100x100 Tiles
+	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE+2*World.CHUNK_BORDER][World.CHUNK_SIZE+2*World.CHUNK_BORDER];	
 	
 	
 	public Level(int x, int y){
@@ -64,14 +64,14 @@ public class Level {
 	
 	public void createCurrentTileGrid(int x, int y){
 		System.out.println("createCurrentTileGrid");
-		chunkLeftCornerX = ((x/32)/80)*80;
-		chunkLeftCornerY = ((y/32)/80)*80;
+		chunkLeftCornerX = (((x)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
+		chunkLeftCornerY = (((y)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
 		
-		if (chunkLeftCornerX >=80){chunkLeftCornerX-=10;};
-		if (chunkLeftCornerY >=80){chunkLeftCornerY-=10;};
+		if (chunkLeftCornerX != 0){chunkLeftCornerX-=World.CHUNK_BORDER;};
+		if (chunkLeftCornerY != 0){chunkLeftCornerY-=World.CHUNK_BORDER;};
 		
-		for(int a = 0; a < World.TILE_CHUNK_WIDTH+World.TILES_ON_SCREEN_WIDTH; a++){
-			for(int b = 0; b< World.TILE_CHUNK_HEIGHT+World.TILES_ON_SCREEN_HEIGHT; b++){
+		for(int a = 0; a < World.CHUNK_SIZE+2*World.CHUNK_BORDER; a++){
+			for(int b = 0; b< World.CHUNK_SIZE+2*World.CHUNK_BORDER; b++){
 				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX+a][chunkLeftCornerY+b];
 			}
 		}
@@ -79,21 +79,22 @@ public class Level {
 	
 	
 	public void draw(Player player){
-		playerdeltax = (int) (player.getX()-chunkLeftCornerX*32);
-		playerdeltay = (int) (player.getY()-chunkLeftCornerY*32);
+		screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
+		screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
 		
-		if ((playerdeltax >= 100*32-10*23) ||(playerdeltax <= 10*32 ) || (playerdeltay >= 80*32)){
+		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER) ||(screenDeltaX+player.screenx <= World.CHUNK_BORDER ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER) ||(screenDeltaY+player.screeny <= World.CHUNK_BORDER )){
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
-			playerdeltax = (int) (player.getX()-chunkLeftCornerX*32);
-			playerdeltay = (int) (player.getY()-chunkLeftCornerY*32);
+			screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
+			screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
 		
-		glTranslatef((float)-playerdeltax, (float)-playerdeltay, 0f);
+		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
-		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay);
-		System.out.println("chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY );
+		//System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay);
+		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  playerdeltax/y: "+screenDeltaX+"|"+screenDeltaY);
+		System.out.println("chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY+";  currentTileGrid.length:"+currentTileGrid.length*32);
 		
 		glBegin(GL_QUADS);
 		
