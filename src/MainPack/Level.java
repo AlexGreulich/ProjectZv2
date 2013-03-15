@@ -22,8 +22,10 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 /*
-* playerdeltax/y : Position des Spielers relativ zum Tile, für die Verschiebung via Translationsmatrix
-* cornerx/y : Die linke obere Ecke des zu Zeichnenden Feldes, ist anhängig von der Position des Spielers
+ * Die Position des Spielfelds ist immer vom Spieler abhängig
+ * die Chunks sind alle gleich groß und überlappen sich um die halbe breite des Screens,
+ * d.h. das currentTileGrid ist so breit wie ein Chunk plus eventuelle Border
+ * Ist der Spieler am Rand wird kein Border zum currentTileGrid hinzugefügt
 */
 
 public class Level {
@@ -37,8 +39,7 @@ public class Level {
 	private int screenDeltaX = 0, screenDeltaY = 0;
 	float percentage = 32f/1024f;
 	float u, v, u2, v2;
-	int chunkLeftCornerX;
-	int chunkLeftCornerY;
+	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
 	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE+2*World.CHUNK_BORDER][World.CHUNK_SIZE+2*World.CHUNK_BORDER];	
@@ -59,19 +60,38 @@ public class Level {
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
 		createFinalMap();
 		//calculateTileBorders();
+		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		createCurrentTileGrid(x, y);
 	}
 	
+	private void initCurrentTileGrid() {
+		for(int a = 0; a < World.CHUNK_SIZE+2*World.CHUNK_BORDER; a++){
+			for(int b = 0; b< World.CHUNK_SIZE+2*World.CHUNK_BORDER; b++){
+				currentTileGrid[a][b] = new Tile((short)a,(short)b,(short)1);
+			}
+		}
+	}
+
 	public void createCurrentTileGrid(int x, int y){
 		System.out.println("createCurrentTileGrid");
+		
+		// auf welchem Chunk befindet sich der Spieler?
 		chunkLeftCornerX = (((x)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
 		chunkLeftCornerY = (((y)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
 		
-		if (chunkLeftCornerX != 0){chunkLeftCornerX-=World.CHUNK_BORDER;};
-		if (chunkLeftCornerY != 0){chunkLeftCornerY-=World.CHUNK_BORDER;};
+		// Wo werden Ränder benötigt?
+		if (x < (World.WORLDSIZE-World.CHUNK_SIZE)*32){	// gibt es einen rechten Rand?
+			chunkBorderRight = World.CHUNK_BORDER;
+		} else {chunkBorderRight = 0;}
+		if (y < (World.WORLDSIZE-World.CHUNK_SIZE)*32){	//gibt es einen unteren Rand
+			chunkBorderBottom = World.CHUNK_BORDER;
+		} else {chunkBorderBottom = 0;}
+		if (chunkLeftCornerX != 0){chunkLeftCornerX-=World.CHUNK_BORDER;};	// gibt es einen linken Rand?
+		if (chunkLeftCornerY != 0){chunkLeftCornerY-=World.CHUNK_BORDER;};	// gibt es einen oberen Rand?
 		
-		for(int a = 0; a < World.CHUNK_SIZE+2*World.CHUNK_BORDER; a++){
-			for(int b = 0; b< World.CHUNK_SIZE+2*World.CHUNK_BORDER; b++){
+		// currentTileGrid füllen
+		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER+chunkBorderRight; a++){
+			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER+chunkBorderBottom; b++){
 				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX+a][chunkLeftCornerY+b];
 			}
 		}
@@ -82,7 +102,7 @@ public class Level {
 		screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
 		screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
 		
-		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER) ||(screenDeltaX+player.screenx <= World.CHUNK_BORDER ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER) ||(screenDeltaY+player.screeny <= World.CHUNK_BORDER )){
+		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER*32 )){
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
 			screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
 			screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
@@ -92,9 +112,7 @@ public class Level {
 		
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
-		//System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+" ;  playerdeltax/y: "+playerdeltax+"|"+playerdeltay);
-		System.out.println("player: "+player.getX()+"|"+player.getY()+" ;  playerdeltax/y: "+screenDeltaX+"|"+screenDeltaY);
-		System.out.println("chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY+";  currentTileGrid.length:"+currentTileGrid.length*32);
+		System.out.println("player: "+player.getX()+"|"+player.getY()+"    screendeltax/y: "+screenDeltaX+"|"+screenDeltaY+"     screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"    chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY);
 		
 		glBegin(GL_QUADS);
 		

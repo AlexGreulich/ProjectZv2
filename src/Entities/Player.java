@@ -8,6 +8,10 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import MainPack.World;
 
+/*
+ * Der Spieler hat eine absolute position auf der Karte.
+ * Er hat auch eine Position relativ zum Screen, diese ändert sich nur, wenn der Spieler an den Rand kommt.
+*/
 
 public class Player extends AbstractMovableEntity {
 	
@@ -54,35 +58,45 @@ public class Player extends AbstractMovableEntity {
 
 	@Override
 	public void setX(float f) {
-		if (f < (World.TILES_ON_SCREEN_WIDTH/2*32)){
-			screenx = f;
-		} else {
-			screenx = World.TILES_ON_SCREEN_WIDTH*32 / 2;
-		}
 		//nicht über den rand laufen
 		if (f <= 0){
-			this.x = 0;
-		} else if (f >= World.WORLDSIZE*32 ){
-			this.x = (int) (World.WORLDSIZE*32 - width);
+			x = 0;
+		} else if (f >= World.WORLDSIZE*32-width ){
+			x = (float) (World.WORLDSIZE*32 - width);
 		} else {
-			this.x = f;
+			x = f;
+		}
+		
+		// screenx ermitteln
+		if (x < (World.TILES_ON_SCREEN_WIDTH/2*32)){ 	// links oben
+			screenx = x;
+		} else if (x > ((World.WORLDSIZE-World.CHUNK_BORDER)*32)){	// unten rechts
+			System.out.println("change screenx");
+			screenx = x - ((World.WORLDSIZE-World.TILES_ON_SCREEN_WIDTH)*32);
+		} else {
+			screenx = World.TILES_ON_SCREEN_WIDTH*32 / 2;	// standard
 		}
 	}
 
 	@Override
-	public void setY(float y) {
-		if (y < (World.TILES_ON_SCREEN_HEIGHT/2*32)){
-			screeny = y;
-		} else {
-			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;
-		}
+	public void setY(float f) {
 		//nicht über den rand laufen
-		if (y < 1){
-			this.y = 1;
-		} else if (y >= World.WORLDSIZE*32 ){
-			this.y = (int) (World.WORLDSIZE*32 - height);
+		if (f <= 0){
+			y = 0;
+		} else if (f >= World.WORLDSIZE*32-height ){
+			y = (float) (World.WORLDSIZE*32 - height);
 		} else {
-			this.y = y;
+			y = f;
+		}
+		
+		// screenx ermitteln
+		if (y < (World.TILES_ON_SCREEN_HEIGHT/2*32)){ 	// links oben
+			screeny = y;
+		} else if (y > ((World.WORLDSIZE-World.CHUNK_BORDER)*32)){	// unten rechts
+			System.out.println("change screeny");
+			screeny = y - ((World.WORLDSIZE-World.TILES_ON_SCREEN_HEIGHT)*32);
+		} else {
+			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;	// standard
 		}
 	}
 	
