@@ -34,7 +34,7 @@ public class Player extends AbstractMovableEntity {
 	
 	public Player() {
 		// x, y, width, height, file-name
-        super(World.PLAYERSTARTPOSITIONX, World.PLAYERSTARTPOSITIONY, 32, 64, "newcharset2_32-2erPot.gif");
+        super(World.PLAYERSTARTPOSITIONX, World.PLAYERSTARTPOSITIONY, 32, 64, "charset.gif");//newcharset2_32-2erPot.gif
         this.texposx = 0;
         this.texposy = 0;
         this.changeState = 0;
@@ -77,32 +77,33 @@ public class Player extends AbstractMovableEntity {
 		// zeichne Spieler
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 		glBegin(GL_QUADS);
-			glTexCoord2f(texposx,       texposy);			glVertex2f( screenx, screeny);		
-			glTexCoord2f(texposx+0.25f, texposy);			glVertex2f( screenx + (float)width, screeny);		
-			glTexCoord2f(texposx+0.25f, texposy+0.125f);	glVertex2f( screenx + (float)width, screeny + (float)height);	
-			glTexCoord2f(texposx,       texposy+0.125f);	glVertex2f( screenx, screeny + (float)height);
+			glTexCoord2f(texposx,       texposy);			glVertex2f( screenx, 				screeny);		
+			glTexCoord2f(texposx+0.0625f, texposy);			glVertex2f( screenx + (float)width, screeny);		
+			glTexCoord2f(texposx+0.0625f, texposy+0.125f);	glVertex2f( screenx + (float)width, screeny + (float)height);	
+			glTexCoord2f(texposx,       texposy+0.125f);	glVertex2f( screenx,				screeny + (float)height);
 		glEnd();
 		
 		// zeichne Cursor
-		glBindTexture(GL_TEXTURE_2D, 0);
+		
 		glPushMatrix();
 		glTranslatef(cursorX, cursorY, 0);
 		glBegin(GL_QUADS);
-			glColor3f(1f,1f,1f);
-			glVertex2f(screenx+16, screeny+16);
-			glVertex2f(screenx+26, screeny+16);
-			glVertex2f(screenx+26, screeny+ 26);
-			glVertex2f(screenx+16, screeny+26);
+		
+			glTexCoord2f(0.5f, 0f);				glVertex2f(screenx+16, screeny+16);
+			glTexCoord2f(0.53125f, 0f);			glVertex2f(screenx+26, screeny+16);
+			glTexCoord2f(0.53125f, 0.03125f);	glVertex2f(screenx+26, screeny+ 26);
+			glTexCoord2f(0.5f, 0.03125f);		glVertex2f(screenx+16, screeny+26);
+		
 		glEnd();
 		glPopMatrix();
-		
+		glBindTexture(GL_TEXTURE_2D, 0);
 		// spieler gehbewegung
 		if (isMoving){
 			changeState++;
 			if (changeState == 10){
-				texposx += 0.25;
+				texposx += 0.0625;
 				changeState = 0;
-				if(texposx>= 1){
+				if(texposx>= 0.5){
 					texposx = 0;
 				}
 			}
@@ -179,7 +180,7 @@ public class Player extends AbstractMovableEntity {
 		//nicht über den rand laufen
 		if (f <= 0){
 			x = 0;
-		} else if (f >= World.WORLDSIZE*32-width ){
+		} else if (f >= World.WORLDSIZE*32 - width ){
 			x = (float) (World.WORLDSIZE*32 - width);
 		} else {
 			x = f;

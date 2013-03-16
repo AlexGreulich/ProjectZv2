@@ -42,7 +42,7 @@ public class Level {
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
-	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE+2*World.CHUNK_BORDER][World.CHUNK_SIZE+2*World.CHUNK_BORDER];	
+	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER][World.CHUNK_SIZE + 2*World.CHUNK_BORDER];	
 	int creatingcount=0;
 	
 	public Level(int x, int y){
@@ -65,8 +65,8 @@ public class Level {
 	}
 	
 	private void initCurrentTileGrid() {
-		for(int a = 0; a < World.CHUNK_SIZE+2*World.CHUNK_BORDER; a++){
-			for(int b = 0; b< World.CHUNK_SIZE+2*World.CHUNK_BORDER; b++){
+		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER; a++){
+			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER; b++){
 				currentTileGrid[a][b] = new Tile((short)a,(short)b,(short)1);
 			}
 		}
@@ -76,36 +76,35 @@ public class Level {
 //		System.out.println("createCurrentTileGrid" + creatingcount);
 		creatingcount++;
 		// auf welchem Chunk befindet sich der Spieler?
-		chunkLeftCornerX = (((x)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
-		chunkLeftCornerY = (((y)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
+		chunkLeftCornerX = ((x/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
+		chunkLeftCornerY = ((y/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
 		
 		// Wo werden Ränder benötigt?
-		if (x < (World.WORLDSIZE-World.CHUNK_SIZE)*32){	// gibt es einen rechten Rand?
+		if (x < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	// gibt es einen rechten Rand?
 			chunkBorderRight = World.CHUNK_BORDER;
 		} else {chunkBorderRight = 0;}
-		if (y < (World.WORLDSIZE-World.CHUNK_SIZE)*32){	//gibt es einen unteren Rand
+		if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand
 			chunkBorderBottom = World.CHUNK_BORDER;
 		} else {chunkBorderBottom = 0;}
-		if (chunkLeftCornerX != 0){chunkLeftCornerX-=World.CHUNK_BORDER;};	// gibt es einen linken Rand?
-		if (chunkLeftCornerY != 0){chunkLeftCornerY-=World.CHUNK_BORDER;};	// gibt es einen oberen Rand?
+		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER;};	// gibt es einen linken Rand?
+		if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER;};	// gibt es einen oberen Rand?
 		
 		// currentTileGrid füllen
-		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER+chunkBorderRight; a++){
-			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER+chunkBorderBottom; b++){
-				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX+a][chunkLeftCornerY+b];
+		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderRight; a++){
+			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderBottom; b++){
+				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX +a][chunkLeftCornerY +b];
 			}
 		}
 	}
 	
-	
 	public void draw(Player player){
-		screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
-		screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
+		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
+		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
 		
 		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER*32 )){
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
-			screenDeltaX = (int) (player.getX()-chunkLeftCornerX*32-player.screenx);
-			screenDeltaY = (int) (player.getY()-chunkLeftCornerY*32-player.screeny);
+			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
+			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
@@ -126,28 +125,30 @@ public class Level {
 				v2 = (te.getY()+texW)/texW * percentage;//
 				
 			//	Texturkoord.		..	an Bildschirmausschnitt
-				glTexCoord2f(u,v);		glVertex2f(a*texW,b*texW);		
-				glTexCoord2f(u2,v);		glVertex2f(a*texW+texW,b*texW);		
-				glTexCoord2f(u2,v2);	glVertex2f(a*texW+texW,b*texW+texW);	
-				glTexCoord2f(u,v2);		glVertex2f(a*texW,b*texW+texW);
+				glTexCoord2f(u,v);		glVertex2f(a*texW,		b*texW);		
+				glTexCoord2f(u2,v);		glVertex2f(a*texW+texW,	b*texW);		
+				glTexCoord2f(u2,v2);	glVertex2f(a*texW+texW,	b*texW+texW);	
+				glTexCoord2f(u,v2);		glVertex2f(a*texW,		b*texW+texW);
 			}
 		}
 		glEnd();
 		glLoadIdentity();
 	}
 	
-	
 	private void createFinalMap(){
 		try {
-			BufferedImage map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
+			BufferedImage map = ImageIO.read(getClass().getResource("/karten/grossekarte.gif"));
 			Color c = null;
 			for(short x = 0; x < map.getWidth();x++){
 				for(short y = 0; y < map.getHeight();y++){
 					short n = 0;
 					c = new Color(map.getRGB(x, y));
-							if(c.equals(new Color(100,200,100))){
+							if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
 								n=19;
 							}
+							
+							
+							
 					if(c.getRed() == 255){
 						if(c.getGreen() == 255){
 							//sand
@@ -282,12 +283,14 @@ public class Level {
 						}
 					}
 					Tile t = new Tile(x,y,n);
+					if(c.equals(new Color(255,0,0))){
+						t.spawnsZombie =true;
+					}
 					tilegrid[x][y] = t;
 				}
 			}
 		} catch (IOException e1) {e1.printStackTrace();}
 	}
-	
 	
 	private void changeTile(short a, short b, short type){
 		if((tilegrid[a][b].getType() == 19) && (a-1 >=0 ) && (b-1 >= 0) && (a+1 < World.WORLDSIZE) && (b+1 < World.WORLDSIZE)){
@@ -302,16 +305,16 @@ public class Level {
 			short reunten = tilegrid[a+1][b+1].getType();
 			
 			if((links==type) && (rechts==type)){
-				tilegrid[a][b].setType((short)33);
+				tilegrid[a][b].setType(type);
 			}
 			if((oben == type) && (unten == type)){
-				tilegrid[a][b].setType((short)33);
+				tilegrid[a][b].setType(type);
 			}
 			if((reoben ==type) && (liunten == type) && (reunten != type) && (lioben != type)){
-				tilegrid[a][b].setType((short)33);
+				tilegrid[a][b].setType(type);
 			}
 			if((reunten == type) && (lioben == type) && (reoben != type) && (liunten != type)){
-				tilegrid[a][b].setType((short)33);
+				tilegrid[a][b].setType(type);
 			}
 			
 			if((oben == type) && (links == type)){
@@ -363,7 +366,6 @@ public class Level {
 			}
 		}
 	}
-	
 	
 	private Map<Integer, TextureEntry> createCoordMapFromTexture(Texture t){
 		

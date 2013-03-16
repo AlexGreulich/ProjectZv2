@@ -5,6 +5,7 @@ public class Tile {
 	short x; 
 	short y;
 	short type;
+	boolean spawnsZombie =false;
 	
 	public Tile(short x1, short y1, short type1){
 		this.x = x1;

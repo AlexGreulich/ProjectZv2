@@ -68,8 +68,8 @@ public class Gamemain {
 					
 					int delta = getDelta();
 					
-					player.setX(player.getX()+velocityX*delta);
-					player.setY(player.getY()+velocityY*delta);
+					player.setX(player.getX() +velocityX *delta);
+					player.setY(player.getY() +velocityY *delta);
 					velocityX *= 0.9f;
 					velocityY *= 0.9f;
 					
