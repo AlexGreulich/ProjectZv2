@@ -30,96 +30,43 @@ public class Gamemain {
 			
 			switch(state){
 				case INGAME:
-					
-//					if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-//						velocityX -= 0.01f;
-//						player.movesLeft();
-//						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-//							velocityY -= 0.01f;
-//							player.movesLeftUp();
-//						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-//							velocityY += 0.01f;
-//							player.movesLeftDown();
-//						}
-//						player.isMoving = true;
-//					} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-//						velocityX += 0.01f;
-//						player.movesRight();
-//						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-//							velocityY -= 0.01f;
-//							player.movesRightUp();
-//						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-//							velocityY += 0.01f;
-//							player.movesRightDown();
-//						}
-//						player.isMoving = true;
-//					} else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-//						velocityY -= 0.01f;
-//						player.movesUp();
-//						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-//							velocityX -= 0.01f;
-//							player.movesLeftUp();
-//						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-//							velocityX += 0.01f;
-//							player.movesRightUp();
-//						}
-//						player.isMoving = true;
-//					} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-//						velocityY += 0.01f;
-//						player.movesDown();
-//						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-//							velocityX -= 0.01f;
-//							player.movesLeftUp();
-//						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-//							velocityX += 0.01f;
-//							player.movesRightUp();
-//						}
-//						player.isMoving = true;
-//					} else {
-//						player.isMoving = false;
-//						velocityX = 0;
-//						velocityY = 0;
-//					}
-					
+										
 					player.calcDirection();
 					
-					if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+					if ((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
 						velocityX -= 0.05f;
 					}
-					if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+					if ((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
 						velocityX += 0.05f;
 					}
-					if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+					if ((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
 						velocityY -= 0.05f;
-						
 					}
-					if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-						velocityY += 0.05f;
-						
+					if ((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+						velocityY += 0.05f;						
 					}
 					
 					
 					if(velocityX >= 0.2f){
-						velocityX =0.2f;
+						velocityX = 0.2f;
 					}
 					else if(velocityX < -0.2f){
-						velocityX=-0.2f;
+						velocityX =- 0.2f;
 					}
 					if(velocityY >= 0.2f){
-						velocityY =0.2f;
+						velocityY = 0.2f;
 					}
 					else if(velocityY < -0.2f){
-						velocityY =-0.2f;
+						velocityY =- 0.2f;
 					}
 					
-					if((velocityX < -0.0025f) || (velocityX > 0.0025f) || (velocityY < -0.0025f) || (velocityY > 0.0025f)){
-						player.isMoving =true;
-					}else{
-						player.isMoving =false;
+					if ((velocityX < -0.0025f) || (velocityX > 0.0025f) || (velocityY < -0.0025f) || (velocityY > 0.0025f)){
+						player.isMoving = true;
+					} else {
+						player.isMoving = false;
 					}
 					
 					int delta = getDelta();
-					
 					
 					player.setX(player.getX()+velocityX*delta);
 					player.setY(player.getY()+velocityY*delta);
@@ -163,14 +110,8 @@ public class Gamemain {
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		 
 		GL11.glViewport(0, 0, World.WIDTH, World.HEIGHT);
-//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		 
-//		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-//		GL11.glOrtho(0, World.WIDTH, World.HEIGHT, 0, 1, -1);
-//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 	
 	

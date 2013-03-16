@@ -21,8 +21,6 @@ public class World {
 	
 	public final static int playerMouseRadius = 64;
 	
-	public enum StateofGame{
-		INGAME, MENU
-	}
-	public enum PlayerDirection{ UP,DOWN,LEFT,RIGHT,LEFTUP,LEFTDOWN,RIGHTUP,RIGHTDOWN}
+	public enum StateofGame { INGAME, MENU }
+	public enum PlayerDirection { UP,DOWN,LEFT,RIGHT,LEFTUP,LEFTDOWN,RIGHTUP,RIGHTDOWN }
 }

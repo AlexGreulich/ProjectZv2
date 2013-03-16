@@ -10,8 +10,6 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.GL_LINES;
-
 import org.lwjgl.input.Mouse;
 
 import MainPack.World;
@@ -29,8 +27,8 @@ public class Player extends AbstractMovableEntity {
 	public float screeny;
 	int changeState;
 	public boolean isMoving;
-	float cursorX=0,cursorY=0;
-	float velocityX=0f, velocityY =0f;
+	float cursorX = 0, cursorY = 0;
+	float velocityX = 0f, velocityY = 0f;
 
 	private PlayerDirection direction;
 	
@@ -76,28 +74,29 @@ public class Player extends AbstractMovableEntity {
 			break;
 		}
 		
+		// zeichne Spieler
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
-		
 		glBegin(GL_QUADS);
 			glTexCoord2f(texposx,       texposy);			glVertex2f( screenx, screeny);		
 			glTexCoord2f(texposx+0.25f, texposy);			glVertex2f( screenx + (float)width, screeny);		
 			glTexCoord2f(texposx+0.25f, texposy+0.125f);	glVertex2f( screenx + (float)width, screeny + (float)height);	
 			glTexCoord2f(texposx,       texposy+0.125f);	glVertex2f( screenx, screeny + (float)height);
 		glEnd();
+		
+		// zeichne Cursor
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glPushMatrix();
-		glTranslatef(cursorX,cursorY,0);
+		glTranslatef(cursorX, cursorY, 0);
 		glBegin(GL_QUADS);
 			glColor3f(1f,1f,1f);
-			
-			glVertex2f(World.INT_MIDDLE_X+16, World.INT_MIDDLE_Y+16);
-			glVertex2f(World.INT_MIDDLE_X +26, World.INT_MIDDLE_Y +16);
-			glVertex2f(World.INT_MIDDLE_X +26, World.INT_MIDDLE_Y + 26);
-			glVertex2f(World.INT_MIDDLE_X+16, World.INT_MIDDLE_Y +26);
-		
-		
+			glVertex2f(screenx+16, screeny+16);
+			glVertex2f(screenx+26, screeny+16);
+			glVertex2f(screenx+26, screeny+ 26);
+			glVertex2f(screenx+16, screeny+26);
 		glEnd();
 		glPopMatrix();
+		
+		// spieler gehbewegung
 		if (isMoving){
 			changeState++;
 			if (changeState == 10){
@@ -112,13 +111,12 @@ public class Player extends AbstractMovableEntity {
 
 	public void calcDirection(){
 		
-		double distX = 1.0 * Mouse.getX() - World.INT_MIDDLE_X ;									//0 bis 640 -> -320 bis +320
-		double distY = -1.0 * Mouse.getY() + World.INT_MIDDLE_Y;								//0 bis -640 -> -320 bis +320
-		//damit haben wir die mouseposition abhängig von der bildschirmmitte
+		// berechne mouseposition abhängig von der bildschirmmitte
+		double distX = 1.0 * Mouse.getX() - screenx ;									//0 bis 640 -> -320 bis +320
+		double distY = -1.0 * Mouse.getY() + screeny;								//0 bis -640 -> -320 bis +320
 		
 		//für jeden viertelkreis/quadranten bestimme den winkel und passe die richtung an
-		
-		if((distX > 0) && (distY > 0)){			//maus unten rechts
+		if ((distX > 0) && (distY > 0)){			//maus unten rechts
 			double angle = Math.toDegrees(Math.atan((distX / distY)));
 			System.out.println("angle: "+ (angle));
 			
@@ -128,12 +126,11 @@ public class Player extends AbstractMovableEntity {
 				direction = World.PlayerDirection.RIGHTDOWN;
 			}else{
 				direction = World.PlayerDirection.DOWN;
-			}
-			
+			}			
 			cursorX = (float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 			
-		}else if((distX > 0) && (distY < 0)){	//maus oben rechts
+		} else if((distX > 0) && (distY < 0)){	//maus oben rechts
 			double angle = Math.toDegrees(Math.atan((distX / distY*-1)));
 			System.out.println("angle: "+ (angle));
 			
@@ -143,11 +140,11 @@ public class Player extends AbstractMovableEntity {
 				direction = World.PlayerDirection.RIGHTUP;
 			}else{
 				direction = World.PlayerDirection.UP;
-			}
-			
+			}			
 			cursorX = (float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
-		}else if((distX < 0) && (distY > 0)){	//maus unten links
+			
+		} else if((distX < 0) && (distY > 0)){	//maus unten links
 			double angle = Math.toDegrees(Math.atan((distX*-1 / distY)));
 			System.out.println("angle: "+(angle));
 			
@@ -157,12 +154,11 @@ public class Player extends AbstractMovableEntity {
 				direction = World.PlayerDirection.LEFTDOWN;
 			}else{
 				direction = World.PlayerDirection.DOWN;
-			}
-			
+			}			
 			cursorX = -(float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 			
-		}else if((distX < 0) && (distY < 0)){	//maus oben links
+		} else if((distX < 0) && (distY < 0)){	//maus oben links
 			double angle = Math.toDegrees(Math.atan((distX*-1 / distY*-1)));
 			System.out.println("angle: "+ (angle));
 			
@@ -176,7 +172,6 @@ public class Player extends AbstractMovableEntity {
 			cursorX = -(float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 		}
-		
 	}
 	
 	@Override
@@ -222,32 +217,4 @@ public class Player extends AbstractMovableEntity {
 			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;	// standard
 		}
 	}
-	
-//	public void movesRight(){
-//		texposy = 2*0.125f;
-//	}
-//	public void movesLeft(){
-//		texposy = 0.125f;
-//	}
-//	public void movesDown(){
-//		texposy = 0;
-//	}
-//	public void movesUp() {
-//		texposy = 3*0.125f;
-//	}
-//	public void movesLeftUp() {
-//		texposy = 6*0.125f;
-//	}
-//	public void movesLeftDown() {
-//		texposy = 4*0.125f;
-//	}
-//	public void movesRightUp() {
-//		texposy = 7*0.125f;
-//	}
-//	public void movesRightDown() {
-//		texposy = 5*0.125f;
-//	}
-//	public void setDirection(float f){
-//		this.texposy =f;
-//	}
 }

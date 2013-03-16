@@ -59,7 +59,7 @@ public class Level {
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
 		createFinalMap();
-		//calculateTileBorders();
+		calculateTileBorders();
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		createCurrentTileGrid(x, y);
 	}
