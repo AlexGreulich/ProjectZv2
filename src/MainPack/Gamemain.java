@@ -2,20 +2,22 @@ package MainPack;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import Entities.Player;
+import MainPack.World.StateofGame;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Gamemain {
 
-	private Gamestate state = Gamestate.INGAME;
+	private StateofGame state = StateofGame.INGAME;
 	Level level;
 	Player player;
 	private static long lastFrame;
 	float velocityX =0.0f, velocityY =0.0f;
-	
+	int mouseX=0, mouseY=0;
 	
 	public void start(){
 		
@@ -29,75 +31,104 @@ public class Gamemain {
 			switch(state){
 				case INGAME:
 					
-					if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-						velocityX -= 0.01f;
-						player.movesLeft();
-						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-							velocityY -= 0.01f;
-							player.movesLeftUp();
-						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-							velocityY += 0.01f;
-							player.movesLeftDown();
-						}
-						player.isMoving = true;
-					} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-						velocityX += 0.01f;
-						player.movesRight();
-						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-							velocityY -= 0.01f;
-							player.movesRightUp();
-						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-							velocityY += 0.01f;
-							player.movesRightDown();
-						}
-						player.isMoving = true;
-					} else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-						velocityY -= 0.01f;
-						player.movesUp();
-						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-							velocityX -= 0.01f;
-							player.movesLeftUp();
-						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-							velocityX += 0.01f;
-							player.movesRightUp();
-						}
-						player.isMoving = true;
-					} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-						velocityY += 0.01f;
-						player.movesDown();
-						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-							velocityX -= 0.01f;
-							player.movesLeftUp();
-						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-							velocityX += 0.01f;
-							player.movesRightUp();
-						}
-						player.isMoving = true;
-					} else {
-						player.isMoving = false;
-						velocityX = 0;
-						velocityY = 0;
+//					if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
+//						velocityX -= 0.01f;
+//						player.movesLeft();
+//						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+//							velocityY -= 0.01f;
+//							player.movesLeftUp();
+//						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+//							velocityY += 0.01f;
+//							player.movesLeftDown();
+//						}
+//						player.isMoving = true;
+//					} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+//						velocityX += 0.01f;
+//						player.movesRight();
+//						if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+//							velocityY -= 0.01f;
+//							player.movesRightUp();
+//						} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+//							velocityY += 0.01f;
+//							player.movesRightDown();
+//						}
+//						player.isMoving = true;
+//					} else if((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
+//						velocityY -= 0.01f;
+//						player.movesUp();
+//						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
+//							velocityX -= 0.01f;
+//							player.movesLeftUp();
+//						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+//							velocityX += 0.01f;
+//							player.movesRightUp();
+//						}
+//						player.isMoving = true;
+//					} else if((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
+//						velocityY += 0.01f;
+//						player.movesDown();
+//						if((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
+//							velocityX -= 0.01f;
+//							player.movesLeftUp();
+//						} else if((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
+//							velocityX += 0.01f;
+//							player.movesRightUp();
+//						}
+//						player.isMoving = true;
+//					} else {
+//						player.isMoving = false;
+//						velocityX = 0;
+//						velocityY = 0;
+//					}
+					
+					player.calcDirection();
+					
+					if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+						velocityX -= 0.05f;
+					}
+					if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+						velocityX += 0.05f;
+					}
+					if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+						velocityY -= 0.05f;
+						
+					}
+					if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+						velocityY += 0.05f;
+						
 					}
 					
-					if(velocityX >= 0.3f){
-						velocityX =0.3f;
+					
+					if(velocityX >= 0.2f){
+						velocityX =0.2f;
 					}
-					else if(velocityX < -0.3f){
-						velocityX=-0.3f;
+					else if(velocityX < -0.2f){
+						velocityX=-0.2f;
 					}
-					if(velocityY >= 0.3f){
-						velocityY =0.3f;
+					if(velocityY >= 0.2f){
+						velocityY =0.2f;
 					}
-					else if(velocityY < -0.3f){
-						velocityY =-0.3f;
+					else if(velocityY < -0.2f){
+						velocityY =-0.2f;
 					}
+					
+					if((velocityX < -0.0025f) || (velocityX > 0.0025f) || (velocityY < -0.0025f) || (velocityY > 0.0025f)){
+						player.isMoving =true;
+					}else{
+						player.isMoving =false;
+					}
+					
 					int delta = getDelta();
+					
 					
 					player.setX(player.getX()+velocityX*delta);
 					player.setY(player.getY()+velocityY*delta);
+					velocityX *= 0.9f;
+					velocityY *= 0.9f;
 					
 					level.draw(player);
 					player.draw();
+					
 					break;
 					
 				case MENU:

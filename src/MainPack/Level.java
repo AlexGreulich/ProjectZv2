@@ -43,7 +43,7 @@ public class Level {
 	
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
 	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE+2*World.CHUNK_BORDER][World.CHUNK_SIZE+2*World.CHUNK_BORDER];	
-	
+	int creatingcount=0;
 	
 	public Level(int x, int y){
 		//	Lade das tileset als eine groﬂe Textur
@@ -73,8 +73,8 @@ public class Level {
 	}
 
 	public void createCurrentTileGrid(int x, int y){
-		System.out.println("createCurrentTileGrid");
-		
+//		System.out.println("createCurrentTileGrid" + creatingcount);
+		creatingcount++;
 		// auf welchem Chunk befindet sich der Spieler?
 		chunkLeftCornerX = (((x)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
 		chunkLeftCornerY = (((y)/32)/World.CHUNK_SIZE)*World.CHUNK_SIZE;
@@ -112,7 +112,7 @@ public class Level {
 		
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
-		System.out.println("player: "+player.getX()+"|"+player.getY()+"    screendeltax/y: "+screenDeltaX+"|"+screenDeltaY+"     screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"    chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY);
+//		System.out.println("player: "+player.getX()+"|"+player.getY()+"    screendeltax/y: "+screenDeltaX+"|"+screenDeltaY+"     screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"    chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY);
 		
 		glBegin(GL_QUADS);
 		
