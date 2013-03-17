@@ -30,7 +30,7 @@ public class Player extends AbstractMovableEntity {
 	float cursorX = 0, cursorY = 0;
 	float velocityX = 0f, velocityY = 0f;
 
-	private PlayerDirection direction;
+	public PlayerDirection direction;
 	
 	public Player() {
 		// x, y, width, height, file-name
@@ -77,10 +77,10 @@ public class Player extends AbstractMovableEntity {
 		// zeichne Spieler
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 		glBegin(GL_QUADS);
-			glTexCoord2f(texposx,       texposy);			glVertex2f( screenx, 				screeny);		
+			glTexCoord2f(texposx,     	  texposy);			glVertex2f( screenx, 				screeny);		
 			glTexCoord2f(texposx+0.0625f, texposy);			glVertex2f( screenx + (float)width, screeny);		
 			glTexCoord2f(texposx+0.0625f, texposy+0.125f);	glVertex2f( screenx + (float)width, screeny + (float)height);	
-			glTexCoord2f(texposx,       texposy+0.125f);	glVertex2f( screenx,				screeny + (float)height);
+			glTexCoord2f(texposx,     	  texposy+0.125f);	glVertex2f( screenx,				screeny + (float)height);
 		glEnd();
 		
 		// zeichne Cursor

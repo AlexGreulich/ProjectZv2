@@ -1,4 +1,8 @@
 package MainPack;
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -18,6 +22,8 @@ public class Gamemain {
 	private static long lastFrame;
 	float velocityX =0.0f, velocityY =0.0f;
 	int mouseX=0, mouseY=0;
+	GameMenu menu;
+	
 	
 	public void start(){
 		
@@ -28,24 +34,68 @@ public class Gamemain {
 		
 		while(!Display.isCloseRequested()){
 			
+			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+				switch(state){
+				case INGAME:
+					this.state = World.StateofGame.MENU;
+					break;
+				case MENU:
+					this.state = World.StateofGame.INGAME;
+					break;
+				}
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			switch(state){
 				case INGAME:
-										
+					Mouse.setGrabbed(true);		//versteckt den mauscursor			
 					player.calcDirection();
 					
 					if ((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-						velocityX -= 0.05f;
+						if((player.direction.equals(World.PlayerDirection.LEFT)
+							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN)
+							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
+							
+							velocityX -= 0.05f;
+						}else{
+							velocityX -= 0.01f;
+						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-						velocityX += 0.05f;
+						if((player.direction.equals(World.PlayerDirection.RIGHT) 
+							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
+							|| (player.direction.equals(World.PlayerDirection.RIGHTUP))))){
+							
+							velocityX += 0.05f;
+						}else{
+							velocityX += 0.01f;
+						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-						velocityY -= 0.05f;
+						if((player.direction.equals(World.PlayerDirection.UP) 
+							|| (player.direction.equals(World.PlayerDirection.RIGHTUP) 
+							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
+							
+							velocityY -= 0.05f;
+						}else{
+							velocityY -= 0.01f;
+						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-						velocityY += 0.05f;						
+						if((player.direction.equals(World.PlayerDirection.DOWN) 
+							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
+							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN))))){
+							
+							velocityY += 0.05f;
+							
+						}else{
+							velocityY += 0.01f;
+						}				
 					}
-					
 					
 					if(velocityX >= 0.2f){
 						velocityX = 0.2f;
@@ -79,12 +129,18 @@ public class Gamemain {
 					break;
 					
 				case MENU:
+					Mouse.setGrabbed(false); //Mauscursor wieder da, alternativ könnte man auch einen eigenen cursor erstellen....
+					level.draw(player);
+					player.draw();
+					menu.draw();
+					
 					break;
 			}
 			Display.update();
 			Display.sync(60);
 		}
 		Display.destroy();
+		Mouse.destroy();
 		System.exit(0);
 	}
 	
@@ -118,6 +174,8 @@ public class Gamemain {
 	public void initGame(){
 		player = new Player();
 		level = new Level((int)player.getX(), (int)player.getY());
+		menu = new GameMenu();
+		
 	}
 	
 	
@@ -143,5 +201,7 @@ public class Gamemain {
 		Gamemain gm =new Gamemain();
 		gm.start();
 	}
+	
+	
 	
 }
