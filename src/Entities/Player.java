@@ -27,6 +27,9 @@ import MainPack.World.PlayerDirection;
 
 public class Player extends AbstractMovableEntity {
 	
+	public float lifeEnergy =100f, dexterity = 100f, hunger = 100f, thirst = 100f;
+	
+	
 	float texposx, texposy;
 	public float screenx;
 	public float screeny;
@@ -116,6 +119,10 @@ public class Player extends AbstractMovableEntity {
 		}
 	}
 
+	public float getDexterity(){
+		return this.dexterity;
+	}
+	
 	public void calcDirection(float speed){
 		
 		System.out.println("speed: "+ speed );
