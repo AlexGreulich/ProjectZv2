@@ -54,7 +54,7 @@ public class Level {
 		
 			texW = tilesetTexture.getTextureWidth()/32f;
 			texH = tilesetTexture.getTextureHeight()/32f;
-			map = ImageIO.read(getClass().getResource("/karten/grossekarte.gif"));
+			map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
@@ -92,7 +92,7 @@ public class Level {
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderRight; a++){
 			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderBottom; b++){
 				short n = 0;
-				c = new Color(map.getRGB(a, b));
+				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
 						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
 							n=19;
 						}
@@ -230,10 +230,11 @@ public class Level {
 						}
 					}
 				}
-				currentTileGrid[a][b] = new Tile((short)a,(short)b,n);
+				currentTileGrid[a][b] = new Tile((short)(chunkLeftCornerX+a),(short) (chunkLeftCornerY+b),n);
 			}
 		}
 	}
+	
 	
 	public void draw(Player player){
 		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);

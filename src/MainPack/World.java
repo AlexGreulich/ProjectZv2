@@ -8,8 +8,8 @@ public class World {
 	public final static int TILE_SIZE = 32;
 	final static int WIDTH = 640;
 	final static int HEIGHT = 640;
-	public final static float PLAYERSTARTPOSITIONX = 2*32;
-	public final static float PLAYERSTARTPOSITIONY = 5*32;
+	public final static float PLAYERSTARTPOSITIONX = 2000*32;
+	public final static float PLAYERSTARTPOSITIONY = 2000*32;
 	
 	//Berechnete Werte
 	public final static int TILE_MIDDLE_X = TILES_ON_SCREEN_WIDTH / 2; 
@@ -20,7 +20,7 @@ public class World {
 	public final static int CHUNK_SIZE = WORLDSIZE/40;
 	
 	public final static int playerMouseRadius = 64;
-	public final static float PLAYER_MAX_VELOCITY = 0.2f;
+	public final static float PLAYER_MAX_VELOCITY = 0.5f;
 	public final static float PLAYER_VELOCITY_FORWARD = 0.05f;
 	public final static float PLAYER_VELOCITY_BACKWARD = 0.01f;
 
