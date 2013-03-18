@@ -20,7 +20,10 @@ public class World {
 	public final static int CHUNK_SIZE = WORLDSIZE/40;
 	
 	public final static int playerMouseRadius = 64;
-	
+	public final static float PLAYER_MAX_VELOCITY = 0.2f;
+	public final static float PLAYER_VELOCITY_FORWARD = 0.05f;
+	public final static float PLAYER_VELOCITY_BACKWARD = 0.01f;
+
 	public enum StateofGame { INGAME, MENU }
 	public enum PlayerDirection { UP,DOWN,LEFT,RIGHT,LEFTUP,LEFTDOWN,RIGHTUP,RIGHTDOWN }
 }
