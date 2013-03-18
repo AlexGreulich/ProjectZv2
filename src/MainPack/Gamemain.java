@@ -21,6 +21,7 @@ public class Gamemain {
 	Player player;
 	private static long lastFrame;
 	float velocityX =0.0f, velocityY =0.0f;
+	float speed=0f;
 	int mouseX=0, mouseY=0;
 	GameMenu menu;
 	
@@ -53,78 +54,37 @@ public class Gamemain {
 			switch(state){
 				case INGAME:
 					Mouse.setGrabbed(true);		//versteckt den mauscursor			
-					player.calcDirection();
+					int delta = getDelta();
 					
-					if ((Keyboard.isKeyDown(Keyboard.KEY_A)) || (Keyboard.isKeyDown(Keyboard.KEY_LEFT))){
-						if((player.direction.equals(World.PlayerDirection.LEFT)
-							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN)
-							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
-							
-							velocityX -= 0.05f;
-						}else{
-							velocityX -= 0.01f;
-						}
-					}
-					if ((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
-						if((player.direction.equals(World.PlayerDirection.RIGHT) 
-							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
-							|| (player.direction.equals(World.PlayerDirection.RIGHTUP))))){
-							
-							velocityX += 0.05f;
-						}else{
-							velocityX += 0.01f;
-						}
-					}
-					if ((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
-						if((player.direction.equals(World.PlayerDirection.UP) 
-							|| (player.direction.equals(World.PlayerDirection.RIGHTUP) 
-							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
-							
-							velocityY -= 0.05f;
-						}else{
-							velocityY -= 0.01f;
-						}
-					}
-					if ((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
-						if((player.direction.equals(World.PlayerDirection.DOWN) 
-							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
-							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN))))){
-							
-							velocityY += 0.05f;
-							
-						}else{
-							velocityY += 0.01f;
-						}				
-					}
+					player.calcDirection(speed * delta);
 					
-					if(velocityX >= 0.2f){
-						velocityX = 0.2f;
+					if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+						speed += 0.05f;
 					}
-					else if(velocityX < -0.2f){
-						velocityX =- 0.2f;
+					if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+						speed -= 0.05f;
 					}
-					if(velocityY >= 0.2f){
-						velocityY = 0.2f;
+					if(speed > 0.2f){
+						speed = 0.2f;
+					}else if(speed < -0.1f){
+						speed = -0.1f;
 					}
-					else if(velocityY < -0.2f){
-						velocityY =- 0.2f;
-					}
-					
-					if ((velocityX < -0.0025f) || (velocityX > 0.0025f) || (velocityY < -0.0025f) || (velocityY > 0.0025f)){
+					if ((speed < -0.0025f) || (speed > 0.0025f) ){
 						player.isMoving = true;
 					} else {
 						player.isMoving = false;
 					}
 					
-					int delta = getDelta();
-					
-					player.setX(player.getX() +velocityX *delta);
-					player.setY(player.getY() +velocityY *delta);
-					velocityX *= 0.9f;
-					velocityY *= 0.9f;
+					speed *= 0.9f;
 					
 					level.draw(player);
 					player.draw();
+					
+					//Wenn der chunk gewechselt wurde mache folgendes:
+					// items updaten, ..
+					if(level.chunkChanged){
+//						level.updateItems();
+					}
 					
 					break;
 					
@@ -133,7 +93,9 @@ public class Gamemain {
 					level.draw(player);
 					player.draw();
 					menu.draw();
-					
+					if(Mouse.isButtonDown(0)){
+						menu.changeState();
+					}
 					break;
 			}
 			Display.update();

@@ -23,4 +23,6 @@ public class World {
 	
 	public enum StateofGame { INGAME, MENU }
 	public enum PlayerDirection { UP,DOWN,LEFT,RIGHT,LEFTUP,LEFTDOWN,RIGHTUP,RIGHTDOWN }
+	public enum ItemType { TOOL, WEAPON, MEDIC, COLLECTABLE }
+	public enum MenuOption { NEWGAME, OPTIONS, CREDITS, EXIT, MAINMENU }
 }

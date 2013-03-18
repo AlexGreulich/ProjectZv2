@@ -10,8 +10,13 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Mouse;
 
+import MainPack.Item;
 import MainPack.World;
 import MainPack.World.PlayerDirection;
 
@@ -30,6 +35,7 @@ public class Player extends AbstractMovableEntity {
 	float cursorX = 0, cursorY = 0;
 	float velocityX = 0f, velocityY = 0f;
 
+	List<Item> inventory = new ArrayList<Item>();
 	public PlayerDirection direction;
 	
 	public Player() {
@@ -110,7 +116,9 @@ public class Player extends AbstractMovableEntity {
 		}
 	}
 
-	public void calcDirection(){
+	public void calcDirection(float speed){
+		
+		System.out.println("speed: "+ speed );
 		
 		// berechne mouseposition abhängig von der bildschirmmitte
 		double distX = 1.0 * Mouse.getX() - screenx ;									//0 bis 640 -> -320 bis +320
@@ -119,7 +127,6 @@ public class Player extends AbstractMovableEntity {
 		//für jeden viertelkreis/quadranten bestimme den winkel und passe die richtung an
 		if ((distX > 0) && (distY > 0)){			//maus unten rechts
 			double angle = Math.toDegrees(Math.atan((distX / distY)));
-			System.out.println("angle: "+ (angle));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.RIGHT;
@@ -131,9 +138,9 @@ public class Player extends AbstractMovableEntity {
 			cursorX = (float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 			
+//			System.out.println("cursor@: "+ cursorX+ " "+ cursorY);
 		} else if((distX > 0) && (distY < 0)){	//maus oben rechts
 			double angle = Math.toDegrees(Math.atan((distX / distY*-1)));
-			System.out.println("angle: "+ (angle));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.RIGHT;
@@ -144,10 +151,8 @@ public class Player extends AbstractMovableEntity {
 			}			
 			cursorX = (float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
-			
 		} else if((distX < 0) && (distY > 0)){	//maus unten links
 			double angle = Math.toDegrees(Math.atan((distX*-1 / distY)));
-			System.out.println("angle: "+(angle));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.LEFT;
@@ -158,10 +163,8 @@ public class Player extends AbstractMovableEntity {
 			}			
 			cursorX = -(float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
-			
 		} else if((distX < 0) && (distY < 0)){	//maus oben links
 			double angle = Math.toDegrees(Math.atan((distX*-1 / distY*-1)));
-			System.out.println("angle: "+ (angle));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.LEFT;
@@ -172,7 +175,13 @@ public class Player extends AbstractMovableEntity {
 			}
 			cursorX = -(float) (World.playerMouseRadius * Math.sin(Math.toRadians(angle)));
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
+			//this.y += speed * (cursorY/64)
 		}
+		setX(x + speed * (cursorX/64)) ;
+		setY(y + speed * (cursorY/64));
+//		moveTo = doVectorstuff(screenx, screeny, cursorX, cursorY);
+//		this.x += moveTo.get(0);
+//		this.y += moveTo.get(1);
 	}
 	
 	@Override

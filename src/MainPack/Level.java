@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -44,11 +46,13 @@ public class Level {
 	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
 	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER][World.CHUNK_SIZE + 2*World.CHUNK_BORDER];	
 	int creatingcount=0;
+	boolean chunkChanged = false;
+	
 	
 	public Level(int x, int y){
 		//	Lade das tileset als eine große Textur
 		try {
-			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_neu_32-1024.png"));
+			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_neu_32-1024b.png"));
 		
 			texW = tilesetTexture.getTextureWidth()/32f;
 			texH = tilesetTexture.getTextureHeight()/32f;
@@ -105,6 +109,7 @@ public class Level {
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
 			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
 			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
+			chunkChanged = true;
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
@@ -292,7 +297,8 @@ public class Level {
 		} catch (IOException e1) {e1.printStackTrace();}
 	}
 	
-	private void changeTile(short a, short b, short type){
+	private void changeTile(short a, short b, short type, int c){
+		
 		if((tilegrid[a][b].getType() == 19) && (a-1 >=0 ) && (b-1 >= 0) && (a+1 < World.WORLDSIZE) && (b+1 < World.WORLDSIZE)){
 			
 			short oben = tilegrid[a][b-1].getType();
@@ -356,13 +362,23 @@ public class Level {
 			if((unten == type) && (reoben !=type) && (lioben !=type) && (links !=type) && (rechts !=type) && (oben !=type)){
 				tilegrid[a][b].setType((short)1);
 			}
+			
+			if((oben != type) && (unten != type) && (rechts != type) && (links != type) && (reoben != type) && (reunten != type) && (lioben != type) && (liunten != type)){
+				
+				tilegrid[a][b].setType((short)c);
+			}
 		}
 	}
 	
 	private void calculateTileBorders(){
+		
+		int[] randomgrass = {160,161,162,163,192,193,194,195,224,225,227,256,258,259,288,289,290,291};
+		Random rnd = new Random();
 		for(short a = 0; a< World.WORLDSIZE;a++){
 			for(short b = 0; b< World.WORLDSIZE;b++){
-				changeTile(a,b,(short)33);
+				int d = randomgrass[rnd.nextInt(18)];
+//				System.out.println(d);
+				changeTile(a,b,(short)33, d);
 			}
 		}
 	}
