@@ -60,9 +60,9 @@ public class Gamemain {
 							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN)
 							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
 							
-							velocityX -= 0.05f;
+							velocityX -= World.PLAYER_VELOCITY_FORWARD;
 						}else{
-							velocityX -= 0.01f;
+							velocityX -= World.PLAYER_VELOCITY_BACKWARD;
 						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_D)) || (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))){
@@ -70,9 +70,9 @@ public class Gamemain {
 							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
 							|| (player.direction.equals(World.PlayerDirection.RIGHTUP))))){
 							
-							velocityX += 0.05f;
+							velocityX += World.PLAYER_VELOCITY_FORWARD;
 						}else{
-							velocityX += 0.01f;
+							velocityX += World.PLAYER_VELOCITY_BACKWARD;
 						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_W)) || (Keyboard.isKeyDown(Keyboard.KEY_UP))){
@@ -80,9 +80,9 @@ public class Gamemain {
 							|| (player.direction.equals(World.PlayerDirection.RIGHTUP) 
 							|| (player.direction.equals(World.PlayerDirection.LEFTUP))))){
 							
-							velocityY -= 0.05f;
+							velocityY -= World.PLAYER_VELOCITY_FORWARD;
 						}else{
-							velocityY -= 0.01f;
+							velocityY -= World.PLAYER_VELOCITY_BACKWARD;
 						}
 					}
 					if ((Keyboard.isKeyDown(Keyboard.KEY_S)) || (Keyboard.isKeyDown(Keyboard.KEY_DOWN))){
@@ -90,24 +90,24 @@ public class Gamemain {
 							|| (player.direction.equals(World.PlayerDirection.RIGHTDOWN) 
 							|| (player.direction.equals(World.PlayerDirection.LEFTDOWN))))){
 							
-							velocityY += 0.05f;
+							velocityY += World.PLAYER_VELOCITY_FORWARD;
 							
 						}else{
-							velocityY += 0.01f;
+							velocityY += World.PLAYER_VELOCITY_BACKWARD;
 						}				
 					}
 					
-					if(velocityX >= 0.2f){
-						velocityX = 0.2f;
+					if(velocityX >= World.PLAYER_MAX_VELOCITY){
+						velocityX = World.PLAYER_MAX_VELOCITY;
 					}
-					else if(velocityX < -0.2f){
-						velocityX =- 0.2f;
+					else if(velocityX < -World.PLAYER_MAX_VELOCITY){
+						velocityX =  -World.PLAYER_MAX_VELOCITY;
 					}
-					if(velocityY >= 0.2f){
-						velocityY = 0.2f;
+					if(velocityY >= World.PLAYER_MAX_VELOCITY){
+						velocityY = World.PLAYER_MAX_VELOCITY;
 					}
-					else if(velocityY < -0.2f){
-						velocityY =- 0.2f;
+					else if(velocityY < -World.PLAYER_MAX_VELOCITY){
+						velocityY = -World.PLAYER_MAX_VELOCITY;
 					}
 					
 					if ((velocityX < -0.0025f) || (velocityX > 0.0025f) || (velocityY < -0.0025f) || (velocityY > 0.0025f)){
