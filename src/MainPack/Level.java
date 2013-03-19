@@ -37,6 +37,8 @@ public class Level {
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
 	private Map<Integer,TextureEntry> textureEntryMap = null;
+	BufferedImage map;
+	Color c = null;
 	
 	private int screenDeltaX = 0, screenDeltaY = 0;
 	float percentage = 32f/1024f;
@@ -56,14 +58,13 @@ public class Level {
 		
 			texW = tilesetTexture.getTextureWidth()/32f;
 			texH = tilesetTexture.getTextureHeight()/32f;
+			map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
 		
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
-		createFinalMap();
-		calculateTileBorders();
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		createCurrentTileGrid(x, y);
 	}
@@ -77,8 +78,6 @@ public class Level {
 	}
 
 	public void createCurrentTileGrid(int x, int y){
-//		System.out.println("createCurrentTileGrid" + creatingcount);
-		creatingcount++;
 		// auf welchem Chunk befindet sich der Spieler?
 		chunkLeftCornerX = ((x/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
 		chunkLeftCornerY = ((y/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
@@ -96,10 +95,150 @@ public class Level {
 		// currentTileGrid füllen
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderRight; a++){
 			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderBottom; b++){
-				currentTileGrid[a][b] = tilegrid[chunkLeftCornerX +a][chunkLeftCornerY +b];
+				short n = 0;
+				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
+						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
+							n=19;
+						}
+						
+				if(c.getRed() == 255){
+					if(c.getGreen() == 255){
+						//sand
+						// grid[x][y] = 0;	//da sand, sind alle felder begehbar
+						
+						if(c.getBlue()==0)		 {			//vorher :  {tileArray[x][y] = new Tile(tileset.getTileImage(201));
+						n=33;
+						}else if(c.getBlue()==10){//oben
+						n=1;
+						}else if(c.getBlue()==20){
+						n=65;
+						}else if(c.getBlue()==30){//links
+						n=32;
+						}else if(c.getBlue()==40){
+						n=34;
+						}else if(c.getBlue()==50){//lioben
+						n=0;
+						}else if(c.getBlue()==60){
+						n=64;
+						}else if(c.getBlue()==70){//reoben
+						n=2;
+						}else if(c.getBlue()==80){
+						n=66;
+						}else if(c.getBlue()==90){//gras_lioben
+						n=97;
+						}else if(c.getBlue()==100){
+						n=129;
+						}else if(c.getBlue()==110){//gras_reoben
+						n=96;
+						}else if(c.getBlue()==120){
+						n=128;
+						}
+					}
+				}else if(c.getRed()==0){
+					if(c.getGreen()==200){
+						
+						//busch
+//								tileArray[x][y][1] = 0; //zunächst alle felder begehbar
+						
+						if(c.getBlue()==0) {
+						n=201; //tileArray[x][y][1] = 1; //busch mittig, nicht begehbar
+						}else if(c.getBlue()==10){
+						n=200; //tileArray[x][y][1] = 1;	//busch unten, nicht begehbar
+						}else if(c.getBlue()==20){
+						n=202;
+						}else if(c.getBlue()==30){
+						n=181;
+						}else if(c.getBlue()==40){
+						n=221;
+						}else if(c.getBlue()==50){
+						n=180;
+						}else if(c.getBlue()==60){
+						n=182;
+						}else if(c.getBlue()==70){
+						n=220;
+						}else if(c.getBlue()==80){
+						n=222;
+						}else if(c.getBlue()==90){
+						n=144;
+						}else if(c.getBlue()==100){
+						n=143;
+						}else if(c.getBlue()==110){
+						n=124;
+						}else if(c.getBlue()==120){
+						n=123;
+						}
+					}
+					
+					if(c.getGreen()==255){
+						//wasser
+						// tileArray[x][y][1] = 1;	//kein feld begehbar
+						
+						if(c.getBlue()==255){
+						n=39;
+						}else if(c.getBlue()==10){//oben
+						n=7;
+						}else if(c.getBlue()==20){
+						n=71;
+						}else if(c.getBlue()==30){//links
+						n=38;
+						}else if(c.getBlue()==40){
+						n=40;
+						}else if(c.getBlue()==50){//lioben
+						n=6;
+						}else if(c.getBlue()==60){
+						n=70;
+						}else if(c.getBlue()==70){//reoben
+						n=8;
+						}else if(c.getBlue()==80){
+						n=72;
+						}else if(c.getBlue()==90){//gras_lioben
+						n=133;
+						}else if(c.getBlue()==100){
+						n=101;
+						}else if(c.getBlue()==110){//gras_reoben
+						n=132;
+						}else if(c.getBlue()==120){
+						n=100;
+						}
+					}
+				}else if(c.getRed()==100){
+					if(c.getGreen()==100){
+						//stein
+						// tileArray[x][y][1] = 1;
+						if(c.getBlue()==0)		 {
+						n=81;
+						}else if(c.getBlue()==10){
+						n=80;
+						}else if(c.getBlue()==20){
+						n=82;
+						}else if(c.getBlue()==30){
+						n=61;
+						}else if(c.getBlue()==40){
+						n=101;
+						}else if(c.getBlue()==50){
+						n=60;
+						}else if(c.getBlue()==60){
+						n=62;
+						}else if(c.getBlue()==70){
+						n=100;
+						}else if(c.getBlue()==80){
+						n=102;
+						}else if(c.getBlue()==90){
+						n=64;
+						}else if(c.getBlue()==100){
+						n=63;
+						}else if(c.getBlue()==110){
+						n=44;
+						}else if(c.getBlue()==120){
+						n=43;
+						}
+					}
+				}
+				currentTileGrid[a][b] = new Tile((short)(chunkLeftCornerX+a),(short) (chunkLeftCornerY+b),n);
 			}
 		}
 	}
+	
 	
 	public void draw(Player player){
 		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
@@ -140,249 +279,7 @@ public class Level {
 		glLoadIdentity();
 	}
 	
-	private void createFinalMap(){
-		try {
-			BufferedImage map = ImageIO.read(getClass().getResource("/karten/grossekarte.gif"));
-			Color c = null;
-			for(short x = 0; x < map.getWidth();x++){
-				for(short y = 0; y < map.getHeight();y++){
-					short n = 0;
-					c = new Color(map.getRGB(x, y));
-							if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
-								n=19;
-							}
-							
-							
-							
-					if(c.getRed() == 255){
-						if(c.getGreen() == 255){
-							//sand
-							// grid[x][y] = 0;	//da sand, sind alle felder begehbar
-							
-							if(c.getBlue()==0)		 {			//vorher :  {tileArray[x][y] = new Tile(tileset.getTileImage(201));
-							n=33;
-							}else if(c.getBlue()==10){//oben
-							n=1;
-							}else if(c.getBlue()==20){
-							n=65;
-							}else if(c.getBlue()==30){//links
-							n=32;
-							}else if(c.getBlue()==40){
-							n=34;
-							}else if(c.getBlue()==50){//lioben
-							n=0;
-							}else if(c.getBlue()==60){
-							n=64;
-							}else if(c.getBlue()==70){//reoben
-							n=2;
-							}else if(c.getBlue()==80){
-							n=66;
-							}else if(c.getBlue()==90){//gras_lioben
-							n=97;
-							}else if(c.getBlue()==100){
-							n=129;
-							}else if(c.getBlue()==110){//gras_reoben
-							n=96;
-							}else if(c.getBlue()==120){
-							n=128;
-							}
-						}
-					}else if(c.getRed()==0){
-						if(c.getGreen()==200){
-							
-							//busch
-//								tileArray[x][y][1] = 0; //zunächst alle felder begehbar
-							
-							if(c.getBlue()==0) {
-							n=201; //tileArray[x][y][1] = 1; //busch mittig, nicht begehbar
-							}else if(c.getBlue()==10){
-							n=200; //tileArray[x][y][1] = 1;	//busch unten, nicht begehbar
-							}else if(c.getBlue()==20){
-							n=202;
-							}else if(c.getBlue()==30){
-							n=181;
-							}else if(c.getBlue()==40){
-							n=221;
-							}else if(c.getBlue()==50){
-							n=180;
-							}else if(c.getBlue()==60){
-							n=182;
-							}else if(c.getBlue()==70){
-							n=220;
-							}else if(c.getBlue()==80){
-							n=222;
-							}else if(c.getBlue()==90){
-							n=144;
-							}else if(c.getBlue()==100){
-							n=143;
-							}else if(c.getBlue()==110){
-							n=124;
-							}else if(c.getBlue()==120){
-							n=123;
-							}
-						}
-						
-						if(c.getGreen()==255){
-							//wasser
-							// tileArray[x][y][1] = 1;	//kein feld begehbar
-							
-							if(c.getBlue()==255){
-							n=39;
-							}else if(c.getBlue()==10){//oben
-							n=7;
-							}else if(c.getBlue()==20){
-							n=71;
-							}else if(c.getBlue()==30){//links
-							n=38;
-							}else if(c.getBlue()==40){
-							n=40;
-							}else if(c.getBlue()==50){//lioben
-							n=6;
-							}else if(c.getBlue()==60){
-							n=70;
-							}else if(c.getBlue()==70){//reoben
-							n=8;
-							}else if(c.getBlue()==80){
-							n=72;
-							}else if(c.getBlue()==90){//gras_lioben
-							n=133;
-							}else if(c.getBlue()==100){
-							n=101;
-							}else if(c.getBlue()==110){//gras_reoben
-							n=132;
-							}else if(c.getBlue()==120){
-							n=100;
-							}
-						}
-					}else if(c.getRed()==100){
-						if(c.getGreen()==100){
-							//stein
-							// tileArray[x][y][1] = 1;
-							if(c.getBlue()==0)		 {
-							n=81;
-							}else if(c.getBlue()==10){
-							n=80;
-							}else if(c.getBlue()==20){
-							n=82;
-							}else if(c.getBlue()==30){
-							n=61;
-							}else if(c.getBlue()==40){
-							n=101;
-							}else if(c.getBlue()==50){
-							n=60;
-							}else if(c.getBlue()==60){
-							n=62;
-							}else if(c.getBlue()==70){
-							n=100;
-							}else if(c.getBlue()==80){
-							n=102;
-							}else if(c.getBlue()==90){
-							n=64;
-							}else if(c.getBlue()==100){
-							n=63;
-							}else if(c.getBlue()==110){
-							n=44;
-							}else if(c.getBlue()==120){
-							n=43;
-							}
-						}
-					}
-					Tile t = new Tile(x,y,n);
-					if(c.equals(new Color(255,0,0))){
-						t.spawnsZombie =true;
-					}
-					tilegrid[x][y] = t;
-				}
-			}
-		} catch (IOException e1) {e1.printStackTrace();}
-	}
-	
-	private void changeTile(short a, short b, short type, int c){
-		
-		if((tilegrid[a][b].getType() == 19) && (a-1 >=0 ) && (b-1 >= 0) && (a+1 < World.WORLDSIZE) && (b+1 < World.WORLDSIZE)){
-			
-			short oben = tilegrid[a][b-1].getType();
-			short unten = tilegrid[a][b+1].getType();
-			short links = tilegrid[a-1][b].getType();
-			short rechts = tilegrid[a+1][b].getType();
-			short lioben = tilegrid[a-1][b-1].getType();
-			short reoben = tilegrid[a+1][b-1].getType();
-			short liunten = tilegrid[a-1][b+1].getType();
-			short reunten = tilegrid[a+1][b+1].getType();
-			
-			if((links==type) && (rechts==type)){
-				tilegrid[a][b].setType(type);
-			}
-			if((oben == type) && (unten == type)){
-				tilegrid[a][b].setType(type);
-			}
-			if((reoben ==type) && (liunten == type) && (reunten != type) && (lioben != type)){
-				tilegrid[a][b].setType(type);
-			}
-			if((reunten == type) && (lioben == type) && (reoben != type) && (liunten != type)){
-				tilegrid[a][b].setType(type);
-			}
-			
-			if((oben == type) && (links == type)){
-				tilegrid[a][b].setType((short)96);
-			}
-			if((oben == type) && (rechts == type)){
-				tilegrid[a][b].setType((short)97);
-			}
-			if((unten == type) && (links == type)){
-				tilegrid[a][b].setType((short)128);
-			}
-			if((unten == type) && (rechts == type)){
-				tilegrid[a][b].setType((short)129);
-			}
-					
-			//	nur die 4 ecken:
-			if((reoben ==type)&&(lioben !=type)&&(links !=type)&&(liunten !=type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
-				tilegrid[a][b].setType((short)64);
-			}
-			if((reoben !=type)&&(lioben == type)&&(links !=type)&&(liunten !=type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
-				tilegrid[a][b].setType((short)66);
-			}
-			if((reoben !=type)&&(lioben !=type)&&(links !=type)&&(liunten == type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
-				tilegrid[a][b].setType((short)2);
-			}
-			if((reoben !=type)&&(lioben !=type)&&(links !=type)&&(liunten !=type)&&(reunten == type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
-				tilegrid[a][b].setType((short)0);
-			}
 
-			if((rechts == type) && (links !=type) && (liunten !=type) && (lioben !=type) && (oben !=type) && (unten !=type)){
-				tilegrid[a][b].setType((short)32);
-			}
-			if((links == type) && (reoben !=type) && (reunten !=type) && (rechts !=type) && (oben !=type) && (unten !=type)){
-				tilegrid[a][b].setType((short)34);
-			}
-			if((oben == type) && (links !=type) && (liunten !=type) && (reunten !=type) && (rechts !=type) && (unten !=type)){
-				tilegrid[a][b].setType((short)65);
-			}
-			if((unten == type) && (reoben !=type) && (lioben !=type) && (links !=type) && (rechts !=type) && (oben !=type)){
-				tilegrid[a][b].setType((short)1);
-			}
-			
-			if((oben != type) && (unten != type) && (rechts != type) && (links != type) && (reoben != type) && (reunten != type) && (lioben != type) && (liunten != type)){
-				
-				tilegrid[a][b].setType((short)c);
-			}
-		}
-	}
-	
-	private void calculateTileBorders(){
-		
-		int[] randomgrass = {160,161,162,163,192,193,194,195,224,225,227,256,258,259,288,289,290,291};
-		Random rnd = new Random();
-		for(short a = 0; a< World.WORLDSIZE;a++){
-			for(short b = 0; b< World.WORLDSIZE;b++){
-				int d = randomgrass[rnd.nextInt(18)];
-//				System.out.println(d);
-				changeTile(a,b,(short)33, d);
-			}
-		}
-	}
-	
 	private Map<Integer, TextureEntry> createCoordMapFromTexture(Texture t){
 		
 		Map<Integer,TextureEntry> tileSetEntries = new HashMap<Integer,TextureEntry>();
