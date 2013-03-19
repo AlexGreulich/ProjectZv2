@@ -8,23 +8,33 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glTranslatef;
+import MainPack.World.MenuOption;
+
+
 
 public class GameMenuItem {
 
 	private float texPosX = 0, texPosY = 0;
 	private float scrPosX = 0, scrPosY = 0;
-	private boolean isSelected = false;
+	public boolean isSelected = false;
 	private int shiftX = 1;
 	
-	public GameMenuItem(float xt, float yt, float xs, float ys ){
+	
+	public GameMenuItem(float xt, float yt, float xs, float ys){
 		texPosX = xt;
 		texPosY = yt;
 		scrPosX = xs;
 		scrPosY = ys;
+		
+	}
+	
+	public void setPosition(int x, int y){
+		this.scrPosX = x;
+		this.scrPosY = y;
 	}
 	
 	public void draw(int mX, int mY){
-		System.out.println("my: "+ mY);
+//		System.out.println("my: "+ mY);
 		mY = 640-mY;
 		
 		if((mX > scrPosX) && (mX < (scrPosX + 320)) && (mY > scrPosY) && (mY <( scrPosY + 64))){
