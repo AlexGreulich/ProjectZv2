@@ -30,7 +30,7 @@ public class Player extends AbstractMovableEntity {
 	public float lifeEnergy =100f, dexterity = 100f, hunger = 100f, thirst = 100f;
 	
 	float speed;
-	float maxSpeed;
+	float maxSpeed, minSpeed;
 	float texposx, texposy;
 	public float screenx;
 	public float screeny;
@@ -53,6 +53,7 @@ public class Player extends AbstractMovableEntity {
         this.screeny = World.TILE_MIDDLE_Y*32;
         speed = 0f;
     	maxSpeed = 0.2f;
+    	minSpeed = -0.2f;
         isMoving = false;
         direction = PlayerDirection.DOWN;
 	}
@@ -131,9 +132,7 @@ public class Player extends AbstractMovableEntity {
 	
 	public void calcDirection(float delta){
 		calcSpeed = speed*delta;
-		
-		System.out.println("speed: "+ speed );
-		
+				
 		// berechne mouseposition abhängig von der bildschirmmitte
 		double distX = 1.0 * Mouse.getX() - screenx ;									//0 bis 640 -> -320 bis +320
 		double distY = -1.0 * Mouse.getY() + screeny;								//0 bis -640 -> -320 bis +320
@@ -242,19 +241,31 @@ public class Player extends AbstractMovableEntity {
 		}
 	}
 	
+	
 	public void changeSpeed(float f) {
-		speed += f;
-		
-		if(speed > maxSpeed){
-			speed = maxSpeed;
-		}else if(speed < -0.1f){ // quasi minSpeed
-			speed = -0.1f;
-		}
-		
-		checkMovement();
+		System.out.println("change speed");
+		speed += f;	
+		checkMovementAndSpeed();
 	}
 	
-	private void checkMovement() {
+	public void slowDown() {
+		System.out.println("slow down");
+		speed*=0.9f;	
+		checkMovementAndSpeed();
+		System.out.println("speed: "+ speed );
+	}
+	
+	private void checkMovementAndSpeed() {
+		// Speed
+		if(speed > maxSpeed){
+			speed = maxSpeed;
+			System.out.println("max erreicht");
+		}
+		if(speed < minSpeed){ // quasi minSpeed
+			speed = minSpeed;
+			System.out.println("min erreicht");
+		}
+		// Movement
 		if ((speed < -0.0025f) || (speed > 0.0025f) ){
 			isMoving = true;
 		} else {
@@ -268,10 +279,5 @@ public class Player extends AbstractMovableEntity {
 
 	public float getSpeed() {
 		return speed;
-	}
-
-	public void slowDown() {
-		speed*=0.9f;	
-		checkMovement();
 	}
 }
