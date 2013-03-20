@@ -243,32 +243,28 @@ public class Player extends AbstractMovableEntity {
 	
 	
 	public void changeSpeed(float f) {
-		System.out.println("change speed");
 		speed += f;	
 		checkMovementAndSpeed();
 	}
 	
 	public void slowDown() {
-		System.out.println("slow down");
 		speed*=0.9f;	
 		checkMovementAndSpeed();
-		System.out.println("speed: "+ speed );
 	}
 	
 	private void checkMovementAndSpeed() {
 		// Speed
 		if(speed > maxSpeed){
 			speed = maxSpeed;
-			System.out.println("max erreicht");
 		}
 		if(speed < minSpeed){ // quasi minSpeed
 			speed = minSpeed;
-			System.out.println("min erreicht");
 		}
 		// Movement
 		if ((speed < -0.0025f) || (speed > 0.0025f) ){
 			isMoving = true;
 		} else {
+			speed = 0;
 			isMoving = false;
 		}
 	}
