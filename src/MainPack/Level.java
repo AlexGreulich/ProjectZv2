@@ -45,7 +45,6 @@ public class Level {
 	float u, v, u2, v2;
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
-	Tile[][] tilegrid = new Tile[World.WORLDSIZE][World.WORLDSIZE];
 	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER][World.CHUNK_SIZE + 2*World.CHUNK_BORDER];	
 	int creatingcount=0;
 	boolean chunkChanged = false;
@@ -69,6 +68,7 @@ public class Level {
 		createCurrentTileGrid(x, y);
 	}
 	
+	
 	private void initCurrentTileGrid() {
 		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER; a++){
 			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER; b++){
@@ -76,6 +76,7 @@ public class Level {
 			}
 		}
 	}
+	
 
 	public void createCurrentTileGrid(int x, int y){
 		// auf welchem Chunk befindet sich der Spieler?

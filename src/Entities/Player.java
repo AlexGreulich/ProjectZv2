@@ -29,7 +29,8 @@ public class Player extends AbstractMovableEntity {
 	
 	public float lifeEnergy =100f, dexterity = 100f, hunger = 100f, thirst = 100f;
 	
-	
+	float speed;
+	float maxSpeed;
 	float texposx, texposy;
 	public float screenx;
 	public float screeny;
@@ -37,6 +38,7 @@ public class Player extends AbstractMovableEntity {
 	public boolean isMoving;
 	float cursorX = 0, cursorY = 0;
 	float velocityX = 0f, velocityY = 0f;
+	float calcSpeed;
 
 //	List<Item> inventory = new ArrayList<Item>();
 	public PlayerDirection direction;
@@ -49,6 +51,8 @@ public class Player extends AbstractMovableEntity {
         this.changeState = 0;
         this.screenx = World.TILE_MIDDLE_X*32;
         this.screeny = World.TILE_MIDDLE_Y*32;
+        speed = 0f;
+    	maxSpeed = 0.2f;
         isMoving = false;
         direction = PlayerDirection.DOWN;
 	}
@@ -119,11 +123,14 @@ public class Player extends AbstractMovableEntity {
 		}
 	}
 
+	
 	public float getDexterity(){
 		return this.dexterity;
 	}
 	
-	public void calcDirection(float speed){
+	
+	public void calcDirection(float delta){
+		calcSpeed = speed*delta;
 		
 		System.out.println("speed: "+ speed );
 		
@@ -184,8 +191,8 @@ public class Player extends AbstractMovableEntity {
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 			//this.y += speed * (cursorY/64)
 		}
-		setX(x + speed * (cursorX/64)) ;
-		setY(y + speed * (cursorY/64));
+		setX(x + calcSpeed * (cursorX/64)) ;
+		setY(y + calcSpeed * (cursorY/64));
 //		moveTo = doVectorstuff(screenx, screeny, cursorX, cursorY);
 //		this.x += moveTo.get(0);
 //		this.y += moveTo.get(1);
@@ -233,5 +240,38 @@ public class Player extends AbstractMovableEntity {
 		} else {
 			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;	// standard
 		}
+	}
+	
+	public void changeSpeed(float f) {
+		speed += f;
+		
+		if(speed > maxSpeed){
+			speed = maxSpeed;
+		}else if(speed < -0.1f){ // quasi minSpeed
+			speed = -0.1f;
+		}
+		
+		checkMovement();
+	}
+	
+	private void checkMovement() {
+		if ((speed < -0.0025f) || (speed > 0.0025f) ){
+			isMoving = true;
+		} else {
+			isMoving = false;
+		}
+	}
+
+	public void setMaxSpeed(float f){
+		maxSpeed = f;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void slowDown() {
+		speed*=0.9f;	
+		checkMovement();
 	}
 }

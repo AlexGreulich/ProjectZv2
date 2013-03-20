@@ -20,9 +20,6 @@ public class Gamemain {
 	Level level;
 	Player player;
 	private static long lastFrame;
-	float velocityX =0.0f, velocityY =0.0f;
-	float speed = 0f;
-	float maxSpeed = 0.2f;
 	int mouseX=0, mouseY=0;
 	GameMenu menu;
 	
@@ -54,41 +51,29 @@ public class Gamemain {
 			
 			switch(state){
 				case INGAME:
-					Mouse.setGrabbed(true);		//versteckt den mauscursor			
-					int delta = getDelta();
+					//Mouse.setGrabbed(true);		//versteckt den mauscursor			
+
+					player.calcDirection(getDelta());
 					
-					player.calcDirection(speed * delta);
-					
+					// vorwärts gehen
 					if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-						speed += 0.05f;
-						
+						player.changeSpeed(0.05f);
 					}
+					// rückwärts gehen
 					if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-						speed -= 0.05f;
+						player.changeSpeed(-0.05f);
 					}
 					
-					if(speed > maxSpeed){
-						speed = maxSpeed;
-					}else if(speed < -0.1f){
-						speed = -0.1f;
-					}
 					//test speed verdoppeln wenn man rennt, ausdauer als neues attribut neben energie usw
 					//nur test, wird noch ausgebaut -> spieler erholt sich erst kurze zeit nachdem er gerannt ist
 					if((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) && (player.getDexterity() > 0)){
-						maxSpeed = 0.4f;
+						player.setMaxSpeed(0.4f);
 						player.dexterity--;
-						System.out.println("dex: "+ player.getDexterity());
+//						System.out.println("dex: "+ player.getDexterity());
 					}else{
-						maxSpeed = 0.2f;
+						player.setMaxSpeed(0.2f);
 					}
-					
-					if ((speed < -0.0025f) || (speed > 0.0025f) ){
-						player.isMoving = true;
-					} else {
-						player.isMoving = false;
-					}
-					
-					speed *= 0.9f;
+					player.slowDown();
 					
 					level.draw(player);
 					player.draw();
@@ -150,7 +135,6 @@ public class Gamemain {
 		player = new Player();
 		level = new Level((int)player.getX(), (int)player.getY());
 		menu = new GameMenu();
-		
 	}
 	
 	

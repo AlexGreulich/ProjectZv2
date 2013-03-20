@@ -1,6 +1,5 @@
-package MainPack;
+package Entities;
 
-import Entities.AbstractMovableEntity;
 
 public class Zombie extends AbstractMovableEntity{
 
