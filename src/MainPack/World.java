@@ -8,7 +8,7 @@ public class World {
 	public final static int TILE_SIZE = 32;
 	final static int WIDTH = 640;
 	final static int HEIGHT = 640;
-	public final static float PLAYERSTARTPOSITIONX = 2*32;
+	public final static float PLAYERSTARTPOSITIONX = 4*32;
 	public final static float PLAYERSTARTPOSITIONY = 26*32;
 	
 	//Berechnete Werte
