@@ -1,12 +1,16 @@
 package Entities;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
@@ -112,6 +116,9 @@ public class Player extends AbstractMovableEntity {
 		glEnd();
 		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		drawStats();
+		
 		// spieler gehbewegung
 		if (isMoving){
 			changeState++;
@@ -122,12 +129,81 @@ public class Player extends AbstractMovableEntity {
 					texposx = 0;
 				}
 			}
+		}else{				// spieler erholt sich wenn er mal gerannt ist oder so, wird evtl noch komplexer und dann woanders hin, testweise aber hier
+			if(getDexterity() < 100){
+				setDexterity(0.2f);
+			}
 		}
 	}
-
+	
+	public void drawStats(){
+		//background
+		glBegin(GL_QUADS);
+			glColor4f(0f, 0f, 0f, 0.5f);
+			glVertex2f(0, screeny + 180);
+			glVertex2f(640, screeny +180);
+			glVertex2f(640, screeny + 320);
+			glVertex2f(0, screeny + 320);
+		glEnd();
+		
+		//healthbar
+		glBegin(GL_QUADS);
+			glColor3f(0f, 0f, 0f);
+			glVertex2f(screenx -202, screeny + 198);
+			glVertex2f(screenx +2, screeny +198);
+			glVertex2f(screenx +2, screeny +222);
+			glVertex2f(screenx -202, screeny + 222);
+		glEnd();
+		glBegin(GL_QUADS);
+			glColor3f(1f, 0f, 0f);
+			glVertex2f(screenx - 200, screeny + 200);
+			glVertex2f(screenx - 200 + lifeEnergy*2, screeny + 200);
+			glVertex2f(screenx - 200 + lifeEnergy*2, screeny + 200 +20);
+			glVertex2f(screenx - 200, screeny + 200 + 20);
+		glEnd();
+		
+		//energybar
+		glBegin(GL_QUADS);
+			glColor3f(0f, 0f, 0f);
+			glVertex2f(screenx -202, screeny +228);
+			glVertex2f(screenx +2, screeny +228);
+			glVertex2f(screenx +2, screeny +252);
+			glVertex2f(screenx -202, screeny +252);
+		glEnd();
+		glBegin(GL_QUADS);
+			glColor3f(0f, 0f, 1f);
+			glVertex2f(screenx - 200, screeny + 230);
+			glVertex2f(screenx - 200 + dexterity*2, screeny + 230);
+			glVertex2f(screenx - 200 + dexterity*2, screeny + 230 +20);
+			glVertex2f(screenx - 200, screeny + 230 + 20);
+		glEnd();
+		
+		//hungerbar
+		glBegin(GL_QUADS);
+			glColor3f(0f, 1f, 0f);
+			glVertex2f(screenx - 200, screeny + 260);
+			glVertex2f(screenx - 200 + hunger*0.9f, screeny + 260);
+			glVertex2f(screenx - 200 + hunger*0.9f, screeny + 260 +10);
+			glVertex2f(screenx - 200, screeny + 260 + 10);
+		glEnd();
+		
+		//thirstbar
+		glBegin(GL_QUADS);
+			glColor3f(0f, 1f, 0f);
+			glVertex2f(screenx - 200, screeny + 280);
+			glVertex2f(screenx - 200 + thirst *0.9f, screeny + 280);
+			glVertex2f(screenx - 200 + thirst *0.9f, screeny + 280 +10);
+			glVertex2f(screenx - 200, screeny + 280 + 10);
+		glEnd();
+		
+		glColor3f(1f, 1f, 1f);//farbe zurücksetzen
+	}
 	
 	public float getDexterity(){
 		return this.dexterity;
+	}
+	public void setDexterity(float dext){
+		this.dexterity += dext;
 	}
 	
 	
