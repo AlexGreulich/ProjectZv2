@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
-import MainPack.Item;
+//import MainPack.Item;
 import MainPack.World;
 import MainPack.World.PlayerDirection;
 
@@ -38,7 +38,7 @@ public class Player extends AbstractMovableEntity {
 	float cursorX = 0, cursorY = 0;
 	float velocityX = 0f, velocityY = 0f;
 
-	List<Item> inventory = new ArrayList<Item>();
+//	List<Item> inventory = new ArrayList<Item>();
 	public PlayerDirection direction;
 	
 	public Player() {

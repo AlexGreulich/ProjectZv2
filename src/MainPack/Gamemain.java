@@ -34,7 +34,7 @@ public class Gamemain {
 		initGame();
 		initTimer();
 		
-		while(!Display.isCloseRequested()){
+		while((!Display.isCloseRequested()) && !((Keyboard.isKeyDown(Keyboard.KEY_Q)))) {
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				switch(state){
