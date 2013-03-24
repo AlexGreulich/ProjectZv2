@@ -39,7 +39,7 @@ public class Debugger {
 		font.drawString(x, y+20, "player speed: "+player.getSpeed());
 		font.drawString(x, y+40, "player screenxy: "+player.getScreenx()+" | "+ player.getScreeny());
 		
-		font.drawString(x, y+80, "level screen delta: "+level.getScreenDeltaX() +" | "+ level.getScreenDeltaY());
+		font.drawString(x, y+80, "level screendeltaxy: "+level.getScreenDeltaX() +" | "+ level.getScreenDeltaY());
 		
 		glPopMatrix();
 	}
@@ -47,7 +47,7 @@ public class Debugger {
 	private static void setUpFonts() {
         java.awt.Font awtFont = new java.awt.Font("Times New Roman", java.awt.Font.BOLD, 18);
         font = new UnicodeFont(awtFont);
-        font.getEffects().add(new ColorEffect(java.awt.Color.black));
+        font.getEffects().add(new ColorEffect(java.awt.Color.blue));
         font.addAsciiGlyphs();
         try {
             font.loadGlyphs();
