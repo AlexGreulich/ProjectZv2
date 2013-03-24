@@ -37,7 +37,6 @@ public class Player extends AbstractMovableEntity {
 	int changeState;
 	public boolean isMoving;
 	float cursorX = 0, cursorY = 0;
-	float velocityX = 0f, velocityY = 0f;
 	float calcSpeed;
 	double distX, distY;
 
@@ -145,7 +144,6 @@ public class Player extends AbstractMovableEntity {
 		} else {
 			distY = World.TILES_ON_SCREEN_HEIGHT*32-Mouse.getY() - screeny;
 		}
-//		System.out.println("screenx:"+ screenx + "   screeny:" + screeny+ "   distX:"+distX+"   distY:"+distY+ "   MouseX:"+Mouse.getX()+ "   MouseY:"+Mouse.getY());
 		
 		//für jeden viertelkreis/quadranten bestimme den winkel und passe die richtung an
 		if ((distX > 0) && (distY > 0)){			//maus unten rechts
@@ -283,5 +281,13 @@ public class Player extends AbstractMovableEntity {
 
 	public float getSpeed() {
 		return speed;
+	}
+	
+	public float getScreenx() {
+		return screenx;
+	}
+
+	public float getScreeny() {
+		return screeny;
 	}
 }

@@ -297,4 +297,16 @@ public class Level {
 		}
 		return tileSetEntries;
 	}
+
+
+	public int getScreenDeltaX() {
+		return screenDeltaX;
+	}
+
+
+	public int getScreenDeltaY() {
+		return screenDeltaY;
+	}
+	
+	
 }
