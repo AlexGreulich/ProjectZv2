@@ -107,8 +107,9 @@ public class Gamemain {
 	
 	public void initDisplay(){
 		try {
-			Display.setDisplayMode(new DisplayMode(640,640));
+			Display.setDisplayMode(Display.getDesktopDisplayMode());
 			Display.setTitle("ProjectZ v.2");
+			Display.setFullscreen(true);
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -119,15 +120,19 @@ public class Gamemain {
 	public void initGL(){
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, World.WIDTH, World.HEIGHT, 0, 1, -1);
+		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);               
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glViewport(0, 0, World.WIDTH, World.HEIGHT);
+		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		GL11.glLoadIdentity();
+		
+		World.TILES_ON_SCREEN_WIDTH = (Display.getWidth()/World.TILE_SIZE)+1;
+		World.TILES_ON_SCREEN_HEIGHT = (Display.getHeight()/World.TILE_SIZE)+1;
+		System.out.println(World.TILES_ON_SCREEN_WIDTH + "   " +World.TILES_ON_SCREEN_HEIGHT);
 	}
 	
 	

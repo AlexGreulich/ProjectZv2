@@ -145,7 +145,7 @@ public class Player extends AbstractMovableEntity {
 		} else {
 			distY = World.TILES_ON_SCREEN_HEIGHT*32-Mouse.getY() - screeny;
 		}
-		System.out.println("screenx:"+ screenx + "   screeny:" + screeny+ "   distX:"+distX+"   distY:"+distY+ "   MouseX:"+Mouse.getX()+ "   MouseY:"+Mouse.getY());
+//		System.out.println("screenx:"+ screenx + "   screeny:" + screeny+ "   distX:"+distX+"   distY:"+distY+ "   MouseX:"+Mouse.getX()+ "   MouseY:"+Mouse.getY());
 		
 		//für jeden viertelkreis/quadranten bestimme den winkel und passe die richtung an
 		if ((distX > 0) && (distY > 0)){			//maus unten rechts
@@ -219,7 +219,7 @@ public class Player extends AbstractMovableEntity {
 		// screenx ermitteln
 		if (x < (World.TILES_ON_SCREEN_WIDTH/2*32)){ 	// links oben
 			screenx = x;
-		} else if (x > ((World.WORLDSIZE-World.CHUNK_BORDER)*32)){	// unten rechts
+		} else if (x > ((World.WORLDSIZE-World.CHUNK_BORDER_LR)*32)){	// unten rechts
 			System.out.println("change screenx");
 			screenx = x - ((World.WORLDSIZE-World.TILES_ON_SCREEN_WIDTH)*32);
 		} else {
@@ -241,7 +241,7 @@ public class Player extends AbstractMovableEntity {
 		// screenx ermitteln
 		if (y < (World.TILES_ON_SCREEN_HEIGHT/2*32)){ 	// links oben
 			screeny = y;
-		} else if (y > ((World.WORLDSIZE-World.CHUNK_BORDER)*32)){	// unten rechts
+		} else if (y > ((World.WORLDSIZE-World.CHUNK_BORDER_TB)*32)){	// unten rechts
 			System.out.println("change screeny");
 			screeny = y - ((World.WORLDSIZE-World.TILES_ON_SCREEN_HEIGHT)*32);
 		} else {

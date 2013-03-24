@@ -45,7 +45,7 @@ public class Level {
 	float u, v, u2, v2;
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
-	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER][World.CHUNK_SIZE + 2*World.CHUNK_BORDER];	
+	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];	
 	int creatingcount=0;
 	boolean chunkChanged = false;
 	
@@ -70,8 +70,8 @@ public class Level {
 	
 	
 	private void initCurrentTileGrid() {
-		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER; a++){
-			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER; b++){
+		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR; a++){
+			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB; b++){
 				currentTileGrid[a][b] = new Tile((short)a,(short)b,(short)1);
 			}
 		}
@@ -85,17 +85,17 @@ public class Level {
 		
 		// Wo werden Ränder benötigt?
 		if (x < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	// gibt es einen rechten Rand?
-			chunkBorderRight = World.CHUNK_BORDER;
+			chunkBorderRight = World.CHUNK_BORDER_LR;
 		} else {chunkBorderRight = 0;}
 		if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand
-			chunkBorderBottom = World.CHUNK_BORDER;
+			chunkBorderBottom = World.CHUNK_BORDER_TB;
 		} else {chunkBorderBottom = 0;}
-		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER;};	// gibt es einen linken Rand?
-		if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER;};	// gibt es einen oberen Rand?
+		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
+		if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER_TB;};	// gibt es einen oberen Rand?
 		
 		// currentTileGrid füllen
-		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderRight; a++){
-			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER + chunkBorderBottom; b++){
+		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
+			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
 				short n = 0;
 				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
 						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
@@ -245,7 +245,7 @@ public class Level {
 		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
 		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
 		
-		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER*32 )){
+		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_LR*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER_LR*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_TB*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER_TB*32 )){
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
 			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
 			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
