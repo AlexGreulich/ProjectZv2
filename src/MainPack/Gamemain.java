@@ -22,6 +22,7 @@ public class Gamemain {
 	private static long lastFrame;
 	int mouseX=0, mouseY=0;
 	GameMenu menu;
+	Debugger debugger;
 	
 	
 	public void start(){
@@ -77,6 +78,7 @@ public class Gamemain {
 					
 					level.draw(player);
 					player.draw();
+					debugger.draw();
 					
 					//Wenn der chunk gewechselt wurde mache folgendes:
 					// items updaten, ..
@@ -134,6 +136,7 @@ public class Gamemain {
 	public void initGame(){
 		player = new Player();
 		level = new Level((int)player.getX(), (int)player.getY());
+		debugger = new Debugger(player,level);
 		menu = new GameMenu();
 	}
 	
