@@ -22,7 +22,10 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glTranslatef;
-
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
 /*
  * Die Position des Spielfelds ist immer vom Spieler abhängig
  * die Chunks sind alle gleich groß und überlappen sich um die halbe breite des Screens,
@@ -73,6 +76,7 @@ public class Level {
 		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER; a++){
 			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER; b++){
 				currentTileGrid[a][b] = new Tile((short)a,(short)b,(short)1);
+				
 			}
 		}
 	}
@@ -238,9 +242,84 @@ public class Level {
 				currentTileGrid[a][b] = new Tile((short)(chunkLeftCornerX+a),(short) (chunkLeftCornerY+b),n);
 			}
 		}
+		calculateTileBorders();
 	}
 	
+	private void changeTile(short a, short b, short type){
+		if((currentTileGrid[a][b].getType() == 19) && (a-1 >=0 ) && (b-1 >= 0) && (a+1 < World.CHUNK_SIZE) && (b+1 < World.CHUNK_SIZE)){
+			
+			short oben = currentTileGrid[a][b-1].getType();
+			short unten = currentTileGrid[a][b+1].getType();
+			short links = currentTileGrid[a-1][b].getType();
+			short rechts = currentTileGrid[a+1][b].getType();
+			short lioben = currentTileGrid[a-1][b-1].getType();
+			short reoben = currentTileGrid[a+1][b-1].getType();
+			short liunten = currentTileGrid[a-1][b+1].getType();
+			short reunten = currentTileGrid[a+1][b+1].getType();
+			
+			if((links==type) && (rechts==type)){
+				currentTileGrid[a][b].setType(type);
+			}
+			if((oben == type) && (unten == type)){
+				currentTileGrid[a][b].setType(type);
+			}
+			if((reoben ==type) && (liunten == type) && (reunten != type) && (lioben != type)){
+				currentTileGrid[a][b].setType(type);
+			}
+			if((reunten == type) && (lioben == type) && (reoben != type) && (liunten != type)){
+				currentTileGrid[a][b].setType(type);
+			}
+			
+			if((oben == type) && (links == type)){
+				currentTileGrid[a][b].setType((short)96);
+			}
+			if((oben == type) && (rechts == type)){
+				currentTileGrid[a][b].setType((short)97);
+			}
+			if((unten == type) && (links == type)){
+				currentTileGrid[a][b].setType((short)128);
+			}
+			if((unten == type) && (rechts == type)){
+				currentTileGrid[a][b].setType((short)129);
+			}
+					
+			//	nur die 4 ecken:
+			if((reoben ==type)&&(lioben !=type)&&(links !=type)&&(liunten !=type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
+				currentTileGrid[a][b].setType((short)64);
+			}
+			if((reoben !=type)&&(lioben == type)&&(links !=type)&&(liunten !=type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
+				currentTileGrid[a][b].setType((short)66);
+			}
+			if((reoben !=type)&&(lioben !=type)&&(links !=type)&&(liunten == type)&&(reunten !=type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
+				currentTileGrid[a][b].setType((short)2);
+			}
+			if((reoben !=type)&&(lioben !=type)&&(links !=type)&&(liunten !=type)&&(reunten == type)&&(rechts !=type)&&(oben !=type)&&(unten !=type)){
+				currentTileGrid[a][b].setType((short)0);
+			}
+
+			if((rechts == type) && (links !=type) && (liunten !=type) && (lioben !=type) && (oben !=type) && (unten !=type)){
+				currentTileGrid[a][b].setType((short)32);
+			}
+			if((links == type) && (reoben !=type) && (reunten !=type) && (rechts !=type) && (oben !=type) && (unten !=type)){
+				currentTileGrid[a][b].setType((short)34);
+			}
+			if((oben == type) && (links !=type) && (liunten !=type) && (reunten !=type) && (rechts !=type) && (unten !=type)){
+				currentTileGrid[a][b].setType((short)65);
+			}
+			if((unten == type) && (reoben !=type) && (lioben !=type) && (links !=type) && (rechts !=type) && (oben !=type)){
+				currentTileGrid[a][b].setType((short)1);
+			}
+		}
+	}
 	
+	private void calculateTileBorders(){
+		for(short a = 0; a< World.CHUNK_SIZE;a++){
+			for(short b = 0; b< World.CHUNK_SIZE;b++){
+				changeTile(a,b,(short)33);
+			}
+		}
+	}
+
 	public void draw(Player player){
 		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
 		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
@@ -253,7 +332,8 @@ public class Level {
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
-		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
 //		System.out.println("player: "+player.getX()+"|"+player.getY()+"    screendeltax/y: "+screenDeltaX+"|"+screenDeltaY+"     screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"    chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY);
@@ -297,16 +377,10 @@ public class Level {
 		}
 		return tileSetEntries;
 	}
-
-
 	public int getScreenDeltaX() {
 		return screenDeltaX;
-	}
-
-
+	} 
 	public int getScreenDeltaY() {
 		return screenDeltaY;
-	}
-	
-	
+	} 
 }

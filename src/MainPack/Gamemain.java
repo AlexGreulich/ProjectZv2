@@ -1,7 +1,14 @@
 package MainPack;
+import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JWindow;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -22,8 +29,8 @@ public class Gamemain {
 	private static long lastFrame;
 	int mouseX=0, mouseY=0;
 	GameMenu menu;
-	Debugger debugger;
-	
+	Debugger debugger; 
+	float aspectRatio=0f;
 	
 	public void start(){
 		
@@ -69,7 +76,7 @@ public class Gamemain {
 					//nur test, wird noch ausgebaut -> spieler erholt sich erst kurze zeit nachdem er gerannt ist
 					if((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) && (player.getDexterity() > 0)){
 						player.setMaxSpeed(0.4f);
-						player.dexterity--;
+						player.setDexterity(-0.5f);
 //						System.out.println("dex: "+ player.getDexterity());
 					}else{
 						player.setMaxSpeed(0.2f);
@@ -78,7 +85,6 @@ public class Gamemain {
 					
 					level.draw(player);
 					player.draw();
-					debugger.draw();
 					
 					//Wenn der chunk gewechselt wurde mache folgendes:
 					// items updaten, ..
@@ -92,6 +98,7 @@ public class Gamemain {
 					Mouse.setGrabbed(false); //Mauscursor wieder da, alternativ könnte man auch einen eigenen cursor erstellen....
 					level.draw(player);
 					player.draw();
+					debugger.draw(); 
 					menu.draw();
 					if(Mouse.isButtonDown(0)){
 						menu.changeState();
@@ -106,10 +113,64 @@ public class Gamemain {
 		System.exit(0);
 	}
 	
-	
+	public void setDisplayMode(int width, int height, boolean fullscreen) {
+		 
+		// return if requested DisplayMode is already set
+		if ((Display.getDisplayMode().getWidth() == width) &&
+				(Display.getDisplayMode().getHeight() == height) &&
+				(Display.isFullscreen() == fullscreen)) {
+			return;
+		}
+		 
+		try {
+			DisplayMode targetDisplayMode = null;
+		 
+		if (fullscreen) {
+			DisplayMode[] modes = Display.getAvailableDisplayModes();
+			int freq = 0;
+		 
+			for (int i=0;i<modes.length;i++) {
+					DisplayMode current = modes[i];
+		 
+					if ((current.getWidth() == width) && (current.getHeight() == height)) {
+						if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
+							if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
+								targetDisplayMode = current;
+								freq = targetDisplayMode.getFrequency();
+							}
+						}
+		 
+						// if we've found a match for bpp and frequence against the
+						// original display mode then it's probably best to go for this one
+						// since it's most likely compatible with the monitor
+						if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
+								(current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
+							targetDisplayMode = current;
+							break;
+						}
+					}
+			}
+		} else {
+			targetDisplayMode = new DisplayMode(width,height);
+		}
+		 
+		if (targetDisplayMode == null) {
+			System.out.println("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
+			return;
+		}
+		 
+		Display.setDisplayMode(targetDisplayMode);
+		Display.setFullscreen(fullscreen);
+		 
+		} catch (LWJGLException e) {
+			System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
+		}
+		}
 	public void initDisplay(){
 		try {
-			Display.setDisplayMode(new DisplayMode(640,640));
+//			Display.setDisplayMode(new DisplayMode(640,480));
+			setDisplayMode(1920,1080,true);
+			aspectRatio = Display.getWidth()/Display.getHeight();
 			Display.setTitle("ProjectZ v.2");
 			Display.create();
 		} catch (LWJGLException e) {
@@ -121,23 +182,24 @@ public class Gamemain {
 	public void initGL(){
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, World.WIDTH, World.HEIGHT, 0, 1, -1);
+		glOrtho(0, World.WIDTH * aspectRatio, World.HEIGHT* aspectRatio, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);               
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glViewport(0, 0, World.WIDTH, World.HEIGHT);
-		GL11.glLoadIdentity();
+		glEnable(GL_TEXTURE_2D);               
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
+		glEnable(GL_BLEND);
+		
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glViewport(0, 0, Display.getWidth()-1, Display.getHeight()+1);//World.WIDTHWorld.HEIGHT
+		glLoadIdentity();
 	}
 	
 	
 	public void initGame(){
 		player = new Player();
 		level = new Level((int)player.getX(), (int)player.getY());
-		debugger = new Debugger(player,level);
 		menu = new GameMenu();
+		debugger = new Debugger(player,level); 
 	}
 	
 	
@@ -163,6 +225,7 @@ public class Gamemain {
 		Gamemain gm =new Gamemain();
 		gm.start();
 	}
+	
 	
 	
 	

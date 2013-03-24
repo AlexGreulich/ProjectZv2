@@ -24,6 +24,7 @@ public class GameMenu {
 	Texture menutex;
 	GameMenuItem newGame, exitGame, credits,  options; 
 	MenuOption option = World.MenuOption.MAINMENU;
+	int posX =0, posY =0;
 	
 	public GameMenu(){
 		try {
@@ -33,11 +34,13 @@ public class GameMenu {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		posX =  (Display.getWidth()/2)  - 320;// World..WIDTH /2
+		posY = (Display.getHeight()/2)  - 320;
 		
-		newGame = new GameMenuItem(0, 0.625f, 192, 192);//0.1875f,0.1875f, World.MenuOption.NEWGAME, World.MenuOption.OPTIONS, World.MenuOption.CREDITS, World.MenuOption.EXIT
-		options = new GameMenuItem(0, 0.6875f, 192, 288);
-		credits = new GameMenuItem(0, 0.75f, 192, 384);
-		exitGame = new GameMenuItem(0, 0.8125f, 192, 480);
+		newGame = new GameMenuItem(0, 0.625f, posX +192, posY + 160);//x 192, y 192 288 384 480
+		options = new GameMenuItem(0, 0.6875f, posX + 192, posY + 256);
+		credits = new GameMenuItem(0, 0.75f, posX + 192, posY + 352);
+		exitGame = new GameMenuItem(0, 0.8125f, posX + 192, posY + 448);
 		
 	}
 	
@@ -45,10 +48,10 @@ public class GameMenu {
 		glBindTexture(GL_TEXTURE_2D, menutex.getTextureID());
 		
 		glBegin(GL_QUADS);
-			glTexCoord2f(0f,0f);			glVertex2f(0,0);
-			glTexCoord2f(0.625f,0f);		glVertex2f(640,0);
-			glTexCoord2f(0.625f,0.625f);	glVertex2f(640,640);
-			glTexCoord2f(0f,0.625f);		glVertex2f(0,640);
+			glTexCoord2f(0f,0f);			glVertex2f(posX,posY);//0,640
+			glTexCoord2f(0.625f,0f);		glVertex2f(posX + 640,posY );
+			glTexCoord2f(0.625f,0.625f);	glVertex2f(posX + 640,posY + 640);
+			glTexCoord2f(0f,0.625f);		glVertex2f(posX,posY + 640);
 		
 		glEnd();
 		

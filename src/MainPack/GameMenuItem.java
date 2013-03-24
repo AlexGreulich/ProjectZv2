@@ -35,9 +35,9 @@ public class GameMenuItem {
 	
 	public void draw(int mX, int mY){
 //		System.out.println("my: "+ mY);
-		mY = 640-mY;
+		mY = World.HEIGHT-64-mY;
 		
-		if((mX > scrPosX) && (mX < (scrPosX + 320)) && (mY > scrPosY) && (mY <( scrPosY + 64))){
+		if((mX > scrPosX) && (mX < (scrPosX + 320)) && (mY > scrPosY - 64) && (mY <(scrPosY ))){//(mY > scrPosY) && (mY <( scrPosY + 64))
 			isSelected = true;
 		}else{
 			isSelected = false;

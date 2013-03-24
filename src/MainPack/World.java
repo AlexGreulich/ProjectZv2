@@ -3,11 +3,11 @@ package MainPack;
 public class World {
 
 	public final static int WORLDSIZE = 4000;
-	public final static int TILES_ON_SCREEN_WIDTH = 20;
-	public final static int TILES_ON_SCREEN_HEIGHT = 20;
+	public final static int TILES_ON_SCREEN_WIDTH = 40;
+	public final static int TILES_ON_SCREEN_HEIGHT = 30;
 	public final static int TILE_SIZE = 32;
-	final static int WIDTH = 640;
-	final static int HEIGHT = 640;
+	public final static int WIDTH = 1280;
+	public final static int HEIGHT = 960;
 	public final static float PLAYERSTARTPOSITIONX = 4*32;
 	public final static float PLAYERSTARTPOSITIONY = 26*32;
 	
