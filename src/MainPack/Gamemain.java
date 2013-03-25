@@ -132,9 +132,8 @@ public class Gamemain {
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		GL11.glLoadIdentity();
 		
-		World.TILES_ON_SCREEN_WIDTH = (Display.getWidth()/World.TILE_SIZE)+1;
-		World.TILES_ON_SCREEN_HEIGHT = (Display.getHeight()/World.TILE_SIZE)+1;
-		System.out.println(World.TILES_ON_SCREEN_WIDTH + "   " +World.TILES_ON_SCREEN_HEIGHT);
+		World.setTILES_ON_SCREEN_WIDTH(Display.getWidth());
+		World.setTILES_ON_SCREEN_HEIGHT(Display.getHeight());
 	}
 	
 	

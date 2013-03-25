@@ -45,7 +45,7 @@ public class Level {
 	float u, v, u2, v2;
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
-	Tile[][] currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];	
+	Tile[][] currentTileGrid;	
 	int creatingcount=0;
 	boolean chunkChanged = false;
 	
@@ -62,10 +62,49 @@ public class Level {
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
 		
+		currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];
+		
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
 		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		createCurrentTileGrid(x, y);
+	}
+	
+	
+	public void draw(Player player){
+		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
+		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
+		
+		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_LR*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER_LR*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_TB*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER_TB*32 )){
+			createCurrentTileGrid((int)player.getX(), (int)player.getY());
+			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
+			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
+			chunkChanged = true;
+		}
+		
+		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
+		
+		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
+		
+		glBegin(GL_QUADS);
+		
+		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
+			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
+				TextureEntry te = textureEntryMap.get((int)currentTileGrid[a][b].getType());
+				u = te.getX()/texW * percentage;//
+				v = te.getY()/texW * percentage;//
+				u2 = (te.getX()+texW)/texW * percentage;//
+				v2 = (te.getY()+texW)/texW * percentage;//
+				
+			//	Texturkoord.		..	an Bildschirmausschnitt
+				glTexCoord2f(u,v);		glVertex2f(a*texW,		b*texW);		
+				glTexCoord2f(u2,v);		glVertex2f(a*texW+texW,	b*texW);		
+				glTexCoord2f(u2,v2);	glVertex2f(a*texW+texW,	b*texW+texW);	
+				glTexCoord2f(u,v2);		glVertex2f(a*texW,		b*texW+texW);
+			}
+		}
+		glEnd();
+		glLoadIdentity();
 	}
 	
 	
@@ -87,7 +126,7 @@ public class Level {
 		if (x < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	// gibt es einen rechten Rand?
 			chunkBorderRight = World.CHUNK_BORDER_LR;
 		} else {chunkBorderRight = 0;}
-		if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand
+		if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand?
 			chunkBorderBottom = World.CHUNK_BORDER_TB;
 		} else {chunkBorderBottom = 0;}
 		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
@@ -95,7 +134,7 @@ public class Level {
 		
 		// currentTileGrid füllen
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
-			for(int b = 0; b< World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
+			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
 				short n = 0;
 				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
 						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
@@ -241,46 +280,6 @@ public class Level {
 	}
 	
 	
-	public void draw(Player player){
-		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
-		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
-		
-		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_LR*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER_LR*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_TB*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER_TB*32 )){
-			createCurrentTileGrid((int)player.getX(), (int)player.getY());
-			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
-			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
-			chunkChanged = true;
-		}
-		
-		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
-		
-		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
-		
-//		System.out.println("player: "+player.getX()+"|"+player.getY()+"    screendeltax/y: "+screenDeltaX+"|"+screenDeltaY+"     screenx/y: "+(int)player.screenx+"|"+(int)player.screeny+"    chunkLeftCornerx/Y: "+chunkLeftCornerX+"|"+chunkLeftCornerY);
-		
-		glBegin(GL_QUADS);
-		
-		for(int a = 0; a < currentTileGrid.length; a++){
-			for(int b = 0; b < currentTileGrid.length; b++){
-								
-				TextureEntry te = textureEntryMap.get((int)currentTileGrid[a][b].getType());
-				u = te.getX()/texW * percentage;//
-				v = te.getY()/texW * percentage;//
-				u2 = (te.getX()+texW)/texW * percentage;//
-				v2 = (te.getY()+texW)/texW * percentage;//
-				
-			//	Texturkoord.		..	an Bildschirmausschnitt
-				glTexCoord2f(u,v);		glVertex2f(a*texW,		b*texW);		
-				glTexCoord2f(u2,v);		glVertex2f(a*texW+texW,	b*texW);		
-				glTexCoord2f(u2,v2);	glVertex2f(a*texW+texW,	b*texW+texW);	
-				glTexCoord2f(u,v2);		glVertex2f(a*texW,		b*texW+texW);
-			}
-		}
-		glEnd();
-		glLoadIdentity();
-	}
-	
-
 	private Map<Integer, TextureEntry> createCoordMapFromTexture(Texture t){
 		
 		Map<Integer,TextureEntry> tileSetEntries = new HashMap<Integer,TextureEntry>();
