@@ -10,8 +10,8 @@ public class World {
 	
 	public final static int TILE_SIZE = 32;
 	
-	public final static float PLAYERSTARTPOSITIONX = 3999*32;
-	public final static float PLAYERSTARTPOSITIONY = 3960*32;
+	public final static float PLAYERSTARTPOSITIONX = 20*32;
+	public final static float PLAYERSTARTPOSITIONY = 10*32;
 	
 	//Berechnete Werte
 	public static int TILE_MIDDLE_X; 

@@ -52,7 +52,7 @@ public class Gamemain {
 			
 			switch(state){
 				case INGAME:
-					//Mouse.setGrabbed(true);		//versteckt den mauscursor			
+					Mouse.setGrabbed(true);		//versteckt den mauscursor			
 
 					player.calcDirection(getDelta());
 					
