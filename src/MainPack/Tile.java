@@ -1,23 +1,57 @@
 package MainPack;
 
+/*
+ * x,y,w,h sind Werte bezogen auf die Position auf dem Tileset-Bild
+ * 
+ */
+
 public class Tile {
 
-	short x; 
-	short y;
-	short type;
-	boolean spawnsZombie =false;
+	float x, y, w, h;
+	float xnb, ynb, wnb, hnb; // Begehbarkeit nb = nicht begehbar
+	boolean teilsUnbegehbar;
+	int type;
 	
-	public Tile(short x1, short y1, short type1){
-		this.x = x1;
-		this.y = y1;
-		this.type = type1;
+	public Tile(float x, float y, float w, float h, int type){
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.type = type;
+		teilsUnbegehbar = false;
 	}
 	
-	public short getType(){
+	public Tile(float x, float y, float w, float h, float xnb, float ynb, float wnb, float hnb, int type){
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.xnb = xnb;
+		this.ynb = ynb;
+		this.wnb = wnb;
+		this.hnb = hnb;
+		this.type = type;
+		teilsUnbegehbar = true;
+	}
+	
+	public int getType(){
 		return this.type;
 	}
 	
-	public void setType(short a){
+	public void setType(int a){
 		this.type = a;
+	}
+	
+	public float getX(){
+		return this.x;
+	}
+	public float getY(){
+		return this.y;
+	}
+	public float getW(){
+		return this.w;
+	}
+	public float getH(){
+		return this.h;
 	}
 }

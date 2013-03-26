@@ -38,7 +38,7 @@ public class Level {
 	int tilesetW = 0;
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
-	private Map<Integer,TextureEntry> textureEntryMap = null;
+	private Map<Integer,Tile> tileMap = new HashMap<Integer,Tile>();
 	BufferedImage map;
 	Color c = null;
 	
@@ -50,6 +50,7 @@ public class Level {
 	Tile[][] currentTileGrid;	
 	int creatingcount=0;
 	boolean chunkChanged = false;
+	Tile te = null;
 	
 	
 	public Level(int x, int y){
@@ -67,7 +68,7 @@ public class Level {
 		currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];
 		
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
-		textureEntryMap = createCoordMapFromTexture(tilesetTexture);
+		createCoordMapFromTexture(tilesetTexture);
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		createCurrentTileGrid(x, y);
 	}
@@ -95,7 +96,7 @@ public class Level {
 		
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
 			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
-				TextureEntry te = textureEntryMap.get((int)currentTileGrid[a][b].getType());
+				te = tileMap.get((int)currentTileGrid[a][b].getType());
 				u = te.getX()/texW * percentage;//
 				v = te.getY()/texW * percentage;//
 				u2 = (te.getX()+texW)/texW * percentage;//
@@ -116,7 +117,7 @@ public class Level {
 	private void initCurrentTileGrid() {
 		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR; a++){
 			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB; b++){
-				currentTileGrid[a][b] = new Tile((short)a,(short)b,(short)1);
+				currentTileGrid[a][b] = tileMap.get(1);
 			}
 		}
 	}
@@ -140,7 +141,7 @@ public class Level {
 		// currentTileGrid füllen
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
 			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
-				short n = 0;
+				int n = 0;
 				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
 						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
 							n=19;
@@ -279,27 +280,28 @@ public class Level {
 						}
 					}
 				}
-				currentTileGrid[a][b] = new Tile((short)(chunkLeftCornerX+a),(short) (chunkLeftCornerY+b),n);
+				currentTileGrid[a][b] = tileMap.get(n);
 			}
 		}
 	}
 	
 	
-	private Map<Integer, TextureEntry> createCoordMapFromTexture(Texture t){
-		
-		Map<Integer,TextureEntry> tileSetEntries = new HashMap<Integer,TextureEntry>();
+	private void createCoordMapFromTexture(Texture t){
 		int tindex = 0;
 		
 		for(float y = 0; y< t.getTextureHeight(); y+=texW){
 			for(float x = 0; x< t.getTextureWidth(); x+=texW){
 				x = Math.round(x * 100.0f) /100.0f;		//Rundungsfehler umgehen (vorher war's z.b. 1.000002 und so...)
 				y = Math.round(y * 100.0f) /100.0f;
-				TextureEntry te = new TextureEntry(x,y,texW,texW);
-				tileSetEntries.put(tindex, te);
+				if ((tindex == 39 )){ //komplett unbegehbar
+					te = new Tile(x,y,texW,texW, 0, 0, texW, texW, tindex);
+				} else {
+					te = new Tile(x,y,texW,texW,tindex);
+				}
+				tileMap.put(tindex, te);
 				tindex++;
 			}
 		}
-		return tileSetEntries;
 	}
 
 
