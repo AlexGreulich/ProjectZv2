@@ -35,7 +35,7 @@ public class Debugger {
 		glLoadIdentity();
 		
 		// gewünschte Debug-Info hier hinzufügen
-		font.drawString(x, y, "plaxer xy="+player.getX() +" | "+player.getY());
+		font.drawString(x, y, "plaxer xy: "+player.getX() +" | "+player.getY());
 		font.drawString(x, y+20, "player speed: "+player.getSpeed());
 		font.drawString(x, y+40, "player screenxy: "+player.getScreenx()+" | "+ player.getScreeny());
 		

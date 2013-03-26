@@ -109,7 +109,8 @@ public class Gamemain {
 	
 	public void initDisplay(){
 		try {
-			Display.setDisplayMode(Display.getDesktopDisplayMode());
+			setDisplayMode(1366,768,true);
+			//setDisplayMode(640,480,true);
 			Display.setTitle("ProjectZ v.2");
 			Display.setFullscreen(true);
 			Display.create();
@@ -125,15 +126,70 @@ public class Gamemain {
 		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);               
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		GL11.glLoadIdentity();
+		glEnable(GL11.GL_TEXTURE_2D);               
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
+		glEnable(GL11.GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
+		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		glLoadIdentity();
 		
 		World.setTILES_ON_SCREEN_WIDTH(Display.getWidth());
 		World.setTILES_ON_SCREEN_HEIGHT(Display.getHeight());
+	}
+	
+	public void setDisplayMode(int width, int height, boolean fullscreen) {
+		 
+		// return if requested DisplayMode is already set
+		if ((Display.getDisplayMode().getWidth() == width) &&
+				(Display.getDisplayMode().getHeight() == height) &&
+				(Display.isFullscreen() == fullscreen)) {
+			return;
+		}
+		 
+		try {
+			DisplayMode targetDisplayMode = null;
+		 
+			if (fullscreen) {
+				DisplayMode[] modes = Display.getAvailableDisplayModes();
+				int freq = 0;
+			 
+				for (int i=0;i<modes.length;i++) {
+					DisplayMode current = modes[i];
+		 
+					if ((current.getWidth() == width) && (current.getHeight() == height)) {
+						if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
+							if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
+								targetDisplayMode = current;
+								freq = targetDisplayMode.getFrequency();
+							}
+						}
+		 
+						// if we've found a match for bpp and frequence against the
+						// original display mode then it's probably best to go for this one
+						// since it's most likely compatible with the monitor
+						if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
+								(current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
+							targetDisplayMode = current;
+							break;
+						}
+					}
+				}
+			} else {
+				targetDisplayMode = new DisplayMode(width,height);
+			}
+			 
+			if (targetDisplayMode == null) {
+				System.out.println("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
+				return;
+			}
+			 
+			Display.setDisplayMode(targetDisplayMode);
+			Display.setFullscreen(fullscreen);
+		 
+		} catch (LWJGLException e) {
+			System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
+		}
 	}
 	
 	

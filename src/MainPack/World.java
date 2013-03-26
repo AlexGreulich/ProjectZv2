@@ -10,8 +10,8 @@ public class World {
 	
 	public final static int TILE_SIZE = 32;
 	
-	public final static float PLAYERSTARTPOSITIONX = 20*32;
-	public final static float PLAYERSTARTPOSITIONY = 10*32;
+	public final static float PLAYERSTARTPOSITIONX = 2000*32;
+	public final static float PLAYERSTARTPOSITIONY = 2000*32;
 	
 	//Berechnete Werte
 	public static int TILE_MIDDLE_X; 
@@ -21,7 +21,7 @@ public class World {
 	public static int CHUNK_BORDER_LR;
 	public static int CHUNK_BORDER_TB;
 
-	public final static int CHUNK_SIZE = WORLDSIZE/40; //100
+	public final static int CHUNK_SIZE = WORLDSIZE/80; //100
 	
 	public final static int playerMouseRadius = 64;
 

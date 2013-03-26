@@ -13,9 +13,11 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import Entities.Player;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
@@ -72,19 +74,22 @@ public class Level {
 	
 	
 	public void draw(Player player){
-		screenDeltaX = (int) (player.getX() -chunkLeftCornerX *32 -player.screenx);
-		screenDeltaY = (int) (player.getY() -chunkLeftCornerY *32 -player.screeny);
+		
+		screenDeltaX = (int) ((int)player.getX() -chunkLeftCornerX *32 -player.screenx);
+		screenDeltaY = (int) ((int)player.getY() -chunkLeftCornerY *32 -player.screeny);
 		
 		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_LR*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER_LR*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_TB*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER_TB*32 )){
 			createCurrentTileGrid((int)player.getX(), (int)player.getY());
-			screenDeltaX = (int) (player.getX() - chunkLeftCornerX *32 -player.screenx);
-			screenDeltaY = (int) (player.getY() - chunkLeftCornerY *32 -player.screeny);
+			screenDeltaX = (int) ((int)player.getX() - chunkLeftCornerX *32 -player.screenx);
+			screenDeltaY = (int) ((int)player.getY() - chunkLeftCornerY *32 -player.screeny);
 			chunkChanged = true;
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
 		
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
+		
+		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glBegin(GL_QUADS);
 		
