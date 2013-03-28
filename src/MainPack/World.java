@@ -10,8 +10,8 @@ public class World {
 	
 	public final static int TILE_SIZE = 32;
 	
-	public final static float PLAYERSTARTPOSITIONX = 2000*32;
-	public final static float PLAYERSTARTPOSITIONY = 2000*32;
+	public final static float PLAYERSTARTPOSITIONX = 10*32;
+	public final static float PLAYERSTARTPOSITIONY = 10*32;
 	
 	//Berechnete Werte
 	public static int TILE_MIDDLE_X; 
@@ -27,7 +27,7 @@ public class World {
 
 	public enum StateofGame { INGAME, MENU }
 	public enum PlayerDirection { UP,DOWN,LEFT,RIGHT,LEFTUP,LEFTDOWN,RIGHTUP,RIGHTDOWN }
-	public enum ItemType { TOOL, WEAPON, MEDIC, COLLECTABLE }
+	public enum ItemType { TOOL, WEAPON, MEDIC, COLLECTABLE, OTHER }
 	public enum MenuOption { NEWGAME, OPTIONS, CREDITS, EXIT, MAINMENU }
 	
 	public static void setTILES_ON_SCREEN_WIDTH(int i) {
