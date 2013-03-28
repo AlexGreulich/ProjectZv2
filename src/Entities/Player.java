@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -290,9 +289,5 @@ public class Player extends AbstractMovableEntity {
 
 	public float getScreeny() {
 		return screeny;
-	}
-	public boolean collidesWith(Rectangle rec1){
-		Rectangle rec = new Rectangle((int)x,(int)y,32,64);
-		return(rec.intersects(rec1));
 	}
 }

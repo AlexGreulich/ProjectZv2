@@ -1,8 +1,6 @@
 package MainPack;
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,7 +39,7 @@ public class Level {
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
 	private Map<Integer,Tile> tileMap = new HashMap<Integer,Tile>();
-	BufferedImage map, itemmap;
+	BufferedImage map;
 	Color c = null;
 	
 	private int screenDeltaX = 0, screenDeltaY = 0;
@@ -54,20 +52,15 @@ public class Level {
 	boolean chunkChanged = false;
 	Tile te = null;
 	
-	ItemHandler itemHandler;
-	
-	int currentX, currentY =0;
-	
 	
 	public Level(int x, int y){
 		//	Lade das tileset als eine große Textur
 		try {
-			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/tilesetnewalign.png"));//Tileset_neu_32-1024b
+			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_neu_32-1024b.png"));
 		
 			texW = tilesetTexture.getTextureWidth()/32f;
 			texH = tilesetTexture.getTextureHeight()/32f;
 			map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
-			itemmap = ImageIO.read(new File("src/karten/itemmap.png"));
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
@@ -77,16 +70,9 @@ public class Level {
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
 		createCoordMapFromTexture(tilesetTexture);
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
-		itemHandler = new ItemHandler();
 		createCurrentTileGrid(x, y);
-		
 	}
 	
-	public void update(int x, int y){
-		createCurrentTileGrid(x,y);
-//		itemHandler.update(x, y);
-		//itemhandler updaten?
-	}
 	
 	public void draw(Player player){
 		
@@ -94,7 +80,7 @@ public class Level {
 		screenDeltaY = (int) ((int)player.getY() -chunkLeftCornerY *32 -player.screeny);
 		
 		if ((screenDeltaX+player.screenx >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_LR*32) ||(screenDeltaX+player.screenx < World.CHUNK_BORDER_LR*32 ) || (screenDeltaY+player.screeny >= World.CHUNK_SIZE*32+World.CHUNK_BORDER_TB*32) ||(screenDeltaY+player.screeny < World.CHUNK_BORDER_TB*32 )){
-			update((int)player.getX(), (int)player.getY());
+			createCurrentTileGrid((int)player.getX(), (int)player.getY());
 			screenDeltaX = (int) ((int)player.getX() - chunkLeftCornerX *32 -player.screenx);
 			screenDeltaY = (int) ((int)player.getY() - chunkLeftCornerY *32 -player.screeny);
 			chunkChanged = true;
@@ -124,7 +110,6 @@ public class Level {
 			}
 		}
 		glEnd();
-		itemHandler.draw(World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight, World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom);
 		glLoadIdentity();
 	}
 	
@@ -136,13 +121,7 @@ public class Level {
 			}
 		}
 	}
-//	public Rectangle getItemBounds(short c, short d){
-//	
-//	}
 	
-	public void checkForItem(float a, float b){
-//		
-	}
 
 	public void createCurrentTileGrid(int x, int y){
 		// auf welchem Chunk befindet sich der Spieler?
@@ -159,8 +138,6 @@ public class Level {
 		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
 		if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER_TB;};	// gibt es einen oberen Rand?
 		
-		
-		
 		// currentTileGrid füllen
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
 			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
@@ -176,7 +153,7 @@ public class Level {
 						// grid[x][y] = 0;	//da sand, sind alle felder begehbar
 						
 						if(c.getBlue()==0)		 {			//vorher :  {tileArray[x][y] = new Tile(tileset.getTileImage(201));
-						n=0;
+						n=33;
 						}else if(c.getBlue()==10){//oben
 						n=1;
 						}else if(c.getBlue()==20){
@@ -303,28 +280,7 @@ public class Level {
 						}
 					}
 				}
-				
 				currentTileGrid[a][b] = tileMap.get(n);
-				
-				Color tempitemcolor = new Color(itemmap.getRGB(a,b));
-				if(tempitemcolor.equals(new Color(50,50,50))){
-					Item item = new Item((short)a,(short)b,0,0,28);
-					itemHandler.itemsInChunk[a][b] =item;
-					
-				}
-				else if (tempitemcolor.equals(new Color(100,100,100))){
-					Item item = new Item((short)a,(short)b,0,0,29);
-					itemHandler.itemsInChunk[a][b] =item;
-				}
-				else if (tempitemcolor.equals(new Color(150,150,150))){
-					Item item = new Item((short)a,(short)b,0,0,30);
-					itemHandler.itemsInChunk[a][b] =item;
-				}
-				else if (tempitemcolor.equals(new Color(200,200,200))){
-					Item item = new Item((short)a,(short)b,0,0,31);
-					itemHandler.itemsInChunk[a][b] =item;
-				}
-				
 			}
 		}
 	}
@@ -342,7 +298,6 @@ public class Level {
 				} else {
 					te = new Tile(x,y,texW,texW,tindex);
 				}
-				
 				tileMap.put(tindex, te);
 				tindex++;
 			}
