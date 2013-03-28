@@ -44,7 +44,9 @@ public class Debugger {
 		font.drawString(x,y+120,"World.TILES_ON_SCREEN_WIDTH/HEIGHT: " + World.TILES_ON_SCREEN_WIDTH + " | " + World.TILES_ON_SCREEN_HEIGHT);
 		font.drawString(x,y+140,"World.TILES_ON_SCREEN_LR/TB: " + World.CHUNK_BORDER_LR + " | " + World.CHUNK_BORDER_TB);
 
+		font.drawString(x, y+160,"items in chunk[]"+level.itemHandler.itemsInChunk.length);
 		glPopMatrix();
+		
 	}
 	
 	private static void setUpFonts() {

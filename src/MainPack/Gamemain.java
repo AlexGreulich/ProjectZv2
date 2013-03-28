@@ -23,6 +23,7 @@ public class Gamemain {
 	int mouseX=0, mouseY=0;
 	GameMenu menu;
 	Debugger debugger;
+	Inventory inventory;
 	
 	
 	public void start(){
@@ -65,6 +66,9 @@ public class Gamemain {
 						player.changeSpeed(-0.05f);
 					}
 					
+					if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+					}
+					
 					//test speed verdoppeln wenn man rennt, ausdauer als neues attribut neben energie usw
 					//nur test, wird noch ausgebaut -> spieler erholt sich erst kurze zeit nachdem er gerannt ist
 					if((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) && (player.getDexterity() > 0)){
@@ -78,11 +82,13 @@ public class Gamemain {
 					
 					level.draw(player);
 					player.draw();
+					
 					debugger.draw();
 					
 					//Wenn der chunk gewechselt wurde mache folgendes:
 					// items updaten, ..
 					if(level.chunkChanged){
+//						itemHandler.update(a, b)
 //						level.updateItems();
 					}
 					
@@ -109,7 +115,7 @@ public class Gamemain {
 	
 	public void initDisplay(){
 		try {
-			setDisplayMode(1366,768,true);
+			setDisplayMode(1920,1080,true);
 			//setDisplayMode(640,480,true);
 			Display.setTitle("ProjectZ v.2");
 			Display.setFullscreen(true);
@@ -198,6 +204,7 @@ public class Gamemain {
 		level = new Level((int)player.getX(), (int)player.getY());
 		debugger = new Debugger(player,level);
 		menu = new GameMenu();
+		inventory = new Inventory();
 	}
 	
 	

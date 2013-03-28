@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+	<tool>
+       		 <id>28</id>
+       		 <name>Hammer</name>
+       		 <energy>100</energy>
+      		 <description>If i had a hammer..</description>
+      		 <texcoordsX>0.875</texcoordsX>
+      		  <texcoordsY>0</texcoordsY>
+  	</tool>
+    <weapon>
+             <id>29</id>
+       		 <name>Knife</name>
+       		 <energy>100</energy>
+      		 <description>A Knife</description>
+      		 <damage>5</damage>
+       		 <dexterityLoss>5</dexterityLoss>
+       		 <texcoordsX>0.90625</texcoordsX>
+       		  <texcoordsY>0</texcoordsY>
+	</weapon>
+	 <medic>
+              <id>30</id>
+       		 <name>MediKit</name>
+       		 <uses>3</uses>
+      		 <description>Some bandages, tapes, Aspirin and such</description>
+      		 <healthGain>25</healthGain>
+      		 <texcoordsX>0.9375</texcoordsX>
+      		  <texcoordsY>0</texcoordsY>
+ 	</medic>
+  	<collectable>
+             <id>31</id>
+       		 <name>Easter Egg</name>
+       		 <energy>1</energy>
+      		 <description>An Easter Egg</description>
+      		 <texcoordsX>0.96875</texcoordsX>
+      		  <texcoordsY>0</texcoordsY>
+	</collectable>
+	
+        
+  
+    
+    
+</items>
