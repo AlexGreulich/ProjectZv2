@@ -3,13 +3,17 @@ package Hilfsprogramme;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+import javax.swing.RepaintManager;
 
 public class TileMonitorPanel extends JPanel{
 	
 	Tileset tileset;
+	RepaintManager m;
+	Editor editor;
 	
-	public TileMonitorPanel(Tileset tileset){
+	public TileMonitorPanel(Tileset tileset, Editor editor){
 		this.tileset = tileset;
+		m = RepaintManager.currentManager(editor);
 		setPreferredSize(new Dimension(500,500));
 		setBounds(20, 220, 42, 70);
 	}
@@ -23,5 +27,4 @@ public class TileMonitorPanel extends JPanel{
 		BufferedImage tile = tileset.getCurrentTileImage();
 		g.drawImage(tile, 5, 32, this);	
 	}
-
 }

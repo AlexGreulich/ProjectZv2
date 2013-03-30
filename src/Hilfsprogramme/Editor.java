@@ -60,9 +60,9 @@ public class Editor extends JFrame{
 			}
 		});
 		
-		monitor = new TileMonitorPanel(tileset);
+		monitor = new TileMonitorPanel(tileset, this);
 		add(monitor, null);
-		palettenPanel = new PalettenPanel(this, tileset);
+		palettenPanel = new PalettenPanel(this, tileset, monitor);
 		add(palettenPanel.scroll, BorderLayout.NORTH);
 		kartenPanel = new KartenPanel(this, tileset);
 		add(kartenPanel.scroll, BorderLayout.CENTER);

@@ -15,8 +15,8 @@ public class Tileset {
 		images = new ArrayList<BufferedImage>();
 		try{
 			BufferedImage tileset = ImageIO.read(getClass().getResource("../tilesets/Tileset_2048.png"));
-			for(int x = 0; x < (tileset.getWidth()/32) ;x++){
-				for(int y = 0; y < (tileset.getHeight()/32) ;y++){
+			for(int y = 0; y < (tileset.getWidth()/32) ;y++){
+				for(int x = 0; x < (tileset.getHeight()/32) ;x++){
 					BufferedImage bi = tileset.getSubimage(x*32, y*32, 32, 32);
 					images.add(bi);
 				}
