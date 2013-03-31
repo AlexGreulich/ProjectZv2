@@ -60,4 +60,13 @@ public class EditorController {
 		kartenPanel.repaint();
 	}
 
+	public void zoomIn() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void zoomOut() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

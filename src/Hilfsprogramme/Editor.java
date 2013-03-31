@@ -61,7 +61,7 @@ public class Editor extends JFrame{
 		houses.setEnabled(false);
 		items.setEnabled(false);
 		
-		JMenu menu3 = new JMenu("Umwandeln");
+		JMenu menu3 = new JMenu("CalcBorders");
 		menubar.add(menu3);
 		JMenuItem water = new JMenuItem("Water");
 		JMenuItem sand = new JMenuItem("Sand");
@@ -103,7 +103,6 @@ public class Editor extends JFrame{
 		topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JPanel toolPanel = new JPanel();
-//		toolPanel.setPreferredSize(new Dimension(40,40));
 		toolPanel.setLayout(new GridLayout(4,1));
 		
 		zoomInButton = new JButton("+");
@@ -115,16 +114,16 @@ public class Editor extends JFrame{
 		toolPanel.add(personButton);
 		toolPanel.add(selectionButton);
 		
-		
+		ZoomButtonHandler buttonHandler = new ZoomButtonHandler();
+		zoomInButton.addActionListener(buttonHandler);
+		zoomOutButton.addActionListener(buttonHandler);
+				
 		palettenPanel = new PalettenPanel(controller);
 		kartenPanel = new KartenPanel(controller);
-		//controller.initParts(palettenPanel, kartenPanel);
+		controller.initParts(palettenPanel, kartenPanel);
 		
-		JButton testB = new JButton("test");
-		testB.setPreferredSize(new Dimension(100,100));
 		topPanel.add(toolPanel);
 		topPanel.add(palettenPanel.scroll);
-		//topPanel.add(testB);
 		add(topPanel, BorderLayout.NORTH);		
 		add(kartenPanel.scroll, BorderLayout.CENTER);
 		
@@ -167,6 +166,19 @@ public class Editor extends JFrame{
 	
 	public void onNew(){
 		controller.createNewMap();
+	}
+	
+	
+	private class ZoomButtonHandler implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == zoomInButton){
+				controller.zoomIn();
+			}
+			if (e.getSource() == zoomOutButton){
+				controller.zoomOut();
+			}
+		}
 	}
 
 	
