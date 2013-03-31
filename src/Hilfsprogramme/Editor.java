@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -30,28 +31,65 @@ public class Editor extends JFrame{
 		
 		menubar = new JMenuBar();
 		setJMenuBar(menubar);
-		JMenu menu = new JMenu("Datei");
-		menubar.add(menu);
-		JMenuItem neu = new JMenuItem("neu");
-		JMenuItem laden = new JMenuItem("laden");
-		JMenuItem speichern = new JMenuItem("speichern");
-		menu.add(speichern);
-		menu.add(laden);
-		menu.add(neu);
 		
-		speichern.addActionListener(new ActionListener(){
+		JMenu menu1 = new JMenu("File");
+		menubar.add(menu1);
+		JMenuItem newmap = new JMenuItem("new");
+		JMenuItem load = new JMenuItem("load");
+		JMenuItem save = new JMenuItem("save");
+		menu1.add(save);
+		menu1.add(load);
+		menu1.add(newmap);
+		
+		JMenu menu2 = new JMenu("Tiles");
+		menubar.add(menu2);
+		JCheckBoxMenuItem all = new JCheckBoxMenuItem("Show all");
+		JCheckBoxMenuItem country = new JCheckBoxMenuItem("Countrsside");
+		JCheckBoxMenuItem houses = new JCheckBoxMenuItem("Houses");
+		JCheckBoxMenuItem items = new JCheckBoxMenuItem("Items");
+		menu2.add(all);
+		menu2.add(country);
+		menu2.add(houses);
+		menu2.add(items);
+		all.setEnabled(false);
+		country.setEnabled(false);
+		houses.setEnabled(false);
+		items.setEnabled(false);
+		
+		JMenu menu3 = new JMenu("Umwandeln");
+		menubar.add(menu3);
+		JMenuItem water = new JMenuItem("Water");
+		JMenuItem sand = new JMenuItem("Sand");
+		JMenuItem stone = new JMenuItem("Stone");
+		JMenuItem bush = new JMenuItem("Bush");
+		JMenuItem concrete = new JMenuItem("Concrete");
+		JMenuItem house = new JMenuItem("House");
+		menu3.add(water);
+		menu3.add(sand);
+		menu3.add(stone);
+		menu3.add(bush);
+		menu3.add(concrete);
+		menu3.add(house);
+		water.setEnabled(false);
+		sand.setEnabled(false);
+		stone.setEnabled(false);
+		bush.setEnabled(false);
+		concrete.setEnabled(false);
+		house.setEnabled(false);
+		
+		save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				onSpeichern();
 			}
 		});
-		laden.addActionListener(new ActionListener(){
+		load.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				onLaden();
 			}
 		});
-		neu.addActionListener(new ActionListener(){
+		newmap.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// to do
+				onNew();
 			}
 		});
 		
@@ -68,7 +106,6 @@ public class Editor extends JFrame{
 	}
 	
 	
-	// Menubutton laden
 	public void onLaden(){
 		JFileChooser chooser = new JFileChooser(new File(new File("").getAbsolutePath()).toString()+"/src/karten");
 		int result = chooser.showOpenDialog(this);
@@ -86,7 +123,6 @@ public class Editor extends JFrame{
 	}
 	
 	
-	// Menubutton speichern
 	public void onSpeichern(){
 		JFileChooser chooser = new JFileChooser(new File(new File("").getAbsolutePath()).toString()+"/src/karten");
 		int result = chooser.showSaveDialog(this);
@@ -99,6 +135,11 @@ public class Editor extends JFrame{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	public void onNew(){
+		controller.createNewMap();
 	}
 
 	

@@ -55,4 +55,9 @@ public class EditorController {
 		return tileset.getTileAmount();
 	}
 
+	public void createNewMap() {
+		kartenPanel.initCleanMap();
+		kartenPanel.repaint();
+	}
+
 }
