@@ -9,7 +9,6 @@ public class EditorController {
 	Editor editor;
 	PalettenPanel palettenPanel;	
 	KartenPanel kartenPanel;
-	TileMonitorPanel monitor;
 	JMenuBar menubar;
 	Tileset tileset;
 	int currentTile;
@@ -20,10 +19,9 @@ public class EditorController {
 		tileset = new Tileset();
 	}
 	
-	public void initParts(PalettenPanel palettenPanel2, KartenPanel kartenPanel2, TileMonitorPanel monitor2) {
+	public void initParts(PalettenPanel palettenPanel2, KartenPanel kartenPanel2) {
 		this.palettenPanel = palettenPanel2;
 		this.kartenPanel = kartenPanel2;
-		this.monitor = monitor2;
 	}
 	
 	public Editor getEditor(){
@@ -35,7 +33,7 @@ public class EditorController {
 	}
 	public void setCurrentTileType(int currentTile) {
 		this.currentTile = currentTile;
-		monitor.repaint();
+		kartenPanel.repaint();
 	}
 	
 	public void setMap(BufferedImage kartenImage){

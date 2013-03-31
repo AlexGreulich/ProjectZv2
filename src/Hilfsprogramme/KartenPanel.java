@@ -18,21 +18,21 @@ public class KartenPanel extends JPanel{
 	Karte karte;
 	Editor editor;
 	EditorController controller;
-	JScrollPane scroll = new JScrollPane();
+	JScrollPane scroll;
 	RepaintManager m;
+	int mouseX, mouseY;
 	 
 	public KartenPanel(EditorController controller){
 		this.controller = controller;
+		scroll = new JScrollPane();
 		scroll.setViewportView(this);
 		
 		setDoubleBuffered(true); //verhindert Flackern
 		initCleanMap();
 		setPanelDimensions();
 		
-		editor = controller.getEditor();;
+		editor = controller.getEditor();
 		m = RepaintManager.currentManager(editor);
-		
-//		new MouseExplorer(this);
 		
 		addMouseListener(new MouseAdapter(){
 			@Override
@@ -44,6 +44,12 @@ public class KartenPanel extends JPanel{
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				zeichneTile(e.getX(), e.getY());
+			}
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+				repaint(); // geht nicht anders
 			}
 		});
 	}
@@ -85,6 +91,8 @@ public class KartenPanel extends JPanel{
 			}
 		}
 		
+		g2d.drawImage(controller.getCurrentTileImage(), (mouseX/32)*32, (mouseY/32)*32, this);
+		
 		g.setColor(Color.black);
 		for (int ly=32; ly<this.getHeight(); ly+=32){
 			g2d.drawLine(0, ly, this.getWidth(), ly);
@@ -100,6 +108,7 @@ public class KartenPanel extends JPanel{
 		setPreferredSize(new Dimension(karte.getWidth()*32, karte.getHeight()*32));
 		scroll.setViewportView(this);
 	}
+	
 	
 	public void zeichneTile(int x, int y){
 		x = x/32;

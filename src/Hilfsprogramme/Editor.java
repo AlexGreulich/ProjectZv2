@@ -18,7 +18,6 @@ public class Editor extends JFrame{
 	
 	PalettenPanel palettenPanel;	
 	KartenPanel kartenPanel;
-	TileMonitorPanel monitor;
 	JMenuBar menubar;
 	EditorController controller;
 	
@@ -57,12 +56,10 @@ public class Editor extends JFrame{
 		});
 		
 		controller = new EditorController(this);
-		monitor = new TileMonitorPanel(controller);
 		palettenPanel = new PalettenPanel(controller);
 		kartenPanel = new KartenPanel(controller);
-		controller.initParts(palettenPanel, kartenPanel, monitor);
+		controller.initParts(palettenPanel, kartenPanel);
 		
-		add(monitor, null);		
 		add(palettenPanel.scroll, BorderLayout.NORTH);		
 		add(kartenPanel.scroll, BorderLayout.CENTER);
 		

@@ -9,12 +9,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.RepaintManager;
 
 
 public class PalettenPanel extends JPanel{
 	
 	EditorController controller;
 	public JScrollPane scroll = new JScrollPane();
+	RepaintManager m;
 	
 	public PalettenPanel(EditorController controller){
 		this.controller = controller;
@@ -23,6 +25,7 @@ public class PalettenPanel extends JPanel{
 		scroll.setViewportView(this);
 		scroll.setPreferredSize(new Dimension(50, 200));
 		setDoubleBuffered(true);
+		m = RepaintManager.currentManager(controller.getEditor());
 		
 		this.addMouseListener(new MouseAdapter(){
 			@Override
