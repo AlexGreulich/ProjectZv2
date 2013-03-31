@@ -5,11 +5,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageFilter;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -74,23 +77,25 @@ public class Editor extends JFrame{
 	
 	// Menubutton laden
 	public void onLaden(){
-		JFileChooser fc=new JFileChooser();
-		fc.showOpenDialog(this);
-		File f = fc.getSelectedFile();
-		BufferedImage kartenImage;
-		try {
-			kartenImage = ImageIO.read(f);
-			kartenPanel.setMap(kartenImage);
-		} catch (IOException e) {
-			e.printStackTrace();
+		JFileChooser chooser = new JFileChooser(new File(new File("").getAbsolutePath()).toString()+"/src/karten");
+		int result = chooser.showOpenDialog(this);
+		if (result == chooser.APPROVE_OPTION){
+			File f = chooser.getSelectedFile();
+			BufferedImage kartenImage;
+			try {
+				kartenImage = ImageIO.read(f);
+				kartenPanel.setMap(kartenImage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			repaint();
 		}
-		repaint();
 	}
 	
 	
 	// Menubutton speichern
 	public void onSpeichern(){
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser(new File(new File("").getAbsolutePath()).toString()+"/src/karten");
 		int result = chooser.showSaveDialog(this);
 		if (result == chooser.APPROVE_OPTION){
 			File file = chooser.getSelectedFile();

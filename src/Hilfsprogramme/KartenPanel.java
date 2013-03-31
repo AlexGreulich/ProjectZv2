@@ -123,11 +123,6 @@ public class KartenPanel extends JPanel{
 		BufferedImage bufferedImage = new BufferedImage(karte.getWidth(), karte.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Color color;
 		int rgb,r,g,b,type;
-		type = tileset.getCurrentTileType();
-		r = type/65536;
-		g = (type-r*65536)/256;
-		b = type - (g*256 + r*65536);
-		System.out.println(r +" "+g+" "+b);
 		for(int x=0; x<karte.getWidth();x++){
 			for(int y=0; y<karte.getHeight();y++){
 				type = karte.getTileType(x,y);
