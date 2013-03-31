@@ -90,12 +90,17 @@ public class Editor extends JFrame{
 	
 	// Menubutton speichern
 	public void onSpeichern(){
-		JFileChooser speicherDialog=new JFileChooser();
-		speicherDialog.showSaveDialog(this);
-		File file = speicherDialog.getSelectedFile();
-		try {
-			ImageIO.write(kartenPanel.getSaveableImage(), "png", file);
-		} catch (IOException e) {e.printStackTrace();}
+		JFileChooser chooser = new JFileChooser();
+		int result = chooser.showSaveDialog(this);
+		if (result == chooser.APPROVE_OPTION){
+			File file = chooser.getSelectedFile();
+			try {
+				ImageIO.write(kartenPanel.getSaveableImage(), "png", file);
+			}
+			catch (IOException e){
+				e.printStackTrace();
+			}
+		}
 	}
 
 	

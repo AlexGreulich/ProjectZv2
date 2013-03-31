@@ -118,19 +118,25 @@ public class KartenPanel extends JPanel{
 		}
 	}
 	
+	
 	public BufferedImage getSaveableImage(){
-		BufferedImage bufferedImage = new BufferedImage(karte.getWidth(), karte.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage bufferedImage = new BufferedImage(karte.getWidth(), karte.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Color color;
 		int rgb,r,g,b,type;
+		type = tileset.getCurrentTileType();
+		r = type/65536;
+		g = (type-r*65536)/256;
+		b = type - (g*256 + r*65536);
+		System.out.println(r +" "+g+" "+b);
 		for(int x=0; x<karte.getWidth();x++){
 			for(int y=0; y<karte.getHeight();y++){
 				type = karte.getTileType(x,y);
-				r = type%65536;
-				g = (type-r*65536)%256;
+				r = type/65536;
+				g = (type-r*65536)/256;
 				b = type - (g*256 + r*65536);
 				color = new Color(r, g, b);
-				rgb = color.getRGB();
-				bufferedImage.setRGB(x, y, rgb);
+				//System.out.println(color.toString());
+				bufferedImage.setRGB(x, y, color.getRGB());
 			}
 		}
 		return bufferedImage;

@@ -28,7 +28,7 @@ public class Karte{
 		karte = new int [width][height];
 		for(int x=0; x<width;x++){
 			for(int y=0; y<height;y++){
-				karte[x][y] = 4;
+				karte[x][y] = 400;
 			}
 		}
 	}
