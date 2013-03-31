@@ -22,7 +22,7 @@ public class PalettenPanel extends JPanel{
 		new MouseExplorer(this);
 		setPreferredSize(new Dimension(2048,2048));
 		scroll.setViewportView(this);
-		scroll.setPreferredSize(new Dimension(50, 200));
+		scroll.setPreferredSize(new Dimension(1200, 150));
 		setDoubleBuffered(true);
 		
 		this.addMouseListener(new MouseAdapter(){

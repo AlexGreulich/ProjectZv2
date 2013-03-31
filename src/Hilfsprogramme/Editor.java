@@ -2,18 +2,22 @@ package Hilfsprogramme;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 public class Editor extends JFrame{
 	
@@ -21,6 +25,7 @@ public class Editor extends JFrame{
 	KartenPanel kartenPanel;
 	JMenuBar menubar;
 	EditorController controller;
+	JButton zoomInButton, zoomOutButton, personButton, selectionButton;
 	
 	// Konstruktor
 	public Editor(){
@@ -94,11 +99,33 @@ public class Editor extends JFrame{
 		});
 		
 		controller = new EditorController(this);
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		JPanel toolPanel = new JPanel();
+//		toolPanel.setPreferredSize(new Dimension(40,40));
+		toolPanel.setLayout(new GridLayout(4,1));
+		
+		zoomInButton = new JButton("+");
+		zoomOutButton = new JButton("-");
+		personButton = new JButton("P");
+		selectionButton = new JButton("S");
+		toolPanel.add(zoomInButton);
+		toolPanel.add(zoomOutButton);
+		toolPanel.add(personButton);
+		toolPanel.add(selectionButton);
+		
+		
 		palettenPanel = new PalettenPanel(controller);
 		kartenPanel = new KartenPanel(controller);
-		controller.initParts(palettenPanel, kartenPanel);
+		//controller.initParts(palettenPanel, kartenPanel);
 		
-		add(palettenPanel.scroll, BorderLayout.NORTH);		
+		JButton testB = new JButton("test");
+		testB.setPreferredSize(new Dimension(100,100));
+		topPanel.add(toolPanel);
+		topPanel.add(palettenPanel.scroll);
+		//topPanel.add(testB);
+		add(topPanel, BorderLayout.NORTH);		
 		add(kartenPanel.scroll, BorderLayout.CENTER);
 		
 		pack();
