@@ -17,6 +17,7 @@ public class EditorController {
 	public EditorController (Editor editor){
 		this.editor = editor;
 		tileset = new Tileset();
+		currentZoom = 32;
 	}
 	
 	public void initParts(PalettenPanel palettenPanel2, KartenPanel kartenPanel2) {
@@ -50,6 +51,14 @@ public class EditorController {
 	public BufferedImage getCurrentTileImage() {
 		return tileset.getTileImage(currentTile);
 	}
+	
+	public BufferedImage getZoomTileImage(int tileType) {
+		return tileset.getZoomTileImage(tileType);
+	}
+
+	public BufferedImage getZoomCurrentTileImage() {
+		return tileset.getZoomTileImage(currentTile);
+	}
 
 	public int getTileAmount() {
 		return tileset.getTileAmount();
@@ -61,12 +70,20 @@ public class EditorController {
 	}
 
 	public void zoomIn() {
-		// TODO Auto-generated method stub
-		
+		if (currentZoom < 32){
+			currentZoom++;
+			tileset.updateZoomTiles(currentZoom);
+			kartenPanel.setPanelDimensions();
+		}
 	}
 	public void zoomOut() {
-		// TODO Auto-generated method stub
-		
+		if (currentZoom > 1){
+			currentZoom--;
+			tileset.updateZoomTiles(currentZoom);
+			kartenPanel.setPanelDimensions();
+		}
 	}
-
+	public int getCurrentZoom() {
+		return currentZoom;
+	} 	
 }

@@ -74,11 +74,12 @@ public class KartenPanel extends JPanel{
 		int starty = r.y;
 		int endx = startx+r.width;
 		int endy = starty+r.height;
+		int cs = controller.getCurrentZoom();
  
-		startx = startx/32;
-		starty = starty/32;
-		endx = endx/32;
-		endy = endy/32;
+		startx = startx/cs;
+		starty = starty/cs;
+		endx = endx/cs;
+		endy = endy/cs;
 		
 		if(endx < karte.getWidth()){
 			endx++;
@@ -90,25 +91,26 @@ public class KartenPanel extends JPanel{
  
 		for(int x = startx; x < endx; x++){
 			for(int y = starty; y < endy; y++){
-				BufferedImage tile = controller.getTileImage(karte.getTileType(x, y));
-				g2d.drawImage(tile, x*32, y*32, this);
+				BufferedImage tile = controller.getZoomTileImage(karte.getTileType(x, y));
+				g2d.drawImage(tile, x*cs, y*cs, this);
 			}
 		}
 		
-		g2d.drawImage(controller.getCurrentTileImage(), (mouseX/32)*32, (mouseY/32)*32, this);
+		g2d.drawImage(controller.getZoomCurrentTileImage(), (mouseX/cs)*cs, (mouseY/cs)*cs, this);
 	}
 		
  
 	public void setPanelDimensions(){
 		//Hier wird nun eine Feste größe des JPanel gesetzt.
-		setPreferredSize(new Dimension(karte.getWidth()*32, karte.getHeight()*32));
+		setPreferredSize(new Dimension(karte.getWidth()*controller.getCurrentZoom(), karte.getHeight()*controller.getCurrentZoom()));
 		scroll.setViewportView(this);
 	}
 	
 	
 	public void zeichneTile(int x, int y){
-		x = x/32;
-		y = y/32;
+		int cs = controller.getCurrentZoom();
+		x = x/cs;
+		y = y/cs;
 		
 		if ((x >= 0) && (y >= 0)){
 			karte.setTileType(x,y,controller.getCurrentTileType());
@@ -119,7 +121,7 @@ public class KartenPanel extends JPanel{
 			int dy = this.scroll.getLocation().y + editor.getInsets().top - rec.y + editor.menubar.getHeight();
 			//zeichnet jframe inhalte neu dx und dy sind die offsets innerhalb des jframes
 
-			m.addDirtyRegion(editor , dx+x*32, dy+y*32, 33, 33);
+			m.addDirtyRegion(editor , dx+x*cs, dy+y*cs, cs+1, cs+1);
 		}
 	}
 	
