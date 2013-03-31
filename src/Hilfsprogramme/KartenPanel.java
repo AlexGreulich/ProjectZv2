@@ -64,6 +64,10 @@ public class KartenPanel extends JPanel{
 	
 	
 	public void paintComponent(Graphics g){
+		// there is a bit of a problem with the transparency
+		// with "super..." > transparent tiles have a white background
+		// without > black lines appear in the transparent part of the tile
+		// super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		Rectangle r = g2d.getClipBounds();
 		int startx = r.x;
@@ -92,14 +96,6 @@ public class KartenPanel extends JPanel{
 		}
 		
 		g2d.drawImage(controller.getCurrentTileImage(), (mouseX/32)*32, (mouseY/32)*32, this);
-		
-		g.setColor(Color.black);
-		for (int ly=32; ly<this.getHeight(); ly+=32){
-			g2d.drawLine(0, ly, this.getWidth(), ly);
-		}
-		for (int lx=32; lx<this.getWidth(); lx+=32){
-			g2d.drawLine(lx, 0, lx, this.getHeight());
-		}
 	}
 		
  

@@ -16,7 +16,6 @@ public class PalettenPanel extends JPanel{
 	
 	EditorController controller;
 	public JScrollPane scroll = new JScrollPane();
-	RepaintManager m;
 	
 	public PalettenPanel(EditorController controller){
 		this.controller = controller;
@@ -25,7 +24,6 @@ public class PalettenPanel extends JPanel{
 		scroll.setViewportView(this);
 		scroll.setPreferredSize(new Dimension(50, 200));
 		setDoubleBuffered(true);
-		m = RepaintManager.currentManager(controller.getEditor());
 		
 		this.addMouseListener(new MouseAdapter(){
 			@Override
@@ -42,6 +40,7 @@ public class PalettenPanel extends JPanel{
 	
 	
 	public void paintComponent(Graphics g){
+		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		int x = 0;
 		int y = 0;
