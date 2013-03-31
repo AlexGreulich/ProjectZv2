@@ -5,14 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageFilter;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.URL;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -26,8 +20,7 @@ public class Editor extends JFrame{
 	KartenPanel kartenPanel;
 	TileMonitorPanel monitor;
 	JMenuBar menubar;
-	Tileset tileset = new Tileset();
-	
+	EditorController controller;
 	
 	// Konstruktor
 	public Editor(){
@@ -63,11 +56,14 @@ public class Editor extends JFrame{
 			}
 		});
 		
-		monitor = new TileMonitorPanel(tileset, this);
-		add(monitor, null);
-		palettenPanel = new PalettenPanel(this, tileset, monitor);
-		add(palettenPanel.scroll, BorderLayout.NORTH);
-		kartenPanel = new KartenPanel(this, tileset);
+		controller = new EditorController(this);
+		monitor = new TileMonitorPanel(controller);
+		palettenPanel = new PalettenPanel(controller);
+		kartenPanel = new KartenPanel(controller);
+		controller.initParts(palettenPanel, kartenPanel, monitor);
+		
+		add(monitor, null);		
+		add(palettenPanel.scroll, BorderLayout.NORTH);		
 		add(kartenPanel.scroll, BorderLayout.CENTER);
 		
 		pack();
@@ -84,7 +80,7 @@ public class Editor extends JFrame{
 			BufferedImage kartenImage;
 			try {
 				kartenImage = ImageIO.read(f);
-				kartenPanel.setMap(kartenImage);
+				controller.setMap(kartenImage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -100,7 +96,7 @@ public class Editor extends JFrame{
 		if (result == chooser.APPROVE_OPTION){
 			File file = chooser.getSelectedFile();
 			try {
-				ImageIO.write(kartenPanel.getSaveableImage(), "png", file);
+				ImageIO.write(controller.getSaveableImage(), "png", file);
 			}
 			catch (IOException e){
 				e.printStackTrace();

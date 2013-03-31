@@ -7,13 +7,12 @@ import javax.swing.RepaintManager;
 
 public class TileMonitorPanel extends JPanel{
 	
-	Tileset tileset;
 	RepaintManager m;
-	Editor editor;
+	EditorController controller;
 	
-	public TileMonitorPanel(Tileset tileset, Editor editor){
-		this.tileset = tileset;
-		m = RepaintManager.currentManager(editor);
+	public TileMonitorPanel(EditorController controller){
+		this.controller = controller;
+		m = RepaintManager.currentManager(controller.getEditor());
 		setPreferredSize(new Dimension(500,500));
 		setBounds(20, 220, 42, 70);
 	}
@@ -23,8 +22,8 @@ public class TileMonitorPanel extends JPanel{
 		g.fillRect(0, 0, 42, 70);
 		g.setColor(Color.white);
 		g.drawString("Tile: ", 5, 13);
-		g.drawString("" + tileset.getCurrentTileType(), 5, 25);
-		BufferedImage tile = tileset.getCurrentTileImage();
+		g.drawString("" + controller.getCurrentTileType(), 5, 25);
+		BufferedImage tile = controller.getCurrentTileImage();
 		g.drawImage(tile, 5, 32, this);	
 	}
 }

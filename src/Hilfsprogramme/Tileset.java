@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 public class Tileset {
 	
 	ArrayList<BufferedImage> images;
-	int currentTile;
 	
 	public Tileset(){
 		images = new ArrayList<BufferedImage>();
@@ -22,20 +21,10 @@ public class Tileset {
 				}
 			}
 		}catch(IOException e){e.printStackTrace();}
-		currentTile = 0;
 	}
 
 	public BufferedImage getTileImage(int type) {
 		return images.get(type);
-	}
-	public BufferedImage getCurrentTileImage() {
-		return images.get(currentTile);
-	}
-	public int getCurrentTileType() {
-		return currentTile;
-	}
-	public void setCurrentTileType(int currentTile) {
-		this.currentTile = currentTile;
 	}
 	public int getTileAmount(){
 		return images.size();

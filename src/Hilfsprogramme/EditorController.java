@@ -1,0 +1,60 @@
+package Hilfsprogramme;
+
+import java.awt.image.BufferedImage;
+
+import javax.swing.JMenuBar;
+
+public class EditorController {
+	
+	Editor editor;
+	PalettenPanel palettenPanel;	
+	KartenPanel kartenPanel;
+	TileMonitorPanel monitor;
+	JMenuBar menubar;
+	Tileset tileset;
+	int currentTile;
+	int currentZoom;
+	
+	public EditorController (Editor editor){
+		this.editor = editor;
+		tileset = new Tileset();
+	}
+	
+	public void initParts(PalettenPanel palettenPanel2, KartenPanel kartenPanel2, TileMonitorPanel monitor2) {
+		this.palettenPanel = palettenPanel2;
+		this.kartenPanel = kartenPanel2;
+		this.monitor = monitor2;
+	}
+	
+	public Editor getEditor(){
+		return editor;
+	}
+	
+	public int getCurrentTileType() {
+		return currentTile;
+	}
+	public void setCurrentTileType(int currentTile) {
+		this.currentTile = currentTile;
+		monitor.repaint();
+	}
+	
+	public void setMap(BufferedImage kartenImage){
+		kartenPanel.setMap(kartenImage);
+	}
+	public BufferedImage getSaveableImage(){
+		return kartenPanel.getSaveableImage();
+	}
+
+	public BufferedImage getTileImage(int tileType) {
+		return tileset.getTileImage(tileType);
+	}
+
+	public BufferedImage getCurrentTileImage() {
+		return tileset.getTileImage(currentTile);
+	}
+
+	public int getTileAmount() {
+		return tileset.getTileAmount();
+	}
+
+}

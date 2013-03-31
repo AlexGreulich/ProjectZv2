@@ -13,15 +13,11 @@ import javax.swing.JScrollPane;
 
 public class PalettenPanel extends JPanel{
 	
-	Editor edit;
-	Tileset tileset;
+	EditorController controller;
 	public JScrollPane scroll = new JScrollPane();
-	TileMonitorPanel monitor;
 	
-	public PalettenPanel(Editor editor, Tileset tileset, TileMonitorPanel monitor){
-		this.tileset = tileset;
-		this.monitor = monitor;
-		edit = editor;
+	public PalettenPanel(EditorController controller){
+		this.controller = controller;
 		new MouseExplorer(this);
 		setPreferredSize(new Dimension(2048,2048));
 		scroll.setViewportView(this);
@@ -37,12 +33,17 @@ public class PalettenPanel extends JPanel{
 	}
 	
 	
+	public void setCurrentTileID(int x, int y){
+		controller.setCurrentTileType(x/32+(y/32)*64);
+	}
+	
+	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		int x = 0;
 		int y = 0;
-		for(int index = 0; index < tileset.getTileAmount(); index++){
-			g2d.drawImage(tileset.getTileImage(index), x*32, y*32, this);
+		for(int index = 0; index < controller.getTileAmount(); index++){
+			g2d.drawImage(controller.getTileImage(index), x*32, y*32, this);
 			if(index%64==63){
 				y++;
 				x=0;
@@ -59,17 +60,5 @@ public class PalettenPanel extends JPanel{
 		for (int lx=32; lx<this.getWidth(); lx+=32){
 			g2d.drawLine(lx, 0, lx, this.getHeight());
 		}
-	}
-	
-	public void setCurrentTileID(int x, int y){
-//		Rectangle rec = scroll.getViewport().getViewRect();
-//		
-//		int dx = this.scroll.getLocation().x + edit.getInsets().left - rec.x;
-//		int dy = this.scroll.getLocation().y + edit.getInsets().top - rec.y + edit.menubar.getHeight();
-//		//zeichnet jframe inhalte neu dx und dy sind die offsets innerhalb des jframes
-//
-//		m.addDirtyRegion(ed , dx+x*32, dy+y*32, 33, 33);
-		tileset.setCurrentTileType(x/32+(y/32)*64);
-		monitor.repaint();
 	}
 }

@@ -16,21 +16,21 @@ import javax.swing.RepaintManager;
 public class KartenPanel extends JPanel{
 	
 	Karte karte;
-	Editor ed;
-	public JScrollPane scroll = new JScrollPane();
+	Editor editor;
+	EditorController controller;
+	JScrollPane scroll = new JScrollPane();
 	RepaintManager m;
-	Tileset tileset;
 	 
-	public KartenPanel(Editor editor, Tileset tileset){
-		this.tileset = tileset;
+	public KartenPanel(EditorController controller){
+		this.controller = controller;
 		scroll.setViewportView(this);
 		
 		setDoubleBuffered(true); //verhindert Flackern
 		initCleanMap();
 		setPanelDimensions();
 		
-		ed = editor;
-		m = RepaintManager.currentManager(ed);
+		editor = controller.getEditor();;
+		m = RepaintManager.currentManager(editor);
 		
 //		new MouseExplorer(this);
 		
@@ -80,7 +80,7 @@ public class KartenPanel extends JPanel{
  
 		for(int x = startx; x < endx; x++){
 			for(int y = starty; y < endy; y++){
-				BufferedImage tile = tileset.getTileImage(karte.getTileType(x, y));
+				BufferedImage tile = controller.getTileImage(karte.getTileType(x, y));
 				g2d.drawImage(tile, x*32, y*32, this);
 			}
 		}
@@ -106,15 +106,15 @@ public class KartenPanel extends JPanel{
 		y = y/32;
 		
 		if ((x >= 0) && (y >= 0)){
-			karte.setTileType(x,y,tileset.getCurrentTileType());
+			karte.setTileType(x,y,controller.getCurrentTileType());
 						
 			Rectangle rec = scroll.getViewport().getViewRect();
 		
-			int dx = this.scroll.getLocation().x + ed.getInsets().left - rec.x;
-			int dy = this.scroll.getLocation().y + ed.getInsets().top - rec.y + ed.menubar.getHeight();
+			int dx = this.scroll.getLocation().x + editor.getInsets().left - rec.x;
+			int dy = this.scroll.getLocation().y + editor.getInsets().top - rec.y + editor.menubar.getHeight();
 			//zeichnet jframe inhalte neu dx und dy sind die offsets innerhalb des jframes
 
-			m.addDirtyRegion(ed , dx+x*32, dy+y*32, 33, 33);
+			m.addDirtyRegion(editor , dx+x*32, dy+y*32, 33, 33);
 		}
 	}
 	
@@ -130,7 +130,6 @@ public class KartenPanel extends JPanel{
 				g = (type-r*65536)/256;
 				b = type - (g*256 + r*65536);
 				color = new Color(r, g, b);
-				//System.out.println(color.toString());
 				bufferedImage.setRGB(x, y, color.getRGB());
 			}
 		}
