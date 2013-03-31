@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,7 +26,8 @@ public class Editor extends JFrame{
 	KartenPanel kartenPanel;
 	JMenuBar menubar;
 	EditorController controller;
-	JButton zoomInButton, zoomOutButton, personButton, selectionButton;
+	JButton zoomInButton, zoomOutButton;
+	JCheckBox selectionBox;
 	
 	// Konstruktor
 	public Editor(){
@@ -103,16 +105,14 @@ public class Editor extends JFrame{
 		topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JPanel toolPanel = new JPanel();
-		toolPanel.setLayout(new GridLayout(4,1));
+		toolPanel.setLayout(new GridLayout(3,1));
 		
 		zoomInButton = new JButton("+");
 		zoomOutButton = new JButton("-");
-		personButton = new JButton("P");
-		selectionButton = new JButton("S");
+		selectionBox = new JCheckBox();
 		toolPanel.add(zoomInButton);
 		toolPanel.add(zoomOutButton);
-		toolPanel.add(personButton);
-		toolPanel.add(selectionButton);
+		toolPanel.add(selectionBox);
 		
 		ZoomButtonHandler buttonHandler = new ZoomButtonHandler();
 		zoomInButton.addActionListener(buttonHandler);

@@ -12,7 +12,7 @@ public class Tileset {
 	
 	ArrayList<BufferedImage> images, zoomImages;
 	
-	public Tileset(){
+	public Tileset(int scale){
 		images = new ArrayList<BufferedImage>();
 		try{
 			BufferedImage tileset = ImageIO.read(getClass().getResource("../tilesets/Tileset_2048.png"));
@@ -24,7 +24,7 @@ public class Tileset {
 			}
 			zoomImages = new ArrayList<BufferedImage>();
 			for (int i = 0; i<images.size(); i++){
-				zoomImages.add(images.get(i));
+				zoomImages.add(resize(images.get(i),scale,scale));
 			}
 		}catch(IOException e){e.printStackTrace();}
 	}
@@ -48,7 +48,7 @@ public class Tileset {
 	private BufferedImage resize (BufferedImage img, int newW, int newH) {  
         int w = img.getWidth();  
         int h = img.getHeight();  
-        BufferedImage dimg = dimg = new BufferedImage(newW, newH, img.getType());  
+        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());  
         Graphics2D g = dimg.createGraphics();  
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
         g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);  

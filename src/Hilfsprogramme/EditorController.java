@@ -16,8 +16,8 @@ public class EditorController {
 	
 	public EditorController (Editor editor){
 		this.editor = editor;
-		tileset = new Tileset();
-		currentZoom = 32;
+		currentZoom = 20;
+		tileset = new Tileset(currentZoom);
 	}
 	
 	public void initParts(PalettenPanel palettenPanel2, KartenPanel kartenPanel2) {
