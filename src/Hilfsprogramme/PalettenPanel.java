@@ -19,7 +19,7 @@ public class PalettenPanel extends JPanel{
 	
 	public PalettenPanel(EditorController controller){
 		this.controller = controller;
-		new MouseExplorer(this);
+//		new MouseExplorer(this);
 		setPreferredSize(new Dimension(2048,2048));
 		scroll.setViewportView(this);
 		scroll.setPreferredSize(new Dimension(1200, 150));
