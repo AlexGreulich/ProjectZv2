@@ -160,7 +160,6 @@ public class Editor extends JFrame{
 		calculate.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				controller.calculateBorders();
-				water.setState(false);
 			}
 		});
 	}

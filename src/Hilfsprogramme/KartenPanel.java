@@ -1,5 +1,6 @@
 package Hilfsprogramme;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -26,7 +27,8 @@ public class KartenPanel extends JPanel{
 	boolean selectionOn, smthSelected;
 	int selX1, selY1, selX2, selY2;
 	HashSet<Integer> typesToChange;
-	 
+	
+
 	public KartenPanel(EditorController controller){
 		selX1 = 0;
 		selX2 = 0;
@@ -68,11 +70,18 @@ public class KartenPanel extends JPanel{
 	}
 	
 	public void onMouseClicked(MouseEvent e) {
-		if (!selectionOn){
+		if (!selectionOn) {
 			zeichneTile(e.getX(), e.getY());
 		}
-		else {
-			selectAll();
+		if (selectionOn) {
+			System.out.println("select all");
+			selX1 = 0;
+			selY1 = 0;
+			selX2 = karte.getWidth();
+			selY2 = karte.getHeight();
+			smthSelected = true;
+			controller.setCalculateable(true);
+			repaint();
 		}
 	}
 	
@@ -146,14 +155,15 @@ public class KartenPanel extends JPanel{
 			}
 		}
 		
-		g2d.drawImage(controller.getZoomCurrentTileImage(), (mouseX/cs)*cs, (mouseY/cs)*cs, this);
-		if (smthSelected){
-			g.setColor(Color.red);
+		if (!selectionOn){
+			g2d.drawImage(controller.getZoomCurrentTileImage(), (mouseX/cs)*cs, (mouseY/cs)*cs, this);
+		}
+		
+		if ((selectionOn) && (smthSelected)){
+			g2d.setColor(Color.black);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
 			int n = controller.getCurrentZoom();
-			g2d.drawLine(selX1*n, selY1*n, selX2*n, selY1*n);
-			g2d.drawLine(selX2*n, selY1*n, selX2*n, selY2*n);
-			g2d.drawLine(selX2*n, selY2*n, selX1*n, selY2*n);
-			g2d.drawLine(selX1*n, selY2*n, selX1*n, selY1*n);
+			g2d.fillRect(selX1*n, selY1*n, selX2*n-selX1*n, selY2*n-selY1*n);
 		}
 	}
 		
@@ -203,16 +213,9 @@ public class KartenPanel extends JPanel{
 
 	public void setSelectionState(boolean b) {
 		selectionOn = b;
+		repaint();
 	}
 	
-	public void selectAll(){
-		selX1 = 0;
-		selX2 = 0;
-		selY1 = karte.getWidth();
-		selY2 = karte.getHeight();
-		smthSelected = true;
-	}
-
 	public void calculateBorders() {
 		if ((selectionOn) && (smthSelected)){
 			karte.calculateBorders(selX1, selY1, selX2, selY2, typesToChange);
