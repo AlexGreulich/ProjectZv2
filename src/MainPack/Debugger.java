@@ -45,6 +45,12 @@ public class Debugger {
 		font.drawString(x,y+140,"World.TILES_ON_SCREEN_LR/TB: " + World.CHUNK_BORDER_LR + " | " + World.CHUNK_BORDER_TB);
 
 		font.drawString(x, y+160,"items in chunk[]"+level.itemHandler.itemsInChunk.length);
+		
+//		for(int a =0;a< level.itemHandler.itemsInChunk[0].length){
+//			for(){
+//				
+//			}
+//		}
 		glPopMatrix();
 		
 	}

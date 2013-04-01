@@ -8,6 +8,9 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glTranslatef;
+
+import org.lwjgl.opengl.Display;
+
 import MainPack.World.MenuOption;
 
 
@@ -35,7 +38,7 @@ public class GameMenuItem {
 	
 	public void draw(int mX, int mY){
 //		System.out.println("my: "+ mY);
-		mY = 640-mY;
+		mY = Display.getHeight()-mY;
 		
 		if((mX > scrPosX) && (mX < (scrPosX + 320)) && (mY > scrPosY) && (mY <( scrPosY + 64))){
 			isSelected = true;
@@ -62,9 +65,9 @@ public class GameMenuItem {
 		
 		glBegin(GL_QUADS);
 			glTexCoord2f(texPosX, texPosY);					glVertex2f(scrPosX + shiftX, scrPosY);
-			glTexCoord2f(texPosX+ 0.25f, texPosY);			glVertex2f(scrPosX + shiftX + 256, scrPosY);
-			glTexCoord2f(texPosX+ 0.25f, texPosY+ 0.0625f);	glVertex2f(scrPosX + shiftX + 256, scrPosY + 64);
-			glTexCoord2f(texPosX, texPosY + 0.0625f);		glVertex2f(scrPosX + shiftX, scrPosY + 64);
+			glTexCoord2f(texPosX+ 0.25f, texPosY);			glVertex2f(scrPosX + shiftX + 512, scrPosY);
+			glTexCoord2f(texPosX+ 0.25f, texPosY+ 0.0625f);	glVertex2f(scrPosX + shiftX + 512, scrPosY + 128);
+			glTexCoord2f(texPosX, texPosY + 0.0625f);		glVertex2f(scrPosX + shiftX, scrPosY + 128);
 		glEnd();
 	}
 }
