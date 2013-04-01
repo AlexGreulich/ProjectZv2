@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +30,9 @@ public class Editor extends JFrame{
 	EditorController controller;
 	JButton zoomInButton, zoomOutButton;
 	JCheckBox selectionBox;
+	JCheckBoxMenuItem water, sand, stone, concrete, bush, house;
+	JMenu menu3;
+	JMenuItem calculate;
 	
 	// Konstruktor
 	public Editor(){
@@ -36,69 +41,7 @@ public class Editor extends JFrame{
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		menubar = new JMenuBar();
-		setJMenuBar(menubar);
-		
-		JMenu menu1 = new JMenu("File");
-		menubar.add(menu1);
-		JMenuItem newmap = new JMenuItem("new");
-		JMenuItem load = new JMenuItem("load");
-		JMenuItem save = new JMenuItem("save");
-		menu1.add(save);
-		menu1.add(load);
-		menu1.add(newmap);
-		
-		JMenu menu2 = new JMenu("Tiles");
-		menubar.add(menu2);
-		JCheckBoxMenuItem all = new JCheckBoxMenuItem("Show all");
-		JCheckBoxMenuItem country = new JCheckBoxMenuItem("Countrsside");
-		JCheckBoxMenuItem houses = new JCheckBoxMenuItem("Houses");
-		JCheckBoxMenuItem items = new JCheckBoxMenuItem("Items");
-		menu2.add(all);
-		menu2.add(country);
-		menu2.add(houses);
-		menu2.add(items);
-		all.setEnabled(false);
-		country.setEnabled(false);
-		houses.setEnabled(false);
-		items.setEnabled(false);
-		
-		JMenu menu3 = new JMenu("CalcBorders");
-		menubar.add(menu3);
-		JMenuItem water = new JMenuItem("Water");
-		JMenuItem sand = new JMenuItem("Sand");
-		JMenuItem stone = new JMenuItem("Stone");
-		JMenuItem bush = new JMenuItem("Bush");
-		JMenuItem concrete = new JMenuItem("Concrete");
-		JMenuItem house = new JMenuItem("House");
-		menu3.add(water);
-		menu3.add(sand);
-		menu3.add(stone);
-		menu3.add(bush);
-		menu3.add(concrete);
-		menu3.add(house);
-		water.setEnabled(false);
-		sand.setEnabled(false);
-		stone.setEnabled(false);
-		bush.setEnabled(false);
-		concrete.setEnabled(false);
-		house.setEnabled(false);
-		
-		save.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				onSpeichern();
-			}
-		});
-		load.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				onLaden();
-			}
-		});
-		newmap.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				onNew();
-			}
-		});
+		createMenu();
 		
 		controller = new EditorController(this);
 		JPanel topPanel = new JPanel();
@@ -110,6 +53,14 @@ public class Editor extends JFrame{
 		zoomInButton = new JButton("+");
 		zoomOutButton = new JButton("-");
 		selectionBox = new JCheckBox();
+		
+		selectionBox.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				onChecked(e);
+				
+			}
+		});
 		toolPanel.add(zoomInButton);
 		toolPanel.add(zoomOutButton);
 		toolPanel.add(selectionBox);
@@ -129,6 +80,94 @@ public class Editor extends JFrame{
 		
 		pack();
 		setVisible(true);
+	}
+	
+	
+	private void createMenu(){
+		menubar = new JMenuBar();
+		setJMenuBar(menubar);
+		
+		// File menu
+		JMenu menu1 = new JMenu("File");
+		menubar.add(menu1);
+		JMenuItem newmap = new JMenuItem("new");
+		JMenuItem load = new JMenuItem("load");
+		JMenuItem save = new JMenuItem("save");
+		menu1.add(save);
+		menu1.add(load);
+		menu1.add(newmap);
+		
+		save.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				onSpeichern();
+			}
+		});
+		load.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				onLaden();
+			}
+		});
+		newmap.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				onNew();
+			}
+		});
+		
+		// Tile menu
+		JMenu menu2 = new JMenu("Tiles");
+		menubar.add(menu2);
+		JCheckBoxMenuItem all = new JCheckBoxMenuItem("Show all");
+		JCheckBoxMenuItem country = new JCheckBoxMenuItem("Countrsside");
+		JCheckBoxMenuItem houses = new JCheckBoxMenuItem("Houses");
+		JCheckBoxMenuItem items = new JCheckBoxMenuItem("Items");
+		menu2.add(all);
+		menu2.add(country);
+		menu2.add(houses);
+		menu2.add(items);
+		all.setEnabled(false);
+		country.setEnabled(false);
+		houses.setEnabled(false);
+		items.setEnabled(false);
+		
+		// CalcBorders menu
+		menu3 = new JMenu("CalcBorders");
+		menubar.add(menu3);
+		menu3.setEnabled(false);
+		water = new JCheckBoxMenuItem("Water");
+		sand = new JCheckBoxMenuItem("Sand");
+		stone = new JCheckBoxMenuItem("Stone");
+		bush = new JCheckBoxMenuItem("Bush");
+		concrete = new JCheckBoxMenuItem("Concrete");
+		house = new JCheckBoxMenuItem("House");
+		calculate = new JMenuItem("calculate");
+		calculate.setEnabled(false);
+		menu3.add(water);
+		menu3.add(sand);
+		menu3.add(stone);
+		menu3.add(bush);
+		menu3.add(concrete);
+		menu3.add(house);
+		menu3.addSeparator();
+		menu3.add(calculate);
+		
+		water.addItemListener(new TileItemListener());
+		sand.addItemListener(new TileItemListener());
+		stone.addItemListener(new TileItemListener());
+		bush.addItemListener(new TileItemListener());
+		concrete.addItemListener(new TileItemListener());
+		house.addItemListener(new TileItemListener());
+		
+		calculate.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				controller.calculateBorders();
+				water.setState(false);
+			}
+		});
+	}
+	
+	
+	public void setCalculateable(boolean b){
+		calculate.setEnabled(b);
 	}
 	
 	
@@ -168,6 +207,17 @@ public class Editor extends JFrame{
 		controller.createNewMap();
 	}
 	
+	private void onChecked(ItemEvent e) {
+		 if (e.getStateChange() == ItemEvent.DESELECTED) {
+			 controller.setSelectionState(false);
+			 menu3.setEnabled(false);
+	     }
+		 if (e.getStateChange() == ItemEvent.SELECTED) {
+			 controller.setSelectionState(true);
+			 menu3.setEnabled(true);
+	     }
+	}
+	
 	
 	private class ZoomButtonHandler implements ActionListener{
 		@Override
@@ -180,11 +230,41 @@ public class Editor extends JFrame{
 			}
 		}
 	}
+	
+	
+	private class TileItemListener implements ItemListener{
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			int n = 0;
+			if (e.getSource() == water){
+				n = 2;
+			} else if (e.getSource() == sand){
+				n = 0;
+			} else if (e.getSource() == bush){
+				n = 3;
+			} else if (e.getSource() == concrete){
+				n = 1;
+			} else if (e.getSource() == stone){
+				n = 4;
+			} else if (e.getSource() == house){
+				n = 5;
+			}
+			
+			if (e.getStateChange() == ItemEvent.DESELECTED) {
+				 controller.setNotChangeable(n);
+		    }
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				 controller.setChangeable(n);
+		    }
+		}
+		
+	}
 
 	
 	// groesse des JFrames
 	public Dimension getPreferredSize(){
-		return new Dimension(1280,1000);
+		return new Dimension(1280,700);
 	}
 	
 	

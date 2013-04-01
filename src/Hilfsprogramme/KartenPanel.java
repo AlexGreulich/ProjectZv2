@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.RepaintManager;
@@ -21,11 +23,21 @@ public class KartenPanel extends JPanel{
 	JScrollPane scroll;
 	RepaintManager m;
 	int mouseX, mouseY;
+	boolean selectionOn, smthSelected;
+	int selX1, selY1, selX2, selY2;
+	HashSet<Integer> typesToChange;
 	 
 	public KartenPanel(EditorController controller){
+		selX1 = 0;
+		selX2 = 0;
+		selY1 = 0;
+		selY2 = 0;
+		typesToChange = new HashSet<Integer>();
 		this.controller = controller;
 		scroll = new JScrollPane();
 		scroll.setViewportView(this);
+		selectionOn = false;
+		smthSelected = false;
 		
 		setDoubleBuffered(true); //verhindert Flackern
 		initCleanMap();
@@ -37,21 +49,59 @@ public class KartenPanel extends JPanel{
 		addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				zeichneTile(e.getX(), e.getY());
+				onMouseClicked(e);
+			}
+			public void mousePressed(MouseEvent e){
+				onMousePressed(e);
 			}			
 		});
 		addMouseMotionListener(new MouseMotionAdapter(){
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				zeichneTile(e.getX(), e.getY());
+				onMouseDragged(e);
 			}
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-				repaint(); // geht nicht anders
+				onMouseMoved(e);
 			}
 		});
+	}
+	
+	public void onMouseClicked(MouseEvent e) {
+		if (!selectionOn){
+			zeichneTile(e.getX(), e.getY());
+		}
+		else {
+			selectAll();
+		}
+	}
+	
+	public void onMouseDragged(MouseEvent e) {
+		if (!selectionOn){
+			zeichneTile(e.getX(), e.getY());
+		}
+		if (selectionOn){
+			selX2 = e.getX()/controller.getCurrentZoom();
+			selY2 = e.getY()/controller.getCurrentZoom();
+			smthSelected = true;
+			controller.setCalculateable(true);
+			repaint();
+		}
+	}
+	
+	public void onMousePressed(MouseEvent e) {
+		if (selectionOn){
+			selX1 = e.getX()/controller.getCurrentZoom();
+			selY1 = e.getY()/controller.getCurrentZoom();
+		}
+	}
+	
+	public void onMouseMoved(MouseEvent e) {
+		if (!selectionOn){
+			mouseX = e.getX();
+			mouseY = e.getY();
+			repaint(); // geht nicht anders
+		}
 	}
 	
 	public void initCleanMap(){
@@ -97,6 +147,14 @@ public class KartenPanel extends JPanel{
 		}
 		
 		g2d.drawImage(controller.getZoomCurrentTileImage(), (mouseX/cs)*cs, (mouseY/cs)*cs, this);
+		if (smthSelected){
+			g.setColor(Color.red);
+			int n = controller.getCurrentZoom();
+			g2d.drawLine(selX1*n, selY1*n, selX2*n, selY1*n);
+			g2d.drawLine(selX2*n, selY1*n, selX2*n, selY2*n);
+			g2d.drawLine(selX2*n, selY2*n, selX1*n, selY2*n);
+			g2d.drawLine(selX1*n, selY2*n, selX1*n, selY1*n);
+		}
 	}
 		
  
@@ -141,5 +199,33 @@ public class KartenPanel extends JPanel{
 			}
 		}
 		return bufferedImage;
+	}
+
+	public void setSelectionState(boolean b) {
+		selectionOn = b;
+	}
+	
+	public void selectAll(){
+		selX1 = 0;
+		selX2 = 0;
+		selY1 = karte.getWidth();
+		selY2 = karte.getHeight();
+		smthSelected = true;
+	}
+
+	public void calculateBorders() {
+		if ((selectionOn) && (smthSelected)){
+			karte.calculateBorders(selX1, selY1, selX2, selY2, typesToChange);
+			smthSelected = false;
+			repaint();
+		}
+	}
+
+	public void setChangeable(int i) {
+		typesToChange.add(i);
+	}
+
+	public void setNotChangeable(int n) {
+		typesToChange.remove(n);
 	}
 }

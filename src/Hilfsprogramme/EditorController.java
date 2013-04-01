@@ -85,5 +85,25 @@ public class EditorController {
 	}
 	public int getCurrentZoom() {
 		return currentZoom;
+	}
+
+	public void setSelectionState(boolean b) {
+		kartenPanel.setSelectionState(b);
+	}
+
+	public void calculateBorders() {
+		kartenPanel.calculateBorders();
+	}
+
+	public void setChangeable(int i) {
+		kartenPanel.setChangeable(i);
+	}
+
+	public void setNotChangeable(int n) {
+		kartenPanel.setNotChangeable(n);
 	} 	
+	
+	public void setCalculateable(boolean b){
+		editor.setCalculateable(b);
+	}
 }

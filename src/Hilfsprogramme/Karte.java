@@ -2,6 +2,7 @@ package Hilfsprogramme;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 
 
 public class Karte{
@@ -49,4 +50,20 @@ public class Karte{
 		return height;
 	}
 	
+	public void calculateBorders(int xc1, int yc1, int xc2, int yc2, HashSet<Integer> typesToChange){
+		System.out.println("karte change: "+xc1+" "+yc1+" "+xc2+" "+yc2+" "+typesToChange.toString());
+		for (int n : typesToChange){
+			System.out.println("change: "+n);
+			for (int x = xc1; x <= xc2; x++){
+				for (int y = yc1; y <= yc2; y++){
+					calculateBorder(x, y, n);
+				}
+			}
+		}
+	}
+
+	private void calculateBorder(int x, int y, int n) {
+		// do something
+		karte[x][y] = 50 + n;
+	}	
 }
