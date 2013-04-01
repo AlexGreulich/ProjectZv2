@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -33,6 +34,7 @@ public class Editor extends JFrame{
 	JCheckBoxMenuItem water, sand, stone, concrete, bush, house;
 	JMenu menu3;
 	JMenuItem calculate;
+	JLabel zoomLabel;
 	
 	// Konstruktor
 	public Editor(){
@@ -48,10 +50,12 @@ public class Editor extends JFrame{
 		topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JPanel toolPanel = new JPanel();
-		toolPanel.setLayout(new GridLayout(3,1));
+		toolPanel.setLayout(new GridLayout(5,1));
 		
+		zoomLabel = new JLabel(""+controller.getCurrentZoom()+" px");
 		zoomInButton = new JButton("+");
 		zoomOutButton = new JButton("-");
+		JLabel calcLabel = new JLabel("calcB.");
 		selectionBox = new JCheckBox();
 		
 		selectionBox.addItemListener(new ItemListener(){
@@ -61,8 +65,10 @@ public class Editor extends JFrame{
 				
 			}
 		});
+		toolPanel.add(zoomLabel);
 		toolPanel.add(zoomInButton);
 		toolPanel.add(zoomOutButton);
+		toolPanel.add(calcLabel);
 		toolPanel.add(selectionBox);
 		
 		ZoomButtonHandler buttonHandler = new ZoomButtonHandler();
@@ -223,9 +229,11 @@ public class Editor extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == zoomInButton){
 				controller.zoomIn();
+				zoomLabel.setText(""+controller.getCurrentZoom()+" px");
 			}
 			if (e.getSource() == zoomOutButton){
 				controller.zoomOut();
+				zoomLabel.setText(""+controller.getCurrentZoom()+" px");
 			}
 		}
 	}
