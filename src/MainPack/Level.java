@@ -45,29 +45,29 @@ public class Level {
 	Color c = null;
 	
 	private int screenDeltaX = 0, screenDeltaY = 0;
-	float percentage = 32f/1024f;
+	float percentage = 32f/2048;
 	float u, v, u2, v2;
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
 	
 	Tile[][] currentTileGrid;	
-	int creatingcount=0;
+	int creatingcount = 0;
 	boolean chunkChanged = false;
 	Tile te = null;
 	
 	ItemHandler itemHandler;
 	
-	int currentX, currentY =0;
+	int currentX, currentY = 0;
 	
 	
 	public Level(int x, int y){
 		//	Lade das tileset als eine groﬂe Textur
 		try {
-			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/tilesetnewalign.png"));//Tileset_neu_32-1024b
+			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_2048.png"));//Tileset_neu_32-1024b
 		
-			texW = tilesetTexture.getTextureWidth()/32f;
-			texH = tilesetTexture.getTextureHeight()/32f;
-			map = ImageIO.read(getClass().getResource("/karten/grossekarte-kreise.gif"));
-			itemmap = ImageIO.read(new File("src/karten/itemmap.png"));
+			texW = tilesetTexture.getTextureWidth()/64f;
+			texH = tilesetTexture.getTextureHeight()/64f;
+			map = ImageIO.read(getClass().getResource("/karten/grossekarte-new.png"));
+			itemmap = ImageIO.read(new File("src/karten/itemmap-new.png"));
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (IOException e) {e.printStackTrace();}
@@ -166,163 +166,27 @@ public class Level {
 			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
 				int n = 0;
 				c = new Color(map.getRGB(chunkLeftCornerX+a, chunkLeftCornerY+b));
-						if((c.equals(new Color(100,200,100)) || (c.equals(new Color(255,0,0))))){
-							n=19;
-						}
-						
-				if(c.getRed() == 255){
-					if(c.getGreen() == 255){
-						//sand
-						// grid[x][y] = 0;	//da sand, sind alle felder begehbar
-						
-						if(c.getBlue()==0)		 {			//vorher :  {tileArray[x][y] = new Tile(tileset.getTileImage(201));
-						n=0;
-						}else if(c.getBlue()==10){//oben
-						n=1;
-						}else if(c.getBlue()==20){
-						n=65;
-						}else if(c.getBlue()==30){//links
-						n=32;
-						}else if(c.getBlue()==40){
-						n=34;
-						}else if(c.getBlue()==50){//lioben
-						n=0;
-						}else if(c.getBlue()==60){
-						n=64;
-						}else if(c.getBlue()==70){//reoben
-						n=2;
-						}else if(c.getBlue()==80){
-						n=66;
-						}else if(c.getBlue()==90){//gras_lioben
-						n=97;
-						}else if(c.getBlue()==100){
-						n=129;
-						}else if(c.getBlue()==110){//gras_reoben
-						n=96;
-						}else if(c.getBlue()==120){
-						n=128;
-						}
-					}
-				}else if(c.getRed()==0){
-					if(c.getGreen()==200){
-						
-						//busch
-//								tileArray[x][y][1] = 0; //zun‰chst alle felder begehbar
-						
-						if(c.getBlue()==0) {
-						n=201; //tileArray[x][y][1] = 1; //busch mittig, nicht begehbar
-						}else if(c.getBlue()==10){
-						n=200; //tileArray[x][y][1] = 1;	//busch unten, nicht begehbar
-						}else if(c.getBlue()==20){
-						n=202;
-						}else if(c.getBlue()==30){
-						n=181;
-						}else if(c.getBlue()==40){
-						n=221;
-						}else if(c.getBlue()==50){
-						n=180;
-						}else if(c.getBlue()==60){
-						n=182;
-						}else if(c.getBlue()==70){
-						n=220;
-						}else if(c.getBlue()==80){
-						n=222;
-						}else if(c.getBlue()==90){
-						n=144;
-						}else if(c.getBlue()==100){
-						n=143;
-						}else if(c.getBlue()==110){
-						n=124;
-						}else if(c.getBlue()==120){
-						n=123;
-						}
-					}
-					
-					if(c.getGreen()==255){
-						//wasser
-						// tileArray[x][y][1] = 1;	//kein feld begehbar
-						
-						if(c.getBlue()==255){
-						n=39;
-						}else if(c.getBlue()==10){//oben
-						n=7;
-						}else if(c.getBlue()==20){
-						n=71;
-						}else if(c.getBlue()==30){//links
-						n=38;
-						}else if(c.getBlue()==40){
-						n=40;
-						}else if(c.getBlue()==50){//lioben
-						n=6;
-						}else if(c.getBlue()==60){
-						n=70;
-						}else if(c.getBlue()==70){//reoben
-						n=8;
-						}else if(c.getBlue()==80){
-						n=72;
-						}else if(c.getBlue()==90){//gras_lioben
-						n=133;
-						}else if(c.getBlue()==100){
-						n=101;
-						}else if(c.getBlue()==110){//gras_reoben
-						n=132;
-						}else if(c.getBlue()==120){
-						n=100;
-						}
-					}
-				}else if(c.getRed()==100){
-					if(c.getGreen()==100){
-						//stein
-						// tileArray[x][y][1] = 1;
-						if(c.getBlue()==0)		 {
-						n=81;
-						}else if(c.getBlue()==10){
-						n=80;
-						}else if(c.getBlue()==20){
-						n=82;
-						}else if(c.getBlue()==30){
-						n=61;
-						}else if(c.getBlue()==40){
-						n=101;
-						}else if(c.getBlue()==50){
-						n=60;
-						}else if(c.getBlue()==60){
-						n=62;
-						}else if(c.getBlue()==70){
-						n=100;
-						}else if(c.getBlue()==80){
-						n=102;
-						}else if(c.getBlue()==90){
-						n=64;
-						}else if(c.getBlue()==100){
-						n=63;
-						}else if(c.getBlue()==110){
-						n=44;
-						}else if(c.getBlue()==120){
-						n=43;
-						}
-					}
-				}
+				n = c.getRed()*65536 + c.getGreen()*256 + c.getBlue();
 				
 				currentTileGrid[a][b] = tileMap.get(n);
 				
 				Color tempitemcolor = new Color(itemmap.getRGB(a,b));
-				if(tempitemcolor.equals(new Color(50,50,50))){
+				if(tempitemcolor.equals(new Color(0,0,31))){
 					Item item = new Item((short)a,(short)b,0,0,28);
-					itemHandler.itemsInChunk[a][b] =item;
+					itemHandler.itemsInChunk[a][b] = item;
 					
 				}
-				else if (tempitemcolor.equals(new Color(100,100,100))){
+				else if (tempitemcolor.equals(new Color(0,0,28))){
 					Item item = new Item((short)a,(short)b,0,0,29);
-					itemHandler.itemsInChunk[a][b] =item;
+					itemHandler.itemsInChunk[a][b] = item;
 				}
-				else if (tempitemcolor.equals(new Color(150,150,150))){
+				else if (tempitemcolor.equals(new Color(0,0,30))){
 					Item item = new Item((short)a,(short)b,0,0,30);
-					itemHandler.itemsInChunk[a][b] =item;
+					itemHandler.itemsInChunk[a][b] = item;
 				}
-				else if (tempitemcolor.equals(new Color(200,200,200))){
+				else if (tempitemcolor.equals(new Color(0,0,29))){
 					Item item = new Item((short)a,(short)b,0,0,31);
-					itemHandler.itemsInChunk[a][b] =item;
+					itemHandler.itemsInChunk[a][b] = item;
 				}
 				
 			}
@@ -333,14 +197,14 @@ public class Level {
 	private void createCoordMapFromTexture(Texture t){
 		int tindex = 0;
 		
-		for(float y = 0; y< t.getTextureHeight(); y+=texW){
-			for(float x = 0; x< t.getTextureWidth(); x+=texW){
+		for(float y = 0; y < t.getTextureHeight(); y+=World.TILE_SIZE){
+			for(float x = 0; x < t.getTextureWidth(); x+=World.TILE_SIZE){
 				x = Math.round(x * 100.0f) /100.0f;		//Rundungsfehler umgehen (vorher war's z.b. 1.000002 und so...)
 				y = Math.round(y * 100.0f) /100.0f;
 				if ((tindex == 39 )){ //komplett unbegehbar
-					te = new Tile(x,y,texW,texW, 0, 0, texW, texW, tindex);
+					te = new Tile(x,y,World.TILE_SIZE,World.TILE_SIZE, 0, 0, World.TILE_SIZE, World.TILE_SIZE, tindex);
 				} else {
-					te = new Tile(x,y,texW,texW,tindex);
+					te = new Tile(x,y,World.TILE_SIZE,World.TILE_SIZE,tindex);
 				}
 				
 				tileMap.put(tindex, te);

@@ -154,8 +154,8 @@ public class ItemHandler {
 				if(this.itemsInChunk[a][b] != null){
 					float iu = texPosXValues.get(itemsInChunk[a][b].getID());
 					float iv = texPosYValues.get(itemsInChunk[a][b].getID());
-					float iu2 = texPosXValues.get(itemsInChunk[a][b].getID())+0.03125f;
-					float iv2 = texPosYValues.get(itemsInChunk[a][b].getID())+0.03125f;
+					float iu2 = texPosXValues.get(itemsInChunk[a][b].getID())+32f/2048;
+					float iv2 = texPosYValues.get(itemsInChunk[a][b].getID())+32f/2048;
 					
 					glTexCoord2f(iu,iv);		glVertex2f(a*32,		b*32);		
 					glTexCoord2f(iu2,iv);		glVertex2f(a*32+32,		b*32);		

@@ -115,7 +115,7 @@ public class Gamemain {
 	
 	public void initDisplay(){
 		try {
-			setDisplayMode(1920,1080,true);
+			setDisplayMode(1920,1080,false);
 			//setDisplayMode(640,480,true);
 			Display.setTitle("ProjectZ v.2");
 			Display.setFullscreen(true);
