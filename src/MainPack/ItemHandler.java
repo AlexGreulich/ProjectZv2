@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -122,6 +123,9 @@ public class ItemHandler {
 					break;
 				}
 			}
+			itemDescriptions.put(0, "null Item");
+			texPosXValues.put(0, 0.84375f);
+			texPosYValues.put(0,0f);
 		} catch (JDOMException e) {e.printStackTrace();} catch (IOException e) {e.printStackTrace();}	
 	}
 	
@@ -165,13 +169,18 @@ public class ItemHandler {
 			}
 		}
 		glEnd();
-		
-		
-		
 	}
 	public int getItemIDFromWorldMap(int x, int y ){
 		return totalItemsOnMap[x][y];
 	}
 	public void clearCurrentItemlist(){
+	}
+	public Rectangle getItemBounds(int a, int b){
+//		Item i = totalItemsOnChunk[a][b];
+		Rectangle rec = new Rectangle(a , b, 32, 32);
+		return rec;
+	}
+	public void deleteItemOnMap(int a, int b){
+		this.totalItemsOnMap[a][b] =0;
 	}
 }

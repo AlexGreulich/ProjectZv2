@@ -17,6 +17,8 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
+import MainPack.Item;
+import MainPack.Inventory;
 //import MainPack.Item;
 import MainPack.World;
 import MainPack.World.PlayerDirection;
@@ -41,7 +43,6 @@ public class Player extends AbstractMovableEntity {
 	float calcSpeed;
 	double distX, distY;
 
-//	List<Item> inventory = new ArrayList<Item>();
 	public PlayerDirection direction;
 	
 	public Player() {
@@ -247,8 +248,6 @@ public class Player extends AbstractMovableEntity {
 			screeny = World.TILES_ON_SCREEN_HEIGHT*32 / 2;	// standard
 		}
 	}
-	
-	
 	public void changeSpeed(float f) {
 		speed += f;	
 		checkMovementAndSpeed();
@@ -295,4 +294,5 @@ public class Player extends AbstractMovableEntity {
 		Rectangle rec = new Rectangle((int)x,(int)y,32,64);
 		return(rec.intersects(rec1));
 	}
+
 }

@@ -24,7 +24,7 @@ public class Gamemain {
 	GameMenu menu;
 	Debugger debugger;
 	Inventory inventory;
-	
+	ItemHandler itemHandler;
 	
 	public void start(){
 		
@@ -41,6 +41,9 @@ public class Gamemain {
 					this.state = World.StateofGame.MENU;
 					break;
 				case MENU:
+					this.state = World.StateofGame.INGAME;
+					break;
+				case INVENTORY:
 					this.state = World.StateofGame.INGAME;
 					break;
 				}
@@ -65,8 +68,18 @@ public class Gamemain {
 					if(Keyboard.isKeyDown(Keyboard.KEY_S)){
 						player.changeSpeed(-0.05f);
 					}
-					
+					if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+						this.state = World.StateofGame.INVENTORY;
+					}
+
 					if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+						Item i = level.getItemAt((int)player.getX(), (int)player.getY());//checkForItem((int)player.getX(), (int)player.getX());
+						if(i != null){
+//							level.itemHandler.deleteItemOnMap((int)player.getX(), (int)player.getY());
+							inventory.pickUp(i);
+							System.out.println("Pick up new item , add to inventory");
+						}
+						
 					}
 					
 					//test speed verdoppeln wenn man rennt, ausdauer als neues attribut neben energie usw
@@ -102,6 +115,11 @@ public class Gamemain {
 					if(Mouse.isButtonDown(0)){
 						menu.changeState();
 					}
+					break;
+				case INVENTORY:
+					level.draw(player);
+					inventory.draw(level.itemHandler);
+
 					break;
 			}
 			Display.update();
@@ -200,6 +218,7 @@ public class Gamemain {
 	
 	
 	public void initGame(){
+		World.loadTextures();
 		player = new Player();
 		level = new Level((int)player.getX(), (int)player.getY());
 		debugger = new Debugger(player,level);

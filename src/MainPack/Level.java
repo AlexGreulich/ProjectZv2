@@ -36,7 +36,7 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
 	
-	public Texture tilesetTexture = null;
+//	public Texture tilesetTexture = null;
 	int tilesetW = 0;
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
@@ -62,10 +62,10 @@ public class Level {
 	public Level(int x, int y){
 		//	Lade das tileset als eine große Textur
 		try {
-			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/Tileset_2048.png"));//Tileset_neu_32-1024b
+//			tilesetTexture = TextureLoader.getTexture("PNG", new FileInputStream("src/tilesets/tilesetnewalign.png"));//Tileset_neu_32-1024b
 		
-			texW = tilesetTexture.getTextureWidth()/64f;
-			texH = tilesetTexture.getTextureHeight()/64f;
+			texW = World.TILESET.getTextureWidth()/64f;
+			texH = World.TILESET.getTextureHeight()/64f;
 			map = ImageIO.read(getClass().getResource("/karten/grossekarte-new.png"));
 			itemmap = ImageIO.read(new File("src/karten/itemmap-new.png"));
 		} 
@@ -75,9 +75,10 @@ public class Level {
 		currentTileGrid = new Tile[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];
 		
 		//Jetzt die Koordinaten der Einzeltiles aus der Textur holen
-		createCoordMapFromTexture(tilesetTexture);
+		createCoordMapFromTexture(World.TILESET);
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		itemHandler = new ItemHandler();
+		initTotalItems();
 		createCurrentTileGrid(x, y);
 		
 	}
@@ -87,7 +88,39 @@ public class Level {
 //		itemHandler.update(x, y);
 		//itemhandler updaten?
 	}
-	
+	public void initTotalItems(){
+				
+		for(int a = 0;a < itemmap.getWidth(); a++){
+			for(int b = 0;b < itemmap.getHeight(); b++){
+				
+				Color tempitemcolor = new Color(itemmap.getRGB(a,b));
+				
+				if(tempitemcolor.equals(new Color(50,50,50))){
+					Item item = new Item((short)a,(short)b,0,0,28);
+					itemHandler.totalItemsOnMap[a][b]= 28;
+					
+					
+				}
+				else if (tempitemcolor.equals(new Color(100,100,100))){
+					Item item = new Item((short)a,(short)b,0,0,29);
+					itemHandler.totalItemsOnMap[a][b] = 29;
+				}
+				else if (tempitemcolor.equals(new Color(150,150,150))){
+					Item item = new Item((short)a,(short)b,0,0,30);
+					itemHandler.totalItemsOnMap[a][b] = 30;
+				}
+				else if (tempitemcolor.equals(new Color(200,200,200))){
+					Item item = new Item((short)a,(short)b,0,0,31);
+					itemHandler.totalItemsOnMap[a][b] = 31;
+				}else{
+					
+				}
+			}
+		}
+		
+		
+		
+	}
 	public void draw(Player player){
 		
 		screenDeltaX = (int) ((int)player.getX() -chunkLeftCornerX *32 -player.screenx);
@@ -100,7 +133,7 @@ public class Level {
 			chunkChanged = true;
 		}
 		
-		glBindTexture(GL_TEXTURE_2D, tilesetTexture.getTextureID());
+		glBindTexture(GL_TEXTURE_2D, World.TILESET.getTextureID());
 		
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
@@ -139,9 +172,64 @@ public class Level {
 //	public Rectangle getItemBounds(short c, short d){
 //	
 //	}
-	
-	public void checkForItem(float a, float b){
-//		
+	public Item getItemAt (int x, int y){
+		System.out.println("tried to pick up at playerXY: "+ x + ","+y);
+		Item i = null;
+		int index =itemHandler.totalItemsOnMap[x/32][y/32];
+		System.out.println("itemhandler.totalitemsonmaps[x/32][y/32]:"+ x/32 + ","+y/32+"-> index: "+index);
+		if(index != 0){
+			i = new Item((short)0,(short) 0, 0, 0, index);
+			itemHandler.totalItemsOnMap[x/32][y/32] =0;
+			System.out.println("tried to create new item with index "+index); 
+		}
+		
+		return i;
+	}
+	public Item checkForItem(int x, int y){
+		Item i = null;
+		// auf welchem Chunk befindet sich der Spieler?
+//				chunkLeftCornerX = ((x/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
+//				chunkLeftCornerY = ((y/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
+//				
+//				// Wo werden Ränder benötigt?
+//				if (x < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	// gibt es einen rechten Rand?
+//					chunkBorderRight = World.CHUNK_BORDER_LR;
+//				} else {chunkBorderRight = 0;}
+//				if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand?
+//					chunkBorderBottom = World.CHUNK_BORDER_TB;
+//				} else {chunkBorderBottom = 0;}
+//				if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
+//				if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER_TB;};	// gibt es einen oberen Rand?	
+//				System.out.println("chunkcornerleftx: "+chunkLeftCornerX);
+//				System.out.println("chunkcornerlefty: "+chunkLeftCornerY);
+				
+//				for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
+//					for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
+//		if(itemHandler.totalItemsOnMap[x][y] == )
+//						if(itemHandler.itemsInChunk[x][b] != null){
+//							i = itemHandler.itemsInChunk[a][b];
+//							
+//							System.out.println("ab: "+a +" "+ b);
+//							System.out.println("itemid: "+i.getID());
+//						}else{
+//							System.out.println("ab: "+a +" "+ b);
+//						}
+//					}
+//				}
+//					
+		
+			
+//			itemHandler.itemsInChunk[chunkLeftCornerX][chunkLeftCornerY] = null;
+//			if(i != null){
+//				return i;
+//			}
+//			
+//				}else{
+//				return null; 
+//			}
+		return i;
+//		Rectangle item = new Rectangle((int)a,(int)b,32,32);
+		
 	}
 
 	public void createCurrentTileGrid(int x, int y){
@@ -159,8 +247,6 @@ public class Level {
 		if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
 		if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER_TB;};	// gibt es einen oberen Rand?
 		
-		
-		
 		// currentTileGrid füllen
 		for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
 			for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
@@ -174,6 +260,7 @@ public class Level {
 				if(tempitemcolor.equals(new Color(0,0,31))){
 					Item item = new Item((short)a,(short)b,0,0,28);
 					itemHandler.itemsInChunk[a][b] = item;
+					
 					
 				}
 				else if (tempitemcolor.equals(new Color(0,0,28))){
