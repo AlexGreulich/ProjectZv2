@@ -99,17 +99,17 @@ public class Inventory {
 	public void draw(ItemHandler ih){
 		glLoadIdentity();
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.59375f, 0f);			glVertex2f(0,0);
-			glTexCoord2f(0.84375f, 0f);			glVertex2f(Display.getWidth(),0);
-			glTexCoord2f(0.84375f, 0.1875f);		glVertex2f(Display.getWidth(),Display.getHeight());
-			glTexCoord2f(0.59375f, 0.1875f);	glVertex2f(0,Display.getHeight());
+			glTexCoord2f(19*(32f/2048), 0f);			glVertex2f(0,0);
+			glTexCoord2f(27*(32f/2048), 0f);			glVertex2f(Display.getWidth(),0);
+			glTexCoord2f(27*(32f/2048), 6*(32f/2048));	glVertex2f(Display.getWidth(),Display.getHeight());
+			glTexCoord2f(19*(32f/2048), 6*(32f/2048));	glVertex2f(0,Display.getHeight());
 		glEnd();
 		
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.84375f, 0f);			glVertex2f(textboxX1,textboxY1);
-			glTexCoord2f(0.875f, 0f);			glVertex2f(textboxX2,textboxY1);
-			glTexCoord2f(0.875f, 0.03125f);		glVertex2f(textboxX2,textboxY2);
-			glTexCoord2f(0.84375f, 0.03125f);	glVertex2f(textboxX1,textboxY2);
+			glTexCoord2f(27*(32f/2048), 0f);			glVertex2f(textboxX1,textboxY1);
+			glTexCoord2f(28*(32f/2048), 0f);			glVertex2f(textboxX2,textboxY1);
+			glTexCoord2f(28*(32f/2048), 0.03125f/2);		glVertex2f(textboxX2,textboxY2);
+			glTexCoord2f(27*(32f/2048), 0.03125f/2);	glVertex2f(textboxX1,textboxY2);
 			
 		glEnd();
 		drawItemText(ih.getItemDescription(selectedItemID));
@@ -128,17 +128,17 @@ public class Inventory {
 		for(int i = 0; i< itemsInInv.length; i++){
 			if(itemsInInv[i] == null){
 				System.out.println("item in slot " + i + ": null");
-				x1 = 0.84375f;
-				y1 = 0.03125f;
-				x2 = 0.875f;
-				y2 = 0.0625f;
+				x1 = 27*(32f/2048);
+				y1 = 0.03125f/2;
+				x2 = 28*(32f/2048);
+				y2 = 0.03125f;
 			}else{
 				System.out.println("itemID: " + itemsInInv[i].getID()+ " Itemname: "+ ih.getItemName(itemsInInv[i].getID()));
 				
 				x1 = ih.getItemTexPosX(itemsInInv[i].getID());
 				y1 = ih.getItemTexPosY(itemsInInv[i].getID());
-				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) + 0.03125f;
-				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) + 0.03125f;
+				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) + 0.03125f/2;
+				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) + 0.03125f/2;
 				
 //				System.out.println("checkmouse at "+ drawX +" " + drawY);
 				if(checkmouse(drawX, drawY)){

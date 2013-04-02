@@ -5,7 +5,7 @@
        		 <name>Hammer</name>
        		 <energy>100</energy>
       		 <description>If i had a hammer..</description>
-      		 <texcoordsX>0.875</texcoordsX>
+      		 <texcoordsX>0.4375</texcoordsX>
       		  <texcoordsY>0</texcoordsY>
   	</tool>
   	<tool>
@@ -13,7 +13,7 @@
        		 <name>Lighter</name>
        		 <energy>100</energy>
       		 <description>Good old Zippo...</description>
-      		 <texcoordsX>0.875</texcoordsX>
+      		 <texcoordsX>0.4375</texcoordsX>
       		  <texcoordsY>0.03125</texcoordsY>
   	</tool>
   	<tool>
@@ -21,16 +21,16 @@
        		 <name>Bottle</name>
        		 <energy>100</energy>
       		 <description>A bottle.</description>
-      		 <texcoordsX>0.875</texcoordsX>
-      		  <texcoordsY>0.0625</texcoordsY>
+      		 <texcoordsX>0.4375</texcoordsX>
+      		  <texcoordsY>0.046875</texcoordsY>
   	</tool>
   	<tool>
        		 <id>124</id>
        		 <name>Matches</name>
        		 <energy>100</energy>
       		 <description>A matchcase from a local bar.</description>
-      		 <texcoordsX>0.875</texcoordsX>
-      		  <texcoordsY>0.09375</texcoordsY>
+      		 <texcoordsX>0.4375</texcoordsX>
+      		  <texcoordsY>0.0625</texcoordsY>
   	</tool>
   	
     <weapon>
@@ -40,7 +40,7 @@
       		 <description>A knife</description>
       		 <damage>5</damage>
        		 <dexterityLoss>15</dexterityLoss>
-       		 <texcoordsX>0.90625</texcoordsX>
+       		 <texcoordsX>0.453125</texcoordsX>
        		  <texcoordsY>0</texcoordsY>
 	</weapon>
 	<weapon>
@@ -50,7 +50,7 @@
       		 <description>A pistol</description>
       		 <damage>25</damage>
        		 <dexterityLoss>5</dexterityLoss>
-       		 <texcoordsX>0.90625</texcoordsX>
+       		 <texcoordsX>0.453125</texcoordsX>
        		  <texcoordsY>0.03125</texcoordsY>
 	</weapon>
 	<weapon>
@@ -60,7 +60,7 @@
       		 <description>A shotgun</description>
       		 <damage>45</damage>
        		 <dexterityLoss>20</dexterityLoss>
-       		 <texcoordsX>0.90625</texcoordsX>
+       		 <texcoordsX>0.453125</texcoordsX>
        		  <texcoordsY>0.0625</texcoordsY>
 	</weapon>
 	
@@ -70,7 +70,7 @@
        		 <uses>3</uses>
       		 <description>Some bandages, tapes, Aspirin and such</description>
       		 <healthGain>25</healthGain>
-      		 <texcoordsX>0.9375</texcoordsX>
+      		 <texcoordsX>0.046875</texcoordsX>
       		  <texcoordsY>0</texcoordsY>
  	</medic>
  	<medic>
@@ -79,7 +79,7 @@
        		 <uses>3</uses>
       		 <description>Some painkillers</description>
       		 <healthGain>5</healthGain>
-      		 <texcoordsX>0.9375</texcoordsX>
+      		 <texcoordsX>0.046875</texcoordsX>
       		  <texcoordsY>0.03125</texcoordsY>
  	</medic>
  	<medic>
@@ -88,7 +88,7 @@
        		 <uses>1</uses>
       		 <description>One dose morphine</description>
       		 <healthGain>25</healthGain>
-      		 <texcoordsX>0.9375</texcoordsX>
+      		 <texcoordsX>0.046875</texcoordsX>
       		  <texcoordsY>0.0625</texcoordsY>
  	</medic>
  	<medic>
@@ -97,7 +97,7 @@
        		 <uses>3</uses>
       		 <description>An antidote</description>
       		 <healthGain>25</healthGain>
-      		 <texcoordsX>0.9375</texcoordsX>
+      		 <texcoordsX>0.046875</texcoordsX>
       		  <texcoordsY>0.09375</texcoordsY>
  	</medic>
   	<collectable>
@@ -105,7 +105,7 @@
        		 <name>Easter Egg</name>
        		 <energy>1</energy>
       		 <description>An Easter Egg</description>
-      		 <texcoordsX>0.96875</texcoordsX>
+      		 <texcoordsX>0.484375</texcoordsX>
       		  <texcoordsY>0</texcoordsY>
 	</collectable>
 	<collectable>
@@ -113,7 +113,7 @@
        		 <name>Diary</name>
        		 <energy>1</energy>
       		 <description>---- Diary Text here ----</description>
-      		 <texcoordsX>0.96875</texcoordsX>
+      		 <texcoordsX>0.484375</texcoordsX>
       		  <texcoordsY>0.03125</texcoordsY>
 	</collectable>
 	<collectable>
@@ -121,7 +121,7 @@
        		 <name>Teddy Bear</name>
        		 <energy>1</energy>
       		 <description>A teddy bear</description>
-      		 <texcoordsX>0.96875</texcoordsX>
+      		 <texcoordsX>0.484375</texcoordsX>
       		  <texcoordsY>0.0625</texcoordsY>
 	</collectable>
 	<collectable>
@@ -129,7 +129,7 @@
        		 <name>Junk</name>
        		 <energy>1</energy>
       		 <description>A pile of junk</description>
-      		 <texcoordsX>0.96875</texcoordsX>
+      		 <texcoordsX>0.484375</texcoordsX>
       		  <texcoordsY>0.09375</texcoordsY>
 	</collectable>
 	

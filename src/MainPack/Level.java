@@ -185,52 +185,7 @@ public class Level {
 		
 		return i;
 	}
-	public Item checkForItem(int x, int y){
-		Item i = null;
-		// auf welchem Chunk befindet sich der Spieler?
-//				chunkLeftCornerX = ((x/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
-//				chunkLeftCornerY = ((y/32) / World.CHUNK_SIZE) * World.CHUNK_SIZE;
-//				
-//				// Wo werden Ränder benötigt?
-//				if (x < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	// gibt es einen rechten Rand?
-//					chunkBorderRight = World.CHUNK_BORDER_LR;
-//				} else {chunkBorderRight = 0;}
-//				if (y < (World.WORLDSIZE - World.CHUNK_SIZE) * 32){	//gibt es einen unteren Rand?
-//					chunkBorderBottom = World.CHUNK_BORDER_TB;
-//				} else {chunkBorderBottom = 0;}
-//				if (chunkLeftCornerX != 0){chunkLeftCornerX -= World.CHUNK_BORDER_LR;};	// gibt es einen linken Rand?
-//				if (chunkLeftCornerY != 0){chunkLeftCornerY -= World.CHUNK_BORDER_TB;};	// gibt es einen oberen Rand?	
-//				System.out.println("chunkcornerleftx: "+chunkLeftCornerX);
-//				System.out.println("chunkcornerlefty: "+chunkLeftCornerY);
-				
-//				for(int a = 0; a < World.CHUNK_SIZE+World.CHUNK_BORDER_LR + chunkBorderRight; a++){
-//					for(int b = 0; b < World.CHUNK_SIZE+World.CHUNK_BORDER_TB + chunkBorderBottom; b++){
-//		if(itemHandler.totalItemsOnMap[x][y] == )
-//						if(itemHandler.itemsInChunk[x][b] != null){
-//							i = itemHandler.itemsInChunk[a][b];
-//							
-//							System.out.println("ab: "+a +" "+ b);
-//							System.out.println("itemid: "+i.getID());
-//						}else{
-//							System.out.println("ab: "+a +" "+ b);
-//						}
-//					}
-//				}
-//					
-		
-			
-//			itemHandler.itemsInChunk[chunkLeftCornerX][chunkLeftCornerY] = null;
-//			if(i != null){
-//				return i;
-//			}
-//			
-//				}else{
-//				return null; 
-//			}
-		return i;
-//		Rectangle item = new Rectangle((int)a,(int)b,32,32);
-		
-	}
+	
 
 	public void createCurrentTileGrid(int x, int y){
 		// auf welchem Chunk befindet sich der Spieler?
