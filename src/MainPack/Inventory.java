@@ -1,5 +1,12 @@
 package MainPack;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -41,7 +48,7 @@ public class Inventory {
 	public Inventory(){
 		textboxX1 = Display.getWidth() / 4;
 		textboxX2 = Display.getWidth() / 4 + Display.getWidth() / 2;
-		textboxY1 = 3*Display.getHeight() / 4;
+		textboxY1 = 5*Display.getHeight() / 8;
 		textboxY2 = Display.getHeight() -100;
 		
 		state = InvState.JUSTLOOKING;
@@ -107,6 +114,7 @@ public class Inventory {
 		glPopMatrix();
 	}
 	public void draw(ItemHandler ih){
+		
 		glLoadIdentity();
 		glBegin(GL_QUADS);
 			glTexCoord2f(0f,					52* World.FLOATINDEX);	glVertex2f(0,0);
@@ -125,6 +133,9 @@ public class Inventory {
 		drawItemText(ih.getItemDescription(selectedItemID));
 		glLoadIdentity();
 		glBindTexture(GL_TEXTURE_2D, World.TILESET.getTextureID());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
 		glBegin(GL_QUADS);
 		
 		switch(state){
@@ -136,54 +147,57 @@ public class Inventory {
 			break;
 		}
 		for(int i = 0; i< itemsInInv.length; i++){
-			if(itemsInInv[i] == null){
-				System.out.println("item in slot " + i + ": null");
-				x1 = 27* World.FLOATINDEX;
-				y1 =  World.FLOATINDEX;
-				x2 = 28* World.FLOATINDEX;
-				y2 = 0.03125f;
-			}else{
-				System.out.println("itemID: " + itemsInInv[i].getID()+ " Itemname: "+ ih.getItemName(itemsInInv[i].getID()));
-				
-				x1 = ih.getItemTexPosX(itemsInInv[i].getID());
-				y1 = ih.getItemTexPosY(itemsInInv[i].getID());
-				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) +  World.FLOATINDEX;
-				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) +  World.FLOATINDEX;
-				
-//				System.out.println("checkmouse at "+ drawX +" " + drawY);
-				if(checkmouse(drawX, drawY)){
-						setSelectedItemID(itemsInInv[i].getID());
-						glLoadIdentity();
-						System.out.println("selecteditemid set to " + selectedItemID);
+			if(checkmouse(drawX, drawY)){
+				if(itemsInInv[i] != null){
+					setSelectedItemID(itemsInInv[i].getID());
+					glLoadIdentity();
+					System.out.println("selecteditemid set to " + selectedItemID);
 				}
 			}
 			if(i<6){
-				drawY = space;
+				drawY = 2*space ;
 				drawX = (3f * space) + (i * itemsize) + (i * space);
 			}else{
-				drawY = space*2 +itemsize;
+				drawY = space*3 +itemsize;
 				drawX = (3f * space) + ((i-6) * itemsize) + ((i-6) * space);
 			}
+			x1 = 0f;
+			y1 = 49* World.FLOATINDEX;
+			x2 = World.FLOATINDEX;
+			y2 = 50* World.FLOATINDEX;
 			
 			glTexCoord2f(x1,y1);		glVertex2f(drawX,drawY);
 			glTexCoord2f(x2,y1);		glVertex2f(drawX + 2* space, drawY);
 			glTexCoord2f(x2,y2);		glVertex2f(drawX + 2* space, drawY + 2* space);	
 			glTexCoord2f(x1,y2);		glVertex2f(drawX,drawY + 2* space);
-		
+			
+			if(itemsInInv[i] != null){
+				x1 = ih.getItemTexPosX(itemsInInv[i].getID());
+				y1 = ih.getItemTexPosY(itemsInInv[i].getID());
+				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) +  World.FLOATINDEX;
+				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) +  World.FLOATINDEX;
+				
+				glTexCoord2f(x1,y1);		glVertex2f(drawX,drawY);
+				glTexCoord2f(x2,y1);		glVertex2f(drawX + 2* space, drawY);
+				glTexCoord2f(x2,y2);		glVertex2f(drawX + 2* space, drawY + 2* space);	
+				glTexCoord2f(x1,y2);		glVertex2f(drawX,drawY + 2* space);
+			}
+			
+			
 		}
 		glEnd();
 		
 		glBindTexture(GL_TEXTURE_2D,0);
 	}
-	private static void setUpFont() {
-        java.awt.Font awtFont = new java.awt.Font("Times New Roman", java.awt.Font.BOLD, 18);
-        invFont = new UnicodeFont(awtFont);
-        invFont.getEffects().add(new ColorEffect(java.awt.Color.white));
-        invFont.addAsciiGlyphs();
-        try {
-        	invFont.loadGlyphs();
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+	private void setUpFont() {
+		try {
+			Font awtFont = Font.createFont( Font.TRUETYPE_FONT, new FileInputStream("src/tilesets/TravelingTypewriter.ttf")).deriveFont(36f);// happydays=24f		Zombified	=48f	TravelingTypewriter =36
+			invFont = new UnicodeFont(awtFont);
+	        invFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+	        invFont.addAsciiGlyphs();
+			invFont.loadGlyphs();
+			
+		} catch (FontFormatException e1) {e1.printStackTrace();} catch (IOException e1) {e1.printStackTrace();}catch (SlickException e) {e.printStackTrace(); }
+	        
     }
 }

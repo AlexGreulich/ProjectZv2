@@ -16,6 +16,7 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import Entities.Player;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -100,7 +101,8 @@ public class Level {
 		}
 		
 		glBindTexture(GL_TEXTURE_2D, World.TILESET.getTextureID());
-		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTranslatef((float)-screenDeltaX, (float)-screenDeltaY, 0f);
 		
 		glClear(GL_COLOR_BUFFER_BIT);
