@@ -31,7 +31,6 @@ public class ItemHandler {
 
 	Item[][] itemsInChunk = new Item[World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR][World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB];
 	
-	int[][] totalItemsOnMap = new int[World.WORLDSIZE][World.WORLDSIZE]; 
 	Map<Integer, String> itemDescriptions = new HashMap<Integer, String>();
 	Map<Integer, String> itemNames = new HashMap<Integer, String>();
 	Map<Integer, Integer> energyValues = new HashMap<Integer, Integer>();
@@ -41,6 +40,7 @@ public class ItemHandler {
 	Map<Integer, Float> texPosXValues = new HashMap<Integer, Float>();
 	Map<Integer, Float> texPosYValues = new HashMap<Integer, Float>();
 	
+	Map<Point, Item> totalItems = new HashMap<Point, Item>();
 	
 	BufferedImage itemmap;
 	Color tempitemcolor;
@@ -49,6 +49,9 @@ public class ItemHandler {
 	
 	Document itemList;
 	int chunkLeftCornerX, chunkLeftCornerY, chunkBorderRight, chunkBorderBottom;
+	
+	int tempID=0;
+	
 	public ItemHandler(){
 		/*
 		 * Items spawnen in/ um Häuser und an anderen (angemessenen) Stellen.  
@@ -151,16 +154,17 @@ public class ItemHandler {
 		return itemDescriptions.get(i);
 	}
 	public void draw(int x, int y){
-		
 		glBegin(GL_QUADS);
 		for(int a =0; a< x; a++){
 			for(int b = 0; b<y; b++){
-				if(this.itemsInChunk[a][b] != null){
-					float iu = texPosXValues.get(itemsInChunk[a][b].getID());
-					float iv = texPosYValues.get(itemsInChunk[a][b].getID());
-					float iu2 = texPosXValues.get(itemsInChunk[a][b].getID())+32f/2048;
-					float iv2 = texPosYValues.get(itemsInChunk[a][b].getID())+32f/2048;
-					
+				if(totalItems.get(new Point(a,b)) != null){
+					tempID = totalItems.get(new Point(a,b)).getID();
+				
+					float iu = texPosXValues.get(tempID);
+					float iv = texPosYValues.get(tempID);
+					float iu2 = texPosXValues.get(tempID)+ World.FLOATINDEX;
+					float iv2 = texPosYValues.get(tempID)+ World.FLOATINDEX;
+						
 					glTexCoord2f(iu,iv);		glVertex2f(a*32,		b*32);		
 					glTexCoord2f(iu2,iv);		glVertex2f(a*32+32,		b*32);		
 					glTexCoord2f(iu2,iv2);		glVertex2f(a*32+32,		b*32+32);	
@@ -169,18 +173,5 @@ public class ItemHandler {
 			}
 		}
 		glEnd();
-	}
-	public int getItemIDFromWorldMap(int x, int y ){
-		return totalItemsOnMap[x][y];
-	}
-	public void clearCurrentItemlist(){
-	}
-	public Rectangle getItemBounds(int a, int b){
-//		Item i = totalItemsOnChunk[a][b];
-		Rectangle rec = new Rectangle(a , b, 32, 32);
-		return rec;
-	}
-	public void deleteItemOnMap(int a, int b){
-		this.totalItemsOnMap[a][b] =0;
 	}
 }

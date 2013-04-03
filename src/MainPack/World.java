@@ -19,6 +19,8 @@ public class World {
 	public final static float PLAYERSTARTPOSITIONX = 10*32;
 	public final static float PLAYERSTARTPOSITIONY = 10*32;
 	
+	public static float FLOATINDEX = 32f/2048;
+	
 	//Berechnete Werte
 	public static int TILE_MIDDLE_X; 
 	public static int INT_MIDDLE_X; 
@@ -28,7 +30,7 @@ public class World {
 	public static int CHUNK_BORDER_TB;
 	public static int SCREENWIDTH;
 	public static int SCREENHEIGHT;
-
+	
 
 	public final static int CHUNK_SIZE = WORLDSIZE/80; //100
 	

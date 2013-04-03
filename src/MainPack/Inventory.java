@@ -48,9 +48,19 @@ public class Inventory {
 		setUpFont();
 	}
 	
-	
 	public void setSelectedItemID(int i){
 		this.selectedItemID = i;
+	}
+	
+	public boolean invIsFull(){
+		boolean isFull = false;
+		for(int i = 0; i< itemsInInv.length; i++){
+			if(itemsInInv[i] != null){
+				isFull = true;
+			}
+			else isFull = false;
+		}
+		return isFull;
 	}
 	
 	public void pickUp(Item i){
@@ -58,7 +68,7 @@ public class Inventory {
 			if(itemsInInv[index] == null){
 				itemsInInv[index] = i;
 				System.out.println("Item picked up.");
-				return;
+				break;
 			}else{
 				System.out.println("Itemslot already full");
 			}
@@ -99,17 +109,17 @@ public class Inventory {
 	public void draw(ItemHandler ih){
 		glLoadIdentity();
 		glBegin(GL_QUADS);
-			glTexCoord2f(19*(32f/2048), 0f);			glVertex2f(0,0);
-			glTexCoord2f(27*(32f/2048), 0f);			glVertex2f(Display.getWidth(),0);
-			glTexCoord2f(27*(32f/2048), 6*(32f/2048));	glVertex2f(Display.getWidth(),Display.getHeight());
-			glTexCoord2f(19*(32f/2048), 6*(32f/2048));	glVertex2f(0,Display.getHeight());
+			glTexCoord2f(0f,					52* World.FLOATINDEX);	glVertex2f(0,0);
+			glTexCoord2f(16* World.FLOATINDEX,	52* World.FLOATINDEX);	glVertex2f(Display.getWidth(),0);
+			glTexCoord2f(16* World.FLOATINDEX, 	64* World.FLOATINDEX);	glVertex2f(Display.getWidth(),Display.getHeight());
+			glTexCoord2f(0f, 					64* World.FLOATINDEX);	glVertex2f(0,Display.getHeight());
 		glEnd();
 		
 		glBegin(GL_QUADS);
-			glTexCoord2f(27*(32f/2048), 0f);			glVertex2f(textboxX1,textboxY1);
-			glTexCoord2f(28*(32f/2048), 0f);			glVertex2f(textboxX2,textboxY1);
-			glTexCoord2f(28*(32f/2048), 0.03125f/2);		glVertex2f(textboxX2,textboxY2);
-			glTexCoord2f(27*(32f/2048), 0.03125f/2);	glVertex2f(textboxX1,textboxY2);
+			glTexCoord2f(27* World.FLOATINDEX, 0f);			glVertex2f(textboxX1,textboxY1);
+			glTexCoord2f(28* World.FLOATINDEX, 0f);			glVertex2f(textboxX2,textboxY1);
+			glTexCoord2f(28* World.FLOATINDEX,  World.FLOATINDEX);		glVertex2f(textboxX2,textboxY2);
+			glTexCoord2f(27* World.FLOATINDEX,  World.FLOATINDEX);	glVertex2f(textboxX1,textboxY2);
 			
 		glEnd();
 		drawItemText(ih.getItemDescription(selectedItemID));
@@ -128,17 +138,17 @@ public class Inventory {
 		for(int i = 0; i< itemsInInv.length; i++){
 			if(itemsInInv[i] == null){
 				System.out.println("item in slot " + i + ": null");
-				x1 = 27*(32f/2048);
-				y1 = 0.03125f/2;
-				x2 = 28*(32f/2048);
+				x1 = 27* World.FLOATINDEX;
+				y1 =  World.FLOATINDEX;
+				x2 = 28* World.FLOATINDEX;
 				y2 = 0.03125f;
 			}else{
 				System.out.println("itemID: " + itemsInInv[i].getID()+ " Itemname: "+ ih.getItemName(itemsInInv[i].getID()));
 				
 				x1 = ih.getItemTexPosX(itemsInInv[i].getID());
 				y1 = ih.getItemTexPosY(itemsInInv[i].getID());
-				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) + 0.03125f/2;
-				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) + 0.03125f/2;
+				x2 = ih.getItemTexPosX(itemsInInv[i].getID()) +  World.FLOATINDEX;
+				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) +  World.FLOATINDEX;
 				
 //				System.out.println("checkmouse at "+ drawX +" " + drawY);
 				if(checkmouse(drawX, drawY)){

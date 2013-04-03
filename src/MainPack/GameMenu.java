@@ -34,21 +34,21 @@ public class GameMenu {
 			e.printStackTrace();
 		}
 		
-		newGame = new GameMenuItem(0, 0.625f, Display.getWidth()/2 - 256, Display.getHeight()/2 - 64);//0.1875f,0.1875f, World.MenuOption.NEWGAME, World.MenuOption.OPTIONS, World.MenuOption.CREDITS, World.MenuOption.EXIT
-		options = new GameMenuItem(0, 0.6875f, Display.getWidth()/2 - 256, Display.getHeight()/2 + 64);
-		credits = new GameMenuItem(0, 0.75f, Display.getWidth()/2 - 256, Display.getHeight()/2 +192);
-		exitGame = new GameMenuItem(0, 0.8125f, Display.getWidth()/2 - 256, Display.getHeight()/2 + 320);
+		newGame = new GameMenuItem(32* World.FLOATINDEX, 52* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 - 128);//0.1875f,0.1875f, World.MenuOption.NEWGAME, World.MenuOption.OPTIONS, World.MenuOption.CREDITS, World.MenuOption.EXIT
+		options = new GameMenuItem(32* World.FLOATINDEX, 54* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 );
+		credits = new GameMenuItem(32* World.FLOATINDEX, 56* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 + 128);
+		exitGame = new GameMenuItem(32* World.FLOATINDEX, 58* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 + 256);
 		
 	}
 	
 	public void draw(){
-		glBindTexture(GL_TEXTURE_2D, menutex.getTextureID());
-		
+//		glBindTexture(GL_TEXTURE_2D, menutex.getTextureID());
+		glBindTexture(GL_TEXTURE_2D, World.TILESET.getTextureID());
 		glBegin(GL_QUADS);
-			glTexCoord2f(0f,0f);			glVertex2f(0,0);
-			glTexCoord2f(0.625f,0f);		glVertex2f(Display.getWidth(),0);
-			glTexCoord2f(0.625f,0.46875f);	glVertex2f(Display.getWidth(),Display.getHeight());
-			glTexCoord2f(0f,0.46875f);		glVertex2f(0,Display.getHeight());
+			glTexCoord2f(16* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(0,0);
+			glTexCoord2f(32* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(Display.getWidth(),0);
+			glTexCoord2f(32* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(Display.getWidth(),Display.getHeight());
+			glTexCoord2f(16* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(0,Display.getHeight());
 		
 		glEnd();
 		
@@ -72,7 +72,6 @@ public class GameMenu {
 			break;
 			
 		}
-		
 		
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

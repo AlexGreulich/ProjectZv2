@@ -45,7 +45,12 @@ public class Debugger {
 		font.drawString(x,y+140,"World.TILES_ON_SCREEN_LR/TB: " + World.CHUNK_BORDER_LR + " | " + World.CHUNK_BORDER_TB);
 
 		font.drawString(x, y+160,"items in chunk[]"+level.itemHandler.itemsInChunk.length);
-		
+		int aaa = 180;
+		font.drawString(x,y+180, "itemlistsize: "+level.itemHandler.totalItems.size());
+		for(Item i : level.itemHandler.totalItems.values()){
+			font.drawString(x, y+aaa, "Item"+ level.itemHandler.getItemName(i.getID())+ ", with x= "+i.getX()+ ", y= "+ i.getY());
+			aaa+=20;
+		}
 //		for(int a =0;a< level.itemHandler.itemsInChunk[0].length){
 //			for(){
 //				

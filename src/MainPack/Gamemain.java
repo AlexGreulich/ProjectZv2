@@ -73,13 +73,14 @@ public class Gamemain {
 					}
 
 					if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-						Item i = level.getItemAt((int)player.getX(), (int)player.getY());//checkForItem((int)player.getX(), (int)player.getX());
+						Item i = level.getItemAt((int)player.getX()+16, (int)player.getY()+24);
 						if(i != null){
-//							level.itemHandler.deleteItemOnMap((int)player.getX(), (int)player.getY());
-							inventory.pickUp(i);
+							if(!inventory.invIsFull()){
+								inventory.pickUp(i);
+								level.itemHandler.totalItems.remove(new Point(((int)player.getX()+16)/32,( (int)player.getY()+24)/32));
+							}
 							System.out.println("Pick up new item , add to inventory");
 						}
-						
 					}
 					
 					//test speed verdoppeln wenn man rennt, ausdauer als neues attribut neben energie usw
@@ -97,13 +98,6 @@ public class Gamemain {
 					player.draw();
 					
 					debugger.draw();
-					
-					//Wenn der chunk gewechselt wurde mache folgendes:
-					// items updaten, ..
-					if(level.chunkChanged){
-//						itemHandler.update(a, b)
-//						level.updateItems();
-					}
 					
 					break;
 					
@@ -160,6 +154,7 @@ public class Gamemain {
 		
 		World.setTILES_ON_SCREEN_WIDTH(Display.getWidth());
 		World.setTILES_ON_SCREEN_HEIGHT(Display.getHeight());
+		
 	}
 	
 	public void setDisplayMode(int width, int height, boolean fullscreen) {

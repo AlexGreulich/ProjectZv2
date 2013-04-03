@@ -1,5 +1,6 @@
 package MainPack;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,14 +37,13 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
 	
-//	public Texture tilesetTexture = null;
 	int tilesetW = 0;
 	int tilesetH = 0;
 	float texH = 0f, texW = 0f;
 	private Map<Integer,Tile> tileMap = new HashMap<Integer,Tile>();
 	BufferedImage map, itemmap;
 	Color c = null;
-	
+	Color tempitemcolor =null;
 	private int screenDeltaX = 0, screenDeltaY = 0;
 	float percentage = 32f/2048;
 	float u, v, u2, v2;
@@ -78,48 +78,14 @@ public class Level {
 		createCoordMapFromTexture(World.TILESET);
 		initCurrentTileGrid();	//nötig falls unten rechts gestartet wird
 		itemHandler = new ItemHandler();
-		initTotalItems();
+		initItems();
 		createCurrentTileGrid(x, y);
-		
 	}
 	
 	public void update(int x, int y){
 		createCurrentTileGrid(x,y);
 //		itemHandler.update(x, y);
 		//itemhandler updaten?
-	}
-	public void initTotalItems(){
-				
-		for(int a = 0;a < itemmap.getWidth(); a++){
-			for(int b = 0;b < itemmap.getHeight(); b++){
-				
-				Color tempitemcolor = new Color(itemmap.getRGB(a,b));
-				
-				if(tempitemcolor.equals(new Color(50,50,50))){
-					Item item = new Item((short)a,(short)b,0,0,28);
-					itemHandler.totalItemsOnMap[a][b]= 28;
-					
-					
-				}
-				else if (tempitemcolor.equals(new Color(100,100,100))){
-					Item item = new Item((short)a,(short)b,0,0,29);
-					itemHandler.totalItemsOnMap[a][b] = 29;
-				}
-				else if (tempitemcolor.equals(new Color(150,150,150))){
-					Item item = new Item((short)a,(short)b,0,0,30);
-					itemHandler.totalItemsOnMap[a][b] = 30;
-				}
-				else if (tempitemcolor.equals(new Color(200,200,200))){
-					Item item = new Item((short)a,(short)b,0,0,31);
-					itemHandler.totalItemsOnMap[a][b] = 31;
-				}else{
-					
-				}
-			}
-		}
-		
-		
-		
 	}
 	public void draw(Player player){
 		
@@ -161,7 +127,6 @@ public class Level {
 		glLoadIdentity();
 	}
 	
-	
 	private void initCurrentTileGrid() {
 		for(int a = 0; a < World.CHUNK_SIZE + 2*World.CHUNK_BORDER_LR; a++){
 			for(int b = 0; b< World.CHUNK_SIZE + 2*World.CHUNK_BORDER_TB; b++){
@@ -169,23 +134,25 @@ public class Level {
 			}
 		}
 	}
-//	public Rectangle getItemBounds(short c, short d){
-//	
-//	}
 	public Item getItemAt (int x, int y){
-		System.out.println("tried to pick up at playerXY: "+ x + ","+y);
-		Item i = null;
-		int index =itemHandler.totalItemsOnMap[x/32][y/32];
-		System.out.println("itemhandler.totalitemsonmaps[x/32][y/32]:"+ x/32 + ","+y/32+"-> index: "+index);
-		if(index != 0){
-			i = new Item((short)0,(short) 0, 0, 0, index);
-			itemHandler.totalItemsOnMap[x/32][y/32] =0;
-			System.out.println("tried to create new item with index "+index); 
-		}
+		System.out.println("tried to pick up at playerXY: "+ x/32 + ","+ y/32);
 		
-		return i;
+		return itemHandler.totalItems.get(new Point(x/32, y/32));
 	}
-	
+	public void initItems(){
+		for(int a = 0;a < itemmap.getWidth(); a++){
+			for(int b = 0;b < itemmap.getHeight(); b++){
+				tempitemcolor = new Color(itemmap.getRGB(a,b));
+				if(!tempitemcolor.equals(Color.WHITE)){
+					int i = tempitemcolor.getBlue();
+					Item item = new Item((short)a,(short)b,0,0,i);
+					
+					itemHandler.totalItems.put(new Point(a,b), item);
+					System.out.println("Created item "+ itemHandler.getItemName(i)+" at : "+ a + ", " + b );
+				}
+			}
+		}
+	}
 
 	public void createCurrentTileGrid(int x, int y){
 		// auf welchem Chunk befindet sich der Spieler?
@@ -210,31 +177,9 @@ public class Level {
 				n = c.getRed()*65536 + c.getGreen()*256 + c.getBlue();
 				
 				currentTileGrid[a][b] = tileMap.get(n);
-				
-				Color tempitemcolor = new Color(itemmap.getRGB(a,b));
-				if(tempitemcolor.equals(new Color(0,0,31))){
-					Item item = new Item((short)a,(short)b,0,0,28);
-					itemHandler.itemsInChunk[a][b] = item;
-					
-					
-				}
-				else if (tempitemcolor.equals(new Color(0,0,28))){
-					Item item = new Item((short)a,(short)b,0,0,29);
-					itemHandler.itemsInChunk[a][b] = item;
-				}
-				else if (tempitemcolor.equals(new Color(0,0,30))){
-					Item item = new Item((short)a,(short)b,0,0,30);
-					itemHandler.itemsInChunk[a][b] = item;
-				}
-				else if (tempitemcolor.equals(new Color(0,0,29))){
-					Item item = new Item((short)a,(short)b,0,0,31);
-					itemHandler.itemsInChunk[a][b] = item;
-				}
-				
 			}
 		}
 	}
-	
 	
 	private void createCoordMapFromTexture(Texture t){
 		int tindex = 0;
@@ -255,15 +200,11 @@ public class Level {
 		}
 	}
 
-
 	public int getScreenDeltaX() {
 		return screenDeltaX;
 	}
 
-
 	public int getScreenDeltaY() {
 		return screenDeltaY;
 	}
-	
-	
 }
