@@ -44,8 +44,8 @@ public class GameMenuItem {
 			glBegin(GL_QUADS);
 				glTexCoord2f(16* World.FLOATINDEX, 62 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX, scrPosY);
 				glTexCoord2f(18* World.FLOATINDEX, 62 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX+ 64, scrPosY);
-				glTexCoord2f(18* World.FLOATINDEX, 64 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX+ 64, scrPosY + 64);
-				glTexCoord2f(16* World.FLOATINDEX, 64 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX, scrPosY + 64);
+				glTexCoord2f(18* World.FLOATINDEX, 64 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX+ 64, scrPosY + 128);
+				glTexCoord2f(16* World.FLOATINDEX, 64 * World.FLOATINDEX);	glVertex2f(scrPosX - shiftX, scrPosY + 128);
 			glEnd();
 		}else{
 			if(shiftX != 1){

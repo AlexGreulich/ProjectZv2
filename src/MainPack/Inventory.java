@@ -150,13 +150,7 @@ public class Inventory {
 			break;
 		}
 		for(int i = 0; i< itemsInInv.length; i++){
-			if(checkmouse(drawX, drawY)){
-				if(itemsInInv[i] != null){
-					setSelectedItemID(itemsInInv[i].getID());
-					glLoadIdentity();
-					System.out.println("selecteditemid set to " + selectedItemID);
-				}
-			}
+			
 			if(i<6){
 				drawX = (3f * space) + (i * itemsize) + (i * space);
 				drawY = 2*space ;
@@ -168,6 +162,15 @@ public class Inventory {
 				drawX2 = drawX + 2*space;
 				drawY2 = drawY + 2*space;
 			}
+			
+			if(checkmouse(drawX, drawY)){
+				if(itemsInInv[i] != null){
+					setSelectedItemID(itemsInInv[i].getID());
+					glLoadIdentity();
+					System.out.println("selecteditemid set to " + selectedItemID);
+				}
+			}
+			
 			x1 = 0f;
 			y1 = 49* World.FLOATINDEX;
 			x2 = World.FLOATINDEX;
