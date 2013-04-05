@@ -24,6 +24,8 @@ public class GameMenu {
 	Texture menutex;
 	GameMenuItem newGame, exitGame, credits,  options; 
 	MenuOption option = World.MenuOption.MAINMENU;
+	int halfscreenW = Display.getWidth()/2;
+	int halfscreenH = Display.getHeight()/2;
 	
 	public GameMenu(){
 		try {
@@ -34,22 +36,32 @@ public class GameMenu {
 			e.printStackTrace();
 		}
 		
-		newGame = new GameMenuItem(32* World.FLOATINDEX, 52* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 - 128);//0.1875f,0.1875f, World.MenuOption.NEWGAME, World.MenuOption.OPTIONS, World.MenuOption.CREDITS, World.MenuOption.EXIT
-		options = new GameMenuItem(32* World.FLOATINDEX, 54* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 );
-		credits = new GameMenuItem(32* World.FLOATINDEX, 56* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 + 128);
-		exitGame = new GameMenuItem(32* World.FLOATINDEX, 58* World.FLOATINDEX, Display.getWidth()/2 - 256, Display.getHeight()/2 + 256);
+		
+		
+		newGame = new GameMenuItem(16* World.FLOATINDEX, 54* World.FLOATINDEX, halfscreenW - 256,halfscreenH - 128);//0.1875f,0.1875f, World.MenuOption.NEWGAME, World.MenuOption.OPTIONS, World.MenuOption.CREDITS, World.MenuOption.EXIT
+		options = new GameMenuItem(16* World.FLOATINDEX, 56* World.FLOATINDEX, halfscreenW - 256, halfscreenH );
+		credits = new GameMenuItem(16* World.FLOATINDEX, 58* World.FLOATINDEX, halfscreenW - 256, halfscreenH + 128);
+		exitGame = new GameMenuItem(16* World.FLOATINDEX, 60* World.FLOATINDEX, halfscreenW - 256, halfscreenH + 256);
+		
 		
 	}
 	
 	public void draw(){
 //		glBindTexture(GL_TEXTURE_2D, menutex.getTextureID());
 		glBindTexture(GL_TEXTURE_2D, World.TILESET.getTextureID());
-		glBegin(GL_QUADS);
-			glTexCoord2f(16* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(0,0);
-			glTexCoord2f(32* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(Display.getWidth(),0);
-			glTexCoord2f(32* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(Display.getWidth(),Display.getHeight());
-			glTexCoord2f(16* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(0,Display.getHeight());
 		
+		glBegin(GL_QUADS);
+		//background
+			glTexCoord2f(0* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(0,0);
+			glTexCoord2f(16* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(Display.getWidth(),0);
+			glTexCoord2f(16* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(Display.getWidth(),Display.getHeight());
+			glTexCoord2f(0* World.FLOATINDEX, 64* World.FLOATINDEX);	glVertex2f(0,Display.getHeight());
+		//title
+			glTexCoord2f(16* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(halfscreenW - halfscreenW/4, halfscreenH);
+			glTexCoord2f(24* World.FLOATINDEX, 52*  World.FLOATINDEX);	glVertex2f(halfscreenW + halfscreenW/4, halfscreenH);
+			glTexCoord2f(24* World.FLOATINDEX, 54* World.FLOATINDEX);	glVertex2f(halfscreenW, halfscreenH);
+			glTexCoord2f(16* World.FLOATINDEX, 54* World.FLOATINDEX);	glVertex2f(halfscreenW - halfscreenW/4, halfscreenH);
+			
 		glEnd();
 		
 		switch(option){

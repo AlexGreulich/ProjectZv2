@@ -147,8 +147,10 @@ public class Level {
 				tempitemcolor = new Color(itemmap.getRGB(a,b));
 				if(!tempitemcolor.equals(Color.WHITE)){
 					int i = tempitemcolor.getBlue();
-					Item item = new Item((short)a,(short)b,0,0,i);
-					
+					Item item = new Item((short)a,(short)b,0,0,i, itemHandler.isUsableMap.get(i));
+					if(itemHandler.isUsableMap.get(i) == true){
+						item.setUses(itemHandler.getItemUses(i));
+					}
 					itemHandler.totalItems.put(new Point(a,b), item);
 					System.out.println("Created item "+ itemHandler.getItemName(i)+" at : "+ a + ", " + b );
 				}

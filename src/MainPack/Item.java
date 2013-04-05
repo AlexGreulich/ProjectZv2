@@ -14,14 +14,17 @@ public class Item{
 	short x = 0, y = 0;
 	float texPosX =0f, texPosY =0f;
 	int type;
+	boolean isLimited;
+	int uses;
 	
-	public Item( short x, short y, int dx, int dy, int id){
+	public Item( short x, short y, int dx, int dy, int id, boolean limit){
 		
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
 		this.type = id;
+		this.isLimited = limit;
 	}
 	public short getX() {
 		return x;
@@ -37,5 +40,8 @@ public class Item{
 	}
 	public int getID(){
 		return this.type;
+	}
+	public void setUses(int u){
+		this.uses =u;
 	}
 }

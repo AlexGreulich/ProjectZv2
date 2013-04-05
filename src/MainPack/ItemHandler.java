@@ -39,6 +39,8 @@ public class ItemHandler {
 	Map<Integer, String> healthValues = new HashMap<Integer, String>();
 	Map<Integer, Float> texPosXValues = new HashMap<Integer, Float>();
 	Map<Integer, Float> texPosYValues = new HashMap<Integer, Float>();
+	Map<Integer, Boolean> isUsableMap = new HashMap<Integer, Boolean>();
+	Map<Integer, Integer> uses = new HashMap<Integer, Integer>();
 	
 	Map<Point, Item> totalItems = new HashMap<Point, Item>();
 	
@@ -98,6 +100,14 @@ public class ItemHandler {
 				itemNames.put(id,itemlist.get(i).getChildText("name"));
 				itemDescriptions.put(id, itemlist.get(i).getChildText("description"));
 				
+				boolean limiteduse = false;
+				if(itemlist.get(i).getChildText("limitedUse").equals("true")){
+					limiteduse = true;
+					int timestouse = Integer.parseInt(itemlist.get(i).getChildText("uses"));
+					uses.put(id, timestouse);
+				}
+				isUsableMap.put(id, limiteduse);
+				
 				float tX =Float.parseFloat(itemlist.get(i).getChildText("texcoordsX"));
 				float tY =Float.parseFloat(itemlist.get(i).getChildText("texcoordsY"));
 				texPosXValues.put(id,tX);
@@ -150,8 +160,11 @@ public class ItemHandler {
 	public float getItemTexPosY(int id){
 		return texPosYValues.get(id);
 	}
-	public String getDescription(int i){
-		return itemDescriptions.get(i);
+	public String getDescription(int id){
+		return itemDescriptions.get(id);
+	}
+	public int getItemUses(int id){
+		return uses.get(id);
 	}
 	public void draw(int x, int y){
 		glBegin(GL_QUADS);

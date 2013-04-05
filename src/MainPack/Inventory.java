@@ -29,11 +29,14 @@ public class Inventory {
 	int space = World.SCREENWIDTH/23;
 	int itemsize = space*2;
 		
-	float drawX = 0f, drawY = 0f;
+	float drawX = 0f, drawY = 0f, drawX2 = 0f, drawY2 = 0f;
 	float x1 = 0f;
 	float x2 = 0f;
 	float y1 = 0f;
 	float y2 = 0f;
+	
+	float useColorIndexY;
+	float useColorIndexY2;
 	
 	int textboxX1;
 	int textboxX2;
@@ -86,29 +89,29 @@ public class Inventory {
 		int mX = Mouse.getX();
 		int mY = Display.getHeight()-Mouse.getY();
 //		System.out.println("mouseXY to check for: " + mX + " " +mY + " with DXY: "+ dx + " " +dy);
-		System.out.println(" check if "+mX + " > " +dx + " & " + mX + " < " +(dx+ 2*space) + " & " + mY + " > " +dy+ " & " +  mY +" < " +(dy + 2*space));
+//		System.out.println(" check if "+mX + " > " +dx + " & " + mX + " < " +(dx+ 2*space) + " & " + mY + " > " +dy+ " & " +  mY +" < " +(dy + 2*space));
 		
 			if((mX > dx) && (mX < dx + 2*space)){
-				System.out.println("mouse clicked on itemX at:"+ mX+ ","+ mY);
-				System.out.println("next check: "+mY +" > "+dy+")"+ " && "+ mY + " <"+ "("+(dy+ "+2*" +space));
+//				System.out.println("mouse clicked on itemX at:"+ mX+ ","+ mY);
+//				System.out.println("next check: "+mY +" > "+dy+")"+ " && "+ mY + " <"+ "("+(dy+ "+2*" +space));
 				if((mY > dy) && (mY < dy+ 2*space )){
-					System.out.println("mouse clicked on itemY at :"+ mX+ ","+ mY);
-					System.out.println(" check true");
+//					System.out.println("mouse clicked on itemY at :"+ mX+ ","+ mY);
+//					System.out.println(" check true");
 					return true;
 				}else{
-					System.out.println(" check false");
+//					System.out.println(" check false");
 					return false;
 				}
 					
 			}else{
-				System.out.println(" check false");
+//				System.out.println(" check false");
 				return false;
 			}
 	}
 	public void drawItemText(String itemtext){
 		glPushMatrix();
 //		glLoadIdentity();
-		System.out.println("draw '"+ itemtext +"' at: "+ (float)textboxX1 +10+" "+ (float)textboxY1 +10);
+//		System.out.println("draw '"+ itemtext +"' at: "+ (float)textboxX1 +10+" "+ (float)textboxY1 +10);
 		invFont.drawString((float)textboxX1 +10, (float)textboxY1 +10, "Description: " + itemtext);
 		
 		glPopMatrix();
@@ -155,11 +158,15 @@ public class Inventory {
 				}
 			}
 			if(i<6){
-				drawY = 2*space ;
 				drawX = (3f * space) + (i * itemsize) + (i * space);
+				drawY = 2*space ;
+				drawX2 = drawX + 2*space;
+				drawY2 = drawY + 2*space;
 			}else{
-				drawY = space*3 +itemsize;
 				drawX = (3f * space) + ((i-6) * itemsize) + ((i-6) * space);
+				drawY = space*3 +itemsize;
+				drawX2 = drawX + 2*space;
+				drawY2 = drawY + 2*space;
 			}
 			x1 = 0f;
 			y1 = 49* World.FLOATINDEX;
@@ -167,9 +174,9 @@ public class Inventory {
 			y2 = 50* World.FLOATINDEX;
 			
 			glTexCoord2f(x1,y1);		glVertex2f(drawX,drawY);
-			glTexCoord2f(x2,y1);		glVertex2f(drawX + 2* space, drawY);
-			glTexCoord2f(x2,y2);		glVertex2f(drawX + 2* space, drawY + 2* space);	
-			glTexCoord2f(x1,y2);		glVertex2f(drawX,drawY + 2* space);
+			glTexCoord2f(x2,y1);		glVertex2f(drawX2, drawY);
+			glTexCoord2f(x2,y2);		glVertex2f(drawX2, drawY2);	
+			glTexCoord2f(x1,y2);		glVertex2f(drawX,drawY2);
 			
 			if(itemsInInv[i] != null){
 				x1 = ih.getItemTexPosX(itemsInInv[i].getID());
@@ -178,12 +185,31 @@ public class Inventory {
 				y2 = ih.getItemTexPosY(itemsInInv[i].getID()) +  World.FLOATINDEX;
 				
 				glTexCoord2f(x1,y1);		glVertex2f(drawX,drawY);
-				glTexCoord2f(x2,y1);		glVertex2f(drawX + 2* space, drawY);
-				glTexCoord2f(x2,y2);		glVertex2f(drawX + 2* space, drawY + 2* space);	
-				glTexCoord2f(x1,y2);		glVertex2f(drawX,drawY + 2* space);
+				glTexCoord2f(x2,y1);		glVertex2f(drawX2, drawY);
+				glTexCoord2f(x2,y2);		glVertex2f(drawX2, drawY2);	
+				glTexCoord2f(x1,y2);		glVertex2f(drawX, drawY2);
+				
+				if(itemsInInv[i].isLimited){
+					System.out.println("Item's usability at slot "+ i + " is limited to "+ ih.getItemUses(itemsInInv[i].getID()) + " uses.");
+					int times = ih.getItemUses(itemsInInv[i].getID());
+					
+					int a = (2*space)/ times;
+					
+					for(int t =0; t< times; t++){
+						if(t < itemsInInv[i].uses){
+							useColorIndexY = 51* World.FLOATINDEX;
+							useColorIndexY2 =52 * World.FLOATINDEX;
+						}else{
+							useColorIndexY = 48 *World.FLOATINDEX;
+							useColorIndexY2 = 49* World.FLOATINDEX;
+						}
+						glTexCoord2f(0f, useColorIndexY );					glVertex2f(drawX2 + 3,drawY2 -(t * a));
+						glTexCoord2f(0f, useColorIndexY2);					glVertex2f(drawX2 + 13, drawY2 -(t * a));
+						glTexCoord2f(World.FLOATINDEX, useColorIndexY2);	glVertex2f(drawX2 + 13, drawY2 -(t * a) - (a-2));	
+						glTexCoord2f( World.FLOATINDEX,useColorIndexY);	glVertex2f(drawX2 + 3,drawY2 -(t * a) - (a-2));
+					}
+				}
 			}
-			
-			
 		}
 		glEnd();
 		
