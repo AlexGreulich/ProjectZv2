@@ -144,9 +144,9 @@
 	</collectable>
 	<collectable>
              <id>15</id>
-       		 <name>Junk</name>
+       		 <name>Rusty nails</name>
        		 <energy>1</energy>
-      		 <description>A pile of junk</description>
+      		 <description>Some rusty nails</description>
       		 <limitedUse>false</limitedUse>
       		 <texcoordsX>0.0625</texcoordsX>
       		 <texcoordsY>0.796875</texcoordsY>

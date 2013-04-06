@@ -54,6 +54,8 @@ public class ItemHandler {
 	
 	int tempID=0;
 	
+	Item itemInUse = null;
+	
 	public ItemHandler(){
 		/*
 		 * Items spawnen in/ um Häuser und an anderen (angemessenen) Stellen.  
@@ -186,5 +188,9 @@ public class ItemHandler {
 			}
 		}
 		glEnd();
+	}
+	
+	public void setItemInUse(Item item){
+		itemInUse = item;
 	}
 }

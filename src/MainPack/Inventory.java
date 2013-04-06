@@ -2,6 +2,8 @@ package MainPack;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,7 +28,7 @@ public class Inventory {
 	InvState state;
 	Item[] itemsInInv = new Item[12];
 	
-	int space = World.SCREENWIDTH/23;
+	int space = World.SCREENWIDTH/33;
 	int itemsize = space*2;
 		
 	float drawX = 0f, drawY = 0f, drawX2 = 0f, drawY2 = 0f;
@@ -38,6 +40,12 @@ public class Inventory {
 	float useColorIndexY;
 	float useColorIndexY2;
 	
+	int itemInUseSlotX;
+	int itemInUseSlotY;
+	float itemInUseTX = 0f, itemInUseTY = 0f;
+	
+	Rectangle itemInUseSlotRec;
+	
 	int textboxX1;
 	int textboxX2;
 	int textboxY1;
@@ -46,6 +54,9 @@ public class Inventory {
 	private static UnicodeFont invFont;
 	
 	int selectedItemID=0;
+	
+	Item selectedItem = null;
+	boolean anItemIsSelected = false;
 	String itemDescription = null;
 	
 	public Inventory(){
@@ -54,6 +65,9 @@ public class Inventory {
 		textboxY1 = 5*Display.getHeight() / 8;
 		textboxY2 = Display.getHeight() -100;
 		
+		itemInUseSlotX = textboxX2 + space;
+		itemInUseSlotY = textboxY1 ;
+		itemInUseSlotRec = new Rectangle(itemInUseSlotX, itemInUseSlotY, 3* space, 3*space);
 		state = InvState.JUSTLOOKING;
 		setUpFont();
 	}
@@ -109,13 +123,9 @@ public class Inventory {
 			}
 	}
 	public void drawItemText(String itemtext){
-		glPushMatrix();
-//		glLoadIdentity();
-//		System.out.println("draw '"+ itemtext +"' at: "+ (float)textboxX1 +10+" "+ (float)textboxY1 +10);
 		invFont.drawString((float)textboxX1 +10, (float)textboxY1 +10, "Description: " + itemtext);
-		
-		glPopMatrix();
 	}
+	
 	public void draw(ItemHandler ih){
 		
 		glLoadIdentity();
@@ -163,14 +173,18 @@ public class Inventory {
 				drawY2 = drawY + 2*space;
 			}
 			
-			if(checkmouse(drawX, drawY)){
+			if(checkmouse(drawX, drawY)){		
 				if(itemsInInv[i] != null){
-					setSelectedItemID(itemsInInv[i].getID());
-					glLoadIdentity();
-					System.out.println("selecteditemid set to " + selectedItemID);
+					if(!anItemIsSelected){
+						setSelectedItemID(itemsInInv[i].getID());
+						if(Mouse.isButtonDown(0)){
+							selectedItem = itemsInInv[i];
+							itemsInInv[i] = null; 
+							anItemIsSelected =true;
+						}
+					}
 				}
 			}
-			
 			x1 = 0f;
 			y1 = 49* World.FLOATINDEX;
 			x2 = World.FLOATINDEX;
@@ -209,15 +223,77 @@ public class Inventory {
 						glTexCoord2f(0f, useColorIndexY );					glVertex2f(drawX2 + 3,drawY2 -(t * a));
 						glTexCoord2f(0f, useColorIndexY2);					glVertex2f(drawX2 + 13, drawY2 -(t * a));
 						glTexCoord2f(World.FLOATINDEX, useColorIndexY2);	glVertex2f(drawX2 + 13, drawY2 -(t * a) - (a-2));	
-						glTexCoord2f( World.FLOATINDEX,useColorIndexY);	glVertex2f(drawX2 + 3,drawY2 -(t * a) - (a-2));
+						glTexCoord2f( World.FLOATINDEX,useColorIndexY);		glVertex2f(drawX2 + 3,drawY2 -(t * a) - (a-2));
 					}
 				}
 			}
 		}
+		itemInUseTX = 0f;
+		itemInUseTY = 49* World.FLOATINDEX;
+		
+		glTexCoord2f(itemInUseTX, itemInUseTY );										glVertex2f(itemInUseSlotX, itemInUseSlotY);
+		glTexCoord2f(itemInUseTX, itemInUseTY + World.FLOATINDEX);						glVertex2f(itemInUseSlotX, itemInUseSlotY + 3*space);
+		glTexCoord2f(itemInUseTX + World.FLOATINDEX, itemInUseTY + World.FLOATINDEX);	glVertex2f(itemInUseSlotX + 3*space, itemInUseSlotY + 3*space);	
+		glTexCoord2f(itemInUseTX + World.FLOATINDEX, itemInUseTY);						glVertex2f(itemInUseSlotX + 3*space, itemInUseSlotY);
+		
+		if(ih.itemInUse != null){
+			itemInUseTX = ih.getItemTexPosX(ih.itemInUse.getID());
+			itemInUseTY = ih.getItemTexPosY(ih.itemInUse.getID());
+			
+			glTexCoord2f(itemInUseTX, itemInUseTY );										glVertex2f(itemInUseSlotX, itemInUseSlotY);
+			glTexCoord2f(itemInUseTX, itemInUseTY + World.FLOATINDEX);						glVertex2f(itemInUseSlotX, itemInUseSlotY + 3*space);
+			glTexCoord2f(itemInUseTX + World.FLOATINDEX, itemInUseTY + World.FLOATINDEX);	glVertex2f(itemInUseSlotX + 3*space, itemInUseSlotY + 3*space);	
+			glTexCoord2f(itemInUseTX + World.FLOATINDEX, itemInUseTY);						glVertex2f(itemInUseSlotX + 3*space, itemInUseSlotY);
+		}
+		
+		if(selectedItem != null){
+			glTexCoord2f(ih.getItemTexPosX(selectedItem.getID()), ih.getItemTexPosY(selectedItem.getID()));												glVertex2f(Mouse.getX(), World.SCREENHEIGHT - Mouse.getY());
+			glTexCoord2f(ih.getItemTexPosX(selectedItem.getID()), ih.getItemTexPosY(selectedItem.getID()) + World.FLOATINDEX );							glVertex2f(Mouse.getX(), World.SCREENHEIGHT - Mouse.getY() + 2*space);
+			glTexCoord2f(ih.getItemTexPosX(selectedItem.getID()) + World.FLOATINDEX, ih.getItemTexPosY(selectedItem.getID()) + World.FLOATINDEX );		glVertex2f(Mouse.getX() + 2*space, 	World.SCREENHEIGHT - Mouse.getY() + 2*space);	
+			glTexCoord2f(ih.getItemTexPosX(selectedItem.getID()) + World.FLOATINDEX, ih.getItemTexPosY(selectedItem.getID()));							glVertex2f(Mouse.getX() + 2*space,	World.SCREENHEIGHT - Mouse.getY());
+		}
+		
 		glEnd();
 		
+		if((!Mouse.isButtonDown(0)) && (selectedItem  != null)){
+			Rectangle releasedItemRec = new Rectangle(Mouse.getX(),World.SCREENHEIGHT - Mouse.getY(),3* space, 3*space);
+			Rectangle itemsRec = new Rectangle(3*space, 2* space, 21*space, 5*space);
+			if(releasedItemRec.intersects(itemInUseSlotRec)){
+				if(ih.itemInUse != null){
+					insertIntoInventory(ih.itemInUse);
+				}
+				ih.setItemInUse(selectedItem);
+			}else if(releasedItemRec.intersects(itemsRec)){
+				insertIntoInventory(selectedItem);
+			}
+			// weltkoordinaten holen irgendwie, um item an der spielerstelle zu platzieren, sonst halt item zerstören/wegwerfen..
+//			else{
+//				ih.totalItems.put(new Point(),  selectedItem);
+//			}
+			selectedItem = null;
+			anItemIsSelected = false;
+		}
+		if(checkmouse(itemInUseSlotX, itemInUseSlotY)){
+			if(ih.itemInUse != null){
+				setSelectedItemID(ih.itemInUse.getID());
+				if(Mouse.isButtonDown(0) && (selectedItem ==null)){
+					selectedItem = ih.itemInUse;
+					ih.itemInUse = null;
+				}
+			}
+		}
 		glBindTexture(GL_TEXTURE_2D,0);
 	}
+	
+	public void insertIntoInventory(Item item){
+		for(int i = 0; i< itemsInInv.length; i++){
+			if(itemsInInv[i] == null){
+				itemsInInv[i] = item;
+				break;
+			}
+		}
+	}
+	
 	private void setUpFont() {
 		try {
 			Font awtFont = Font.createFont( Font.TRUETYPE_FONT, new FileInputStream("src/tilesets/TravelingTypewriter.ttf")).deriveFont(36f);// happydays=24f		Zombified	=48f	TravelingTypewriter =36

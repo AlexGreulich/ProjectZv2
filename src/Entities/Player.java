@@ -42,8 +42,10 @@ public class Player extends AbstractMovableEntity {
 	float cursorX = 0, cursorY = 0;
 	float calcSpeed;
 	double distX, distY;
-
+	double angle = 0d;
 	public PlayerDirection direction;
+	
+	Item itemInUse =null;
 	
 	public Player() {
 		// x, y, width, height, file-name
@@ -149,7 +151,7 @@ public class Player extends AbstractMovableEntity {
 		
 		//für jeden viertelkreis/quadranten bestimme den winkel und passe die richtung an
 		if ((distX > 0) && (distY > 0)){			//maus unten rechts
-			double angle = Math.toDegrees(Math.atan((distX / distY)));
+			angle = Math.toDegrees(Math.atan((distX / distY)));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.RIGHT;
@@ -162,7 +164,7 @@ public class Player extends AbstractMovableEntity {
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 		} 
 		else if((distX > 0) && (distY < 0)){	//maus oben rechts
-			double angle = Math.toDegrees(Math.atan((distX / distY*-1)));
+			angle = Math.toDegrees(Math.atan((distX / distY*-1)));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.RIGHT;
@@ -175,7 +177,7 @@ public class Player extends AbstractMovableEntity {
 			cursorY = -(float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 		} 
 		else if((distX < 0) && (distY > 0)){	//maus unten links
-			double angle = Math.toDegrees(Math.atan((distX*-1 / distY)));
+			angle = Math.toDegrees(Math.atan((distX*-1 / distY)));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.LEFT;
@@ -188,7 +190,7 @@ public class Player extends AbstractMovableEntity {
 			cursorY = (float) (World.playerMouseRadius * Math.cos(Math.toRadians(angle)));
 		} 
 		else if((distX < 0) && (distY < 0)){	//maus oben links
-			double angle = Math.toDegrees(Math.atan((distX*-1 / distY*-1)));
+			angle = Math.toDegrees(Math.atan((distX*-1 / distY*-1)));
 			
 			if(angle > 67.5){
 				direction = World.PlayerDirection.LEFT;
